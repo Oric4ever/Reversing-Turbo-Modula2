@@ -1,0 +1,17 @@
+DEFINITION MODULE Local;
+
+VAR framePointer: POINTER TO ARRAY [0..0FFFFH] OF CARDINAL;
+
+PROCEDURE LoadParam  (n: CARDINAL);
+PROCEDURE StoreParam (n: CARDINAL);
+PROCEDURE Load       (n: INTEGER); (* n is negative for local variables *)
+PROCEDURE LoadDouble (n: INTEGER); (* n is negative for local variables *)
+PROCEDURE LoadQuad   (n: INTEGER); (* n is negative for local variables *)
+PROCEDURE Store      (n: INTEGER);
+PROCEDURE StoreDouble(n: INTEGER);
+PROCEDURE StoreQuad  (n: INTEGER);
+PROCEDURE LoadAddr   (n: INTEGER); (* n is negative for local variables *)
+PROCEDURE LoadUpperFrame(nbFramesUp: CARDINAL);
+
+END Local.
+

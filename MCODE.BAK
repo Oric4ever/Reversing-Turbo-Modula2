@@ -1,0 +1,6 @@
+MODULE MCode;
+FROM Loader2 IMPORT Call;
+BEGIN
+  Call("HELLO")
+END MCode.
+  

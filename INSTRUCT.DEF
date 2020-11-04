@@ -1,0 +1,28 @@
+DEFINITION MODULE Instruction;
+FROM SYSTEM IMPORT BYTE, ADDRESS;
+TYPE ByteArrayPointer = POINTER TO ARRAY [0..0FFFFH] OF BYTE;
+
+VAR instructionPointer: ByteArrayPointer;
+    outerFramePointer : ADDRESS;
+
+PROCEDURE NextByte  (): CARDINAL;
+PROCEDURE NextSigned(): INTEGER;
+PROCEDURE NextWord  (): CARDINAL;
+PROCEDURE LoadNextDouble();
+PROCEDURE LoadString(length: CARDINAL);
+
+PROCEDURE ProcCall(procNum: CARDINAL; outerFrameParam: ADDRESS);
+PROCEDURE ExternProcCall1(modBase: ADDRESS; procNum: CARDINAL);
+PROCEDURE ExternProcCall2(nibbles: CARDINAL);
+PROCEDURE ExternProcCall3(modNum, procNum: CARDINAL);
+PROCEDURE ProcLeave(n: CARDINAL);
+PROCEDURE Enter(n: CARDINAL);
+PROCEDURE Return;
+PROCEDURE Case(value: CARDINAL);
+PROCEDURE PushPCrelative(offset: CARDINAL);
+PROCEDURE Jump(offset: CARDINAL);
+PROCEDURE JumpBackward(distance: CARDINAL);
+PROCEDURE AndThen(offset: CARDINAL);
+PROCEDURE OrElse(offset: CARDINAL);
+
+END Instruction.

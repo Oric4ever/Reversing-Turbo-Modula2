@@ -1,0 +1,13 @@
+DEFINITION MODULE MiscOp;
+
+PROCEDURE CopyBlock;
+PROCEDURE CopyString;
+PROCEDURE ShiftLeft(op1,op2: CARDINAL): CARDINAL;
+PROCEDURE ShiftRight(op1,op2: CARDINAL): CARDINAL;
+PROCEDURE StringCompare;
+PROCEDURE DoubleCompare;
+PROCEDURE RealCompare;
+PROCEDURE CardRangeCheck;
+PROCEDURE IntRangeCheck;
+
+END MiscOp.
