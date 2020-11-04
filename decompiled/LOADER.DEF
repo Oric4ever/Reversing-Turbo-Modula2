@@ -1,0 +1,22 @@
+DEFINITION MODULE Loader;
+FROM SYSTEM IMPORT ADDRESS;
+VAR firstDrive: [0..15];
+
+TYPE FCB = ARRAY [0..35] OF CHAR;
+     LibFile = RECORD
+                bp, pos: CARDINAL;
+                fcbs : ARRAY [0..7] OF FCB;
+               END;
+     Extension = ARRAY [0..2] OF CHAR;
+
+(*  1 *) PROCEDURE InitLibs(wsp: ADDRESS; wsize: CARDINAL);
+(*  2 *) PROCEDURE LibOpen(VAR f: LibFile; VAR fname: ARRAY OF CHAR; symfile: BOOLEAN): BOOLEAN;
+(*  3 *) PROCEDURE DirOpen(VAR f: LibFile; fname: ARRAY OF CHAR; ext: Extension): BOOLEAN;
+(*  4 *) PROCEDURE LibRead(VAR f: LibFile; a: ADDRESS; l : CARDINAL): BOOLEAN;
+(*  5 *) PROCEDURE NLibs(): CARDINAL;
+(*  6 *) PROCEDURE Call(modName: ARRAY OF CHAR);
+
+EXCEPTION LoadError;
+
+END Loader.
+
