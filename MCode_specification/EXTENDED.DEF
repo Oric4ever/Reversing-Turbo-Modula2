@@ -1,0 +1,6 @@
+DEFINITION MODULE Extended;
+
+PROCEDURE Opcode(opcode: CARDINAL);
+
+END Extended.
+

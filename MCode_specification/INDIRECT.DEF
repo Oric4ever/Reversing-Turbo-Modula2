@@ -1,0 +1,12 @@
+DEFINITION MODULE Indirect;
+
+PROCEDURE Load       (n: CARDINAL);
+PROCEDURE LoadDouble (n: CARDINAL);
+PROCEDURE LoadQuad   (n: CARDINAL);
+PROCEDURE Store      (n: CARDINAL);
+PROCEDURE StoreDouble(n: CARDINAL);
+PROCEDURE StoreQuad  (n: CARDINAL);
+PROCEDURE LoadAddr   (n: CARDINAL);
+
+END Indirect.
+

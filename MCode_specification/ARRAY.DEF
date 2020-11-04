@@ -1,0 +1,15 @@
+DEFINITION MODULE Array;
+FROM SYSTEM IMPORT BYTE;
+
+PROCEDURE LoadByte  (index: CARDINAL);
+PROCEDURE LoadWord  (index: CARDINAL);
+PROCEDURE LoadDouble(index: CARDINAL);
+PROCEDURE LoadQuad  (index: CARDINAL);
+
+PROCEDURE StoreWord  (value: CARDINAL; index: CARDINAL);
+PROCEDURE StoreByte  (value: CARDINAL; index: CARDINAL);
+PROCEDURE StoreDouble(value: LONGINT ; index: CARDINAL);
+PROCEDURE StoreQuad  (value: LONGREAL; index: CARDINAL);
+
+END Array.
+

@@ -1,0 +1,14 @@
+DEFINITION MODULE Extern;
+
+PROCEDURE Load       (modNum, varNum: CARDINAL);
+PROCEDURE LoadDouble (modNum, varNum: CARDINAL);
+PROCEDURE LoadQuad   (modNum, varNum: CARDINAL);
+PROCEDURE Store      (modNum, varNum: CARDINAL);
+PROCEDURE StoreDouble(modNum, varNum: CARDINAL);
+PROCEDURE StoreQuad  (modNum, varNum: CARDINAL);
+PROCEDURE LoadAddr   (modNum, varNum: CARDINAL);
+
+PROCEDURE Load2 (nibbles: CARDINAL);
+PROCEDURE Store2(nibbles: CARDINAL);
+END Extern.
+

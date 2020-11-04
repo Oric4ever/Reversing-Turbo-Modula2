@@ -1,0 +1,5 @@
+DEFINITION MODULE Interpreter;
+
+PROCEDURE Run;
+
+END Interpreter.

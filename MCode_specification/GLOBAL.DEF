@@ -1,0 +1,20 @@
+DEFINITION MODULE Global;
+FROM SYSTEM IMPORT ADDRESS;
+
+TYPE WordArrayPointer = POINTER TO ARRAY [0..0FFFFH] OF CARDINAL;
+
+VAR globalPointer : WordArrayPointer;
+
+PROCEDURE Load       (n: CARDINAL);
+PROCEDURE LoadDouble (n: CARDINAL);
+PROCEDURE LoadQuad   (n: CARDINAL);
+PROCEDURE Store      (n: CARDINAL);
+PROCEDURE StoreDouble(n: CARDINAL);
+PROCEDURE StoreQuad  (n: CARDINAL);
+PROCEDURE LoadAddr   (n: CARDINAL);
+PROCEDURE Module     (modNum: CARDINAL): ADDRESS;
+PROCEDURE ProcAddr(moduleBase: WordArrayPointer; procNum: CARDINAL): ADDRESS;
+PROCEDURE LoadProcAddr(procNum: CARDINAL);
+
+END Global.
+

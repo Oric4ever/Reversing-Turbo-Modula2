@@ -1,0 +1,62 @@
+IMPLEMENTATION MODULE Array;
+IMPORT Stack;
+
+TYPE ByteArrayPointer = POINTER TO ARRAY [0..0FFFFH] OF BYTE;
+     WordArrayPointer = POINTER TO ARRAY [0..0FFFFH] OF CARDINAL;
+     DoubleArrPointer = POINTER TO ARRAY [0..0FFFFH] OF LONGINT;
+     QuadArrayPointer = POINTER TO ARRAY [0..0FFFFH] OF LONGREAL;
+
+(* $O- don't check overflows except when explicitly required *)
+(* $T- don't test array indices *)
+
+PROCEDURE LoadByte(index: CARDINAL);
+VAR indirectPointer : ByteArrayPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  Stack.Push( indirectPointer^[index] )
+END LoadByte;
+
+PROCEDURE LoadWord(index: CARDINAL);
+VAR indirectPointer : WordArrayPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  Stack.Push( indirectPointer^[index] )
+END LoadWord;
+
+PROCEDURE LoadDouble(index: CARDINAL);
+VAR indirectPointer : DoubleArrPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  Stack.DPush( indirectPointer^[index] )
+END LoadDouble;
+
+PROCEDURE LoadQuad(index: CARDINAL);
+VAR indirectPointer : QuadArrayPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  Stack.QPush( indirectPointer^[index] )
+END LoadQuad;
+
+PROCEDURE StoreByte(value,index: CARDINAL);
+VAR indirectPointer : ByteArrayPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  indirectPointer^[index] := value
+END StoreByte;
+
+PROCEDURE StoreWord(value,index: CARDINAL);
+VAR indirectPointer : WordArrayPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  indirectPointer^[index] := value
+END StoreWord;
+
+PROCEDURE StoreDouble(value: LONGINT; index: CARDINAL);
+VAR indirectPointer : DoubleArrPointer;
+BEGIN
+  indirectPointer := Stack.PointerPop();
+  indirectPointer^[index] := value
+END StoreDouble;
+
+END Array.
+

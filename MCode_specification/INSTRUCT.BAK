@@ -1,0 +1,163 @@
+IMPLEMENTATION MODULE Instruction;
+FROM SYSTEM IMPORT WORD, ADR;
+FROM Stack  IMPORT Push, Load, DPush, FPush, Pop, BPop, IPop, DPop, FPop, Dup, Swap,
+                   Top, Drop, DropN, Reserve, ReserveString, PointerPop,
+                   NewFrame, ResetFrame;
+IMPORT Local, Global, Extern;
+
+(* $O- don't check overflows except when explicitly required *)
+(* $T- don't test array indices *)
+
+PROCEDURE NextByte(): CARDINAL;
+VAR byte: CARDINAL;
+BEGIN
+  byte := ORD(instructionPointer^[0]);
+  instructionPointer := ADDRESS(instructionPointer) + 1;
+  RETURN byte
+END NextByte;
+
+PROCEDURE NextSigned(): INTEGER;
+VAR n: INTEGER;
+BEGIN
+  n := INTEGER(ORD(instructionPointer^[0]));
+  instructionPointer := ADDRESS(instructionPointer) + 1;
+  IF n < 80H THEN RETURN n ELSE RETURN n - 256 END;
+END NextSigned;
+
+PROCEDURE NextWord(): CARDINAL;
+VAR word : CARDINAL;
+    addr : ADDRESS;
+BEGIN
+  addr := instructionPointer;
+  word := CARDINAL(addr^);
+  instructionPointer := ADDRESS(instructionPointer) + 2;
+  RETURN word
+END NextWord;
+  
+PROCEDURE LoadNextDouble();
+VAR lsw, msw: CARDINAL;
+BEGIN
+  lsw := NextWord();
+  msw := NextWord();
+  Push( msw );
+  Push( lsw );
+END LoadNextDouble;
+
+PROCEDURE LoadString(length: CARDINAL);
+BEGIN
+  Push( instructionPointer );
+  instructionPointer := ADDRESS(instructionPointer) + length
+END LoadString;
+
+PROCEDURE ProcCall(procNum: CARDINAL; outerFrameParam: ADDRESS);
+BEGIN
+  outerFramePointer := outerFrameParam;
+  Push( instructionPointer );
+  instructionPointer := Global.ProcAddr(Global.globalPointer, procNum)
+END ProcCall;
+
+PROCEDURE ExternProcCall1(modBase: ADDRESS; procNum: CARDINAL);
+BEGIN
+  outerFramePointer    := Global.globalPointer;
+  Global.globalPointer := modBase;
+  Push( instructionPointer );
+  instructionPointer := Global.ProcAddr(Global.globalPointer, procNum)
+END ExternProcCall1;
+
+PROCEDURE ExternProcCall2(nibbles: CARDINAL);
+BEGIN
+  ExternProcCall1(Global.Module(nibbles DIV 16), nibbles MOD 16)
+END ExternProcCall2;
+
+PROCEDURE ExternProcCall3(modNum, procNum: CARDINAL);
+BEGIN
+  ExternProcCall1(Global.Module(modNum), procNum)
+END ExternProcCall3;
+
+PROCEDURE ProcLeave(n: CARDINAL);
+BEGIN
+  ResetFrame(Local.framePointer);
+  outerFramePointer  := ADDRESS( Pop());
+  Local.framePointer := ADDRESS( Pop());
+  instructionPointer := ADDRESS( Pop());
+  DropN(n MOD 128);
+  IF  (n >= 80H)                  (* n < 80H means inner proc call *)
+  AND (outerFramePointer # NIL)   (* outerFramePointer = 0 means intra-module call *)
+  THEN Global.globalPointer := outerFramePointer END;
+END ProcLeave;
+
+PROCEDURE FunctionLeave(n: CARDINAL);
+VAR result: CARDINAL;
+BEGIN
+  result := Pop();
+  ProcLeave(n);
+  Push(result)
+END FunctionLeave;
+
+PROCEDURE DoubleFctLeave(n: CARDINAL);
+VAR result: LONGINT;
+BEGIN
+  result := DPop();
+  ProcLeave(n);
+  DPush(result)
+END DoubleFctLeave;
+
+PROCEDURE Enter(n: CARDINAL);
+VAR dummy : ADDRESS;
+BEGIN
+  Local.framePointer := NewFrame(Local.framePointer, outerFramePointer);
+  Push(instructionPointer); (* pointer to start of procedure *)
+  dummy := Reserve(255 - n);
+END Enter;
+
+PROCEDURE Return;
+BEGIN
+  instructionPointer := ADDRESS( Pop() )
+END Return;
+
+PROCEDURE Case(value: CARDINAL);
+VAR lowBound, highBound, relativeAddr : CARDINAL;
+    returnAddr, caseAddrPtr : ADDRESS;
+    relativeJmp : INTEGER;
+BEGIN
+  INC(value, 8000H); (* for unsigned comparison *)
+  lowBound  := NextWord();
+  highBound := NextWord();
+  IF (value >= lowBound) AND (value - lowBound <= highBound) THEN
+    relativeAddr       := NextWord();
+    returnAddr         := ADDRESS(instructionPointer) + relativeAddr - 1;
+    caseAddrPtr        := ADDRESS(instructionPointer) + (value - lowBound) * 2;
+    relativeJmp        := INTEGER(caseAddrPtr^);
+    instructionPointer := caseAddrPtr + CARDINAL(relativeJmp) + 1;
+    IF relativeJmp < 0 THEN Push(returnAddr) END;
+  ELSE
+    instructionPointer := ADDRESS(instructionPointer) + (highBound+2) * 2;
+  END;
+END Case;
+
+PROCEDURE PushPCrelative(offset: CARDINAL);
+BEGIN
+  Push( ADDRESS(instructionPointer) - 1 + offset )
+END PushPCrelative;
+
+PROCEDURE Jump(offset: CARDINAL);
+BEGIN
+  instructionPointer := ADDRESS(instructionPointer) + offset
+END Jump;
+
+PROCEDURE JumpBackward(distance: CARDINAL);
+BEGIN
+  instructionPointer := ADDRESS(instructionPointer) - distance
+END JumpBackward;
+
+PROCEDURE AndThen(offset: CARDINAL);
+BEGIN
+  IF NOT BPop() THEN Push(FALSE); Jump(offset) END;
+END AndThen;
+
+PROCEDURE OrElse(offset: CARDINAL);
+BEGIN
+  IF BPop() THEN Push(TRUE); Jump(offset) END;
+END OrElse;
+
+END Instruction.

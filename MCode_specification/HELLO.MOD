@@ -1,0 +1,11 @@
+MODULE HELLO;
+FROM ComLine IMPORT RedirectInput, inName;
+IMPORT Texts;
+
+BEGIN
+(*
+  Texts.CloseText(Texts.input);
+  RedirectInput;
+*)
+  WRITELN('Hello world!');
+END HELLO.
