@@ -1,1 +1,4635 @@
-sdf
+; M-code opcodes addresses : LSB in page 1, MSB in page 2
+
+0100  c39d06    jp      #069d   ; will be overwritten by initialization
+
+00000100: c39d 06ae b77e 7e7e dbea ba03 95ff 0c15
+00000110: 1e0f 8c3d 3d3d 3d3d 6d7f e399 542b 384c
+00000120: cbd0 c0c9 d26d 6d6d 6d6d 6d6d 4a58 a668
+00000130: 5e7d 2c2c 2c2c 2c2c 2c2c 2c2c 0917 cd27
+00000140: 27c4 8585 8585 8585 8585 8585 8585 8585
+00000150: 10f0 4444 4444 4444 4444 4444 4444 4444
+00000160: aeae aeae aeae aeae aeae aeae aeae aeae
+00000170: d6d6 d6d6 d6d6 d6d6 d6d6 d6d6 d6d6 d6d6
+00000180: 2737 9e44 2944 58b5 2c2c 2c2c dbe5 edf6
+00000190: acbe 0404 0404 0404 0404 0404 0404 0404
+000001a0: a5b7 c4cd d1da a3a9 c826 32a0 8b90 959c
+000001b0: b1bb deea eefa 9aa3 f453 2118 7079 34f7
+000001c0: 8a92 e5d8 4227 2937 7009 28b2 34d8 272a
+000001d0: 9ca7 bbe9 e414 9d95 38a6 344f 7794 a6af
+000001e0: 979f b9c2 c8d2 b5fe aac0 6da6 390c 404f
+000001f0: 5a10 1010 1010 1010 1010 1010 1010 1010
+
+00000200: 060c 0907 0707 0707 0707 0808 0708 0909
+00000210: 0707 1708 0808 0808 0808 0808 0809 0909
+00000220: 1414 0707 0707 0707 0707 0707 0707 0807
+00000230: 0909 0808 0808 0808 0808 0808 0808 0808
+00000240: 1508 0707 0707 0707 0707 0707 0707 0707
+00000250: 0d08 0808 0808 0808 0808 0808 0808 0808
+00000260: 0808 0808 0808 0808 0808 0808 0808 0808
+00000270: 0808 0808 0808 0808 0808 0808 0808 0808
+00000280: 0707 0807 0b0b 0b0a 0b0b 0b0b 0909 0909
+00000290: 0e0e 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a
+000002a0: 0e0e 0e0e 0e0e 0f0f 0f10 100e 0f0f 0f0f
+000002b0: 0f0f 0e0e 0e0e 1414 1010 1111 1010 1413
+000002c0: 1010 1014 0f0f 1111 1112 120e 120d 0e0e
+000002d0: 1010 0b0b 0a0f 1212 1313 0e0e 0e0e 0d0d
+000002e0: 0d0d 0d0d 0d0d 140e 1414 140a 0a0a 0a0a
+000002f0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a
+
+
+0300: 0000 ; IORESULT
+0302: 0000 ; HLRESULT
+0304: 0000 ; raised task
+0306: 0000 ; interrupted task
+0308: 0000 ; caller task
+030a: 0000 ; called task
+030c: 5170 ; main module : COMLINE
+030e: 0000 ; HL save
+0310: 0000 ; HL' save
+0312: 21d2 ; GLOBAL
+0314: 0000 ; interrupt flag
+0316: 5e02 ; stack limit
+0318: 0000 ; freeblocks list
+031a: 0000 ; save1
+031c: 240a ; save2 (* initially addr of end of kernel *)
+031e: 0001 ; resume flag
+0320: 069d ; startup address
+0322: 0001 ; show copyright flag
+
+; 36-bytes FCB for M2.OVR,
+; also contains an unused copyright that will be overwritten
+0324: 00 4d 32 20 20 20 20 20 20 4f 56 52 00 00 00 28 ; .M2      OVR   (
+0334: 43 29 20 31 39 38 36 20 42 4f 52 4c 41 4e 44 20 ; C) 1986 BORLAND
+0344: 49 6e 63 2e                                     ; Inc.
+
+; 0348: start of configurable area for options, array of word values
+0348: (word #00) 0010 ; bitset of options
+                      ; bit  0 (* $L *): 1 if Listing On
+                      ; bit  1 (* $M *): ?
+                      ; bit  2 (* $N *): 1 if Native generation On
+                      ; bit  3 (* $O *): 1 if Overflow detection On
+                      ; bit  4 (* $P *): 1 if PRINTCODE On (need PRINTCOD.MCD)
+                      ; bit  5 (* $Q *): 1 if show free memory on
+                      ; bit  6 (* $R *): ?
+                      ; bit  7 (* $S *): ?
+                      ; bit  8 (* $T *): 1 if range Test On
+                      ; bit  9 (* $U *): 1 if Upper=lower
+                      ; bit 10 (* $V *): ?
+                      ; bit 11 (* $W *): ?
+                      ; bit 12 (* $X *): 1 if turboM2 eXtensions On
+                      ; bit 13 (* $Y *): ?
+                      ; bit 14 (* $Z *): ?
+                      ; bit 15 (* $[ *): 1 if compact On (remove proc names)
+034a: (word #01) 0003 ; bitset of drives where to look for .SYM and .MCD
+034c: (word #02) 000f ; set of options
+                      ; bit 0: ?
+                      ; bit 1: ?
+                      ; bit 2: ?
+                      ; bit 3: ?
+                      ; bit 4: ? 
+                      ; bit 5: ?
+                      ; bit 6: 1 if '[' has to be written "(."
+                      ; bit 7: 1 if ']' has to be written ".)"
+                      ; bit 8: 1 if '{' has to be written "(:"
+                      ; bit 9: 1 if '}' has to be written ":)"
+034e: (word #03) 007c ; '|' character, 0021 if '|' is replaced by '!'
+0350: (word #04) 0764 ; ?
+
+0352: (word #05) 0b 43 50 43 20 34 36 34 2f 36 36 34 20 68 69 6c 69 74 65 6c 65 64 ; terminal name
+0368: (word #10) 50 19 ; columns and rows
+; these terminal sequences (patched with INSTM2) are also word-addressed 
+036a: (word #11) 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ; InitScreen sequence
+037a: (word #19) 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ; ResetScreen sequence
+038a: (word #21) 03 1f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ; GotoXY sequence
+039a: (word #29) 0001 ; boolean: true if GotoXY sequence uses binary parameters
+039c: (word #2a) 0101 ; offsets to add to line and column for GotoXY
+039e: (word #2b) 0203 ; offsets of line and column in GotoXY sequence
+03a0: (word #2c) 0000  ; final tempo for GotoXY sequence
+03a2: (word #2d) 01 0c 00 00 00 00             ; clear screen sequence
+03a8: (word #30) 00 00 00 00 00 00             ; home sequence
+03ae: (word #33) 00 00 00 00 00 00 00 00 00 00 ; insert 1 line sequence
+03b8: (word #38) 00 00 00 00 00 00             ; delete 1 line sequence
+03be: (word #3b) 0000 ; tempo for insert/delete/home line sequence
+03c0: (word #3c) 01 12 00 00 00 00             ; erase end of line sequence
+03c6: (word #3f) 01 18 43 33 00 00 00 00       ; normal attributes sequence
+03ce: (word #43) 01 18 42 33 00 00 00 00       ; highlight sequence
+03d6: (word #47) 0000  ; highlight/normal/ClearToEOL tempo
+03d8: (word #48) 0000  ;
+
+
+; area for up to 8 library names... used by LOADER
+
+000003da:                          5359 534c 4942            SYSLIB
+000003e0: 0000 004f 4d50 4c49 4200 0000 0000 0000  ...OMPLIB.......
+000003f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000400: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+00000410: 0000 0000 0000 0000 0000                 ..........
+
+; NEXT
+; takes next bytecode and jumps to its routine
+
+041a  1a        ld      a,(de)
+041b  13        inc     de
+041c  6f        ld      l,a
+041d  2601      ld      h,#01
+041f  46        ld      b,(hl)
+0420  24        inc     h
+0421  66        ld      h,(hl)
+0422  68        ld      l,b
+0423  e9        jp      (hl)
+
+00000424:           0000 0000 0000 0000 0000 0000
+
+; call interface to some bytecodes:
+; pop the return address on entry, then jump to the bytecode
+; routine, it ends by a jp (iy).
+
+0430  fde1      pop     iy
+0432  c3f106    jp      #06f1       ; OP_00
+
+0435  fde1      pop     iy
+0437  c3c70c    jp      #0cc7       ; OP_01
+
+043a  fde1      pop     iy
+043c  c3dd07    jp      #07dd       ; LLD (A=n)
+
+043f  fde1      pop     iy
+0441  c3ec07    jp      #07ec       ; LGD (A=n)
+
+0444  fde1      pop     iy
+0446  c31509    jp      #0915       ; LID
+
+0449  fde1      pop     iy
+044b  c39117    jp      #1791       ; LONGREAL opcode (L=n A=m)
+
+044e  fde1      pop     iy
+0450  c36f08    jp      #086f       ; SLW (A=n)
+
+0453  fde1      pop     iy
+0455  c38108    jp      #0881       ; SGD (A=n)
+
+0458  fde1      pop     iy
+045a  c34809    jp      #0948       ; SXD
+
+045d  fde1      pop     iy
+045f  c35e09    jp      #095e       ; OP_30
+
+0462  fde1      pop     iy
+0464  c37a09    jp      #097a       ; OP_31
+
+0467  fde1      pop     iy
+0469  c32215    jp      #1522       ; EXT_OP (A=n)
+
+046c  fde1      pop     iy
+046e  c3c408    jp      #08c4       ; LSD0
+
+0471  fde1      pop     iy
+0473  c3100d    jp      #0d10       ; OP_50
+
+0476  fde1      pop     iy
+0478  c3f008    jp      #08f0
+
+047b  eb        ex      de,hl
+047c  c38c0b    jp      #0b8c
+047f  00        nop     
+
+0480  c3a005    jp      #05a0
+0483  c3a705    jp      #05a7   ; BIOS CON_OUTPUT: output character on screen
+0486  00        nop     
+0487  00        nop     
+0488  00        nop     
+0489  00        nop     
+
+048a  08        ex      af,af'
+048b  f5        push    af
+048c  c3f106    jp      #06f1
+
+048f  d1        pop     de
+0490  c3b70a    jp      #0ab7
+0493  00        nop     
+
+0494  fde1      pop     iy
+0496  c3c80f    jp      #0fc8
+
+0499  fde1      pop     iy
+049b  c32610    jp      #1026
+
+049e  fde1      pop     iy
+04a0  c33210    jp      #1032
+
+04a3  fde1      pop     iy
+04a5  c3f410    jp      #10f4
+
+04a8  fde1      pop     iy
+04aa  c35310    jp      #1053
+
+04ad  fde1      pop     iy
+04af  c32111    jp      #1121
+
+04b2  fde1      pop     iy
+04b4  c31811    jp      #1118
+
+04b7  fde1      pop     iy
+04b9  c37010    jp      #1070
+
+04bc  fde1      pop     iy
+04be  c37910    jp      #1079
+
+04c1  fde1      pop     iy
+04c3  c33114    jp      #1431
+
+04c6  fde1      pop     iy
+04c8  c3f413    jp      #13f4
+
+04cb  fde1      pop     iy
+04cd  c3e510    jp      #10e5
+
+04d0  fde1      pop     iy
+04d2  c3d814    jp      #14d8
+
+04d5  fde1      pop     iy
+04d7  c3420f    jp      #0f42
+
+04da  fde1      pop     iy
+04dc  c3270f    jp      #0f27
+
+04df  fde1      pop     iy
+04e1  c32911    jp      #1129
+
+04e4  fde1      pop     iy
+04e6  c33711    jp      #1137
+
+04e9  fde1      pop     iy
+04eb  c37011    jp      #1170
+
+04ee  fde1      pop     iy
+04f0  c30912    jp      #1209
+
+04f3  fde1      pop     iy
+04f5  c32812    jp      #1228
+
+04f8  fde1      pop     iy
+04fa  c33412    jp      #1234
+
+04fd  af        xor     a
+04fe  e1        pop     hl
+04ff  c3db0d    jp      #0ddb
+
+0502  fde1      pop     iy
+0504  c3b70b    jp      #0bb7
+
+0507  fde1      pop     iy
+0509  c3e90b    jp      #0be9
+
+050c  fde1      pop     iy
+050e  c3140f    jp      #0f14
+
+0511  fde1      pop     iy
+0513  c39d12    jp      #129d
+
+0516  fde1      pop     iy
+0518  c39512    jp      #1295
+
+051b  fde1      pop     iy
+051d  c33813    jp      #1338
+
+0520  fde1      pop     iy
+0522  c3a613    jp      #13a6
+
+0525  fde1      pop     iy
+0527  c3340e    jp      #0e34
+
+052a  fde1      pop     iy
+052c  c34f0e    jp      #0e4f
+
+052f  fde1      pop     iy
+0531  c3770e    jp      #0e77
+
+0534  fde1      pop     iy
+0536  c3940e    jp      #0e94
+
+0539  fde1      pop     iy
+053b  c3fe0e    jp      #0efe
+
+053e  fde1      pop     iy
+0540  c36d14    jp      #146d
+
+0543  d1        pop     de      ; return addr in DE
+0544  c1        pop     bc      ; argument in BC
+0545  c3a00a    jp      #0aa0
+
+0548  c3450a    jp      #0a45
+054b  00        nop     
+054c  00        nop     
+
+054d  d1        pop     de
+054e  c30b0b    jp      #0b0b
+0551  00        nop     
+
+0552  fde1      pop     iy
+0554  c3dd10    jp      #10dd
+
+0557  fde1      pop     iy
+0559  c32309    jp      #0923
+
+
+0000055c:                               0000 0000
+00000560: 0000 0000 0000 0000 0000 0000 0000 0000
+00000570: 0000 0000 0000 0000 0000 0000 0000 0000
+00000580: 0000 0000 0000 0000 0000 0000 0000 0000
+00000590: 0000 0000 0000 0000 0000 0000 0000 0000
+
+; BDOS call 6 with param = ff 
+; => return a character without echoing if one is available
+; 0 is none is available
+
+05a0  1eff      ld      e,#ff
+05a2  0e06      ld      c,#06
+05a4  c30500    jp      #0005
+
+; jump to BIOS function CON_OUTPUT: output character on screen
+
+05a7  2a0100    ld      hl,(#0001)
+05aa  110900    ld      de,#0009
+05ad  19        add     hl,de
+05ae  4f        ld      c,a
+05af  e9        jp      (hl)
+
+; fake a module where every procedure (even the INIT) is an exception
+; The "exceptions module" base is at address 069D, 
+; only its procedures table is accessed at address 069B
+
+000005b0: 1249 6c6c 6567 616c 496e 7374 7275 6374  .IllegalInstruct
+000005c0: 696f 6e0c 506f 696e 7465 7245 7272 6f72  ion.PointerError
+000005d0: 0a42 6164 4f76 6572 6c61 790b 426f 756e  .BadOverlay.Boun
+000005e0: 6473 4572 726f 720e 4469 7669 7369 6f6e  dsError.Division
+000005f0: 4279 5a65 726f 0b4f 7574 4f66 4d65 6d6f  ByZero.OutOfMemo
+00000600: 7279 0e45 6e64 4f66 436f 726f 7574 696e  ry.EndOfCoroutin
+00000610: 6517 4675 6e63 7469 6f6e 5265 7475 726e  e.FunctionReturn
+00000620: 734e 6f52 6573 756c 740d 5374 7269 6e67  sNoResult.String
+00000630: 546f 6f4c 6f6e 670c 5265 616c 4f76 6572  TooLong.RealOver
+00000640: 666c 6f77 084f 7665 7266 6c6f 770f 4361  flow.Overflow.Ca
+00000650: 7365 5365 6c65 6374 4572 726f 7207 4261  seSelectError.Ba
+00000660: 6448 6561 700d 5374 6163 6b4f 7665 7266  dHeap.StackOverf
+00000670: 6c6f 77
+
+0673 dw 0000
+0675 dw 0000
+0677 dw ffed Exception 17 -> 0665 StackOverflow
+0679 dw ff36 Exception 16 -> 05b0 IllegalInstruction
+067b dw ffad Exception 15 -> 0629 StringTooLong
+067d dw ffdf Exception 14 -> 065d BadHeap
+067f dw ffcd Exception 13 -> 064d CaseSelectError
+0681 dw ffc2 Exception 12 -> 0644 Overflow
+0683 dw ffb3 Exception 11 -> 0637 RealOverflow
+0685 dw ff7c Exception 10 -> 0602 EndOfCoroutine
+0687 dw ff89 Exception  9 -> 0611 FunctionReturnsNoResult
+0689 dw ff5d Exception  8 -> 05e7 DivisionByZero
+068b dw ff37 Exception  7 -> 05c3 PointerError
+068d dw ff68 Exception  6 -> 05f6 OutOfMemory
+068f dw ff66 Exception  5 -> 05f6 OutOfMemory
+0691 dw ff49 Exception  4 -> 05db BoundsError
+0693 dw ff47 Exception  3 -> 05db BoundsError
+0695 dw ff45 Exception  2 -> 05db BoundsError
+0697 dw ff38 Exception  1 -> 05d0 BadOverlay
+0699 dw ff16 Exception  0 -> 05b0 IllegalInstruction
+069b dw 0699 ; GLOBAL[-1] : address of module's "routines"
+
+
+
+
+; Initialization: restore the first three Opcode addresses
+069d  3ef1      ld      a,#f1           ; OP_00 is at 06F1
+069f  320001    ld      (#0100),a
+06a2  3ec7      ld      a,#c7           ; OP_01 is at 0CC7
+06a4  320101    ld      (#0101),a
+06a7  3ec3      ld      a,#c3           ; OP_02 is at 09C3
+06a9  320201    ld      (#0102),a
+
+06ac  2a1203    ld      hl,(#0312)      ; [0312] = 21D2
+06af  ed7b0600  ld      sp,(#0006)      ; BDOS address = top of TPA
+06b3  2b        dec     hl
+06b4  56        ld      d,(hl)
+06b5  2b        dec     hl
+06b6  5e        ld      e,(hl)          ; [21D0] = 21C0
+06b7  eb        ex      de,hl
+06b8  5e        ld      e,(hl)          ; [21C0] = FF00
+06b9  23        inc     hl
+06ba  56        ld      d,(hl)
+06bb  19        add     hl,de           ; 21C1 + FF00 = 20C1
+06bc  eb        ex      de,hl           ; => DE = 20C1
+06bd  d5        push    de              ; DE is MCode Instr Pointer
+06be  010100    ld      bc,#0001
+06c1  fd211a04  ld      iy,#041a        ; NEXT routine address
+06c5  c32f0a    jp      #0a2f
+
+; save BC and DE
+06c8  ed431a03  ld      (#031a),bc
+06cc  ed531c03  ld      (#031c),de
+06d0  c9        ret     
+
+; save BC/BC'
+06d1  ed431a03  ld      (#031a),bc
+06d5  d9        exx     
+06d6  ed431c03  ld      (#031c),bc
+06da  d9        exx     
+06db  c9        ret     
+
+; save BC/BC' and get  BC/BC'/HL/HL' from stack
+; CAUTION: unpaired exx !
+06dc  d9        exx     
+06dd  e1        pop     hl              ; pop return addr
+06de  d9        exx     
+06df  ed431a03  ld      (#031a),bc      ; save BC
+06e3  c1        pop     bc              ; pop BC
+06e4  d9        exx     
+06e5  ed431c03  ld      (#031c),bc      ; save BC'
+06e9  c1        pop     bc              ; pop BC'
+06ea  d9        exx     
+06eb  e1        pop     hl              ; pop HL
+06ec  d9        exx     
+06ed  e3        ex      (sp),hl         ; pop HL' and push back return addr instead
+06ee  af        xor     a
+06ef  08        ex      af,af'
+06f0  c9        ret     
+
+; OP_00 : ERROR 16
+
+06f1  3e10      ld      a,#10
+06f3  c3be0c    jp      #0cbe
+
+; computes External Address  stack[dft+next()]+next()
+
+06f6  1a        ld      a,(de)      ; fetch first immediate value
+06f7  13        inc     de
+06f8  87        add     a,a
+06f9  ed44      neg     
+06fb  d612      sub     #12         ; => -18-2n
+06fd  4f        ld      c,a
+06fe  06ff      ld      b,#ff
+0700  2a1203    ld      hl,(#0312)
+0703  09        add     hl,bc       ; => GLOBAL-18-2n
+0704  4e        ld      c,(hl)
+0705  23        inc     hl
+0706  46        ld      b,(hl)
+0707  1a        ld      a,(de)      ; fetch second immediate value
+0708  13        inc     de
+0709  6f        ld      l,a
+070a  2600      ld      h,#00
+070c  29        add     hl,hl
+070d  09        add     hl,bc       ; => HL = (GLOBAL-18-2n)+2m
+070e  c9        ret     
+
+; OP_11 : LOAD ((...((IX))...)) n times
+
+070f  1a        ld      a,(de)
+0710  13        inc     de
+0711  dde5      push    ix
+0713  e1        pop     hl
+0714  46        ld      b,(hl)
+0715  23        inc     hl
+0716  66        ld      h,(hl)
+0717  68        ld      l,b
+0718  3d        dec     a
+0719  20f9      jr      nz,#0714        ; (-7)
+071b  e5        push    hl
+071c  fde9      jp      (iy)
+
+; OP_10 : LLW0      Load Local Word 0 (IX+0)
+
+071e  dd6e00    ld      l,(ix+#00)
+0721  dd6601    ld      h,(ix+#01)
+0724  e5        push    hl
+0725  fde9      jp      (iy)
+
+; OP_80 : LLA n     (Load Local Address  IX +/- 2n)
+
+0727  1a        ld      a,(de)
+0728  13        inc     de
+0729  87        add     a,a
+072a  4f        ld      c,a
+072b  3e00      ld      a,#00
+072d  de00      sbc     a,#00
+072f  47        ld      b,a
+0730  dde5      push    ix
+0732  e1        pop     hl
+0733  09        add     hl,bc
+0734  e5        push    hl
+0735  fde9      jp      (iy)
+
+; OP_81 : LGA n     (Load Global Address  Global+2n)
+
+0737  2a1203    ld      hl,(#0312)
+
+073a  1a        ld      a,(de)
+073b  13        inc     de
+073c  4f        ld      c,a
+073d  0600      ld      b,#00
+073f  09        add     hl,bc
+0740  09        add     hl,bc
+0741  e5        push    hl
+0742  fde9      jp      (iy)
+
+; OP_83 : LEA n m   (Load External Address stk[dft+2n]+2m)
+
+0744  cdf606    call    #06f6   ; computes Extern Address  stack[dft+next()]+next()
+0747  e5        push    hl
+0748  fde9      jp      (iy)
+
+; OP_2C : LLW n     Load Local Word n   (n signed)
+
+074a  1a        ld      a,(de)
+074b  13        inc     de
+074c  87        add     a,a
+074d  4f        ld      c,a
+074e  3e00      ld      a,#00
+0750  de00      sbc     a,#00
+0752  47        ld      b,a
+0753  dde5      push    ix
+0755  e1        pop     hl
+0756  1809      jr      #0761           ; (9)
+
+; OP_2D : LGW n     Load Global Word n
+
+0758  2a1203    ld      hl,(#0312)
+                                        ; LOAD (HL+2n)
+075b  1a        ld      a,(de)
+075c  13        inc     de
+075d  4f        ld      c,a
+075e  0600      ld      b,#00
+0760  09        add     hl,bc
+0761  09        add     hl,bc
+
+0762  4e        ld      c,(hl)
+0763  23        inc     hl
+0764  46        ld      b,(hl)
+0765  c5        push    bc
+0766  fde9      jp      (iy)
+
+; OP_2F: LEW n m    Load External Word
+
+0768  cdf606    call    #06f6   ; computes Extern Address  stack[dft+next()]+next()
+076b  18f5      jr      #0762           ; (-11)
+
+; OP_25: LLW5       Load Local Word -5
+; OP_26: LLW6       Load Local Word -6
+; OP_27: LLW7       Load Local Word -7
+; OP_28: LLW8       Load Local Word -8
+; OP_29: LLW9       Load Local Word -9
+; OP_2A: LLW10      Load Local Word -10
+; OP_2B: LLW11      Load Local Word -11
+
+076d  dde5      push    ix
+076f  e1        pop     hl
+0770  e60f      and     #0f
+0772  87        add     a,a
+0773  4f        ld      c,a
+0774  0600      ld      b,#00
+0776  ed42      sbc     hl,bc
+0778  4e        ld      c,(hl)
+0779  23        inc     hl
+077a  46        ld      b,(hl)
+077b  c5        push    bc
+077c  fde9      jp      (iy)
+
+; OP_05 : LOAD (IX+10)
+; OP_06 : LOAD (IX+12)
+; OP_07 : LOAD (IX+14)
+
+077e  dde5      push    ix
+0780  e1        pop     hl
+0781  e607      and     #07
+0783  1805      jr      #078a           ; (5)
+
+; OP_42 : LGW2      Load Global Word #2
+; OP_43 : ...
+; OP_44 : 
+; OP_45 : 
+; OP_46 : 
+; OP_47 : 
+; OP_48 : 
+; OP_49 : 
+; OP_4A : 
+; OP_4B : 
+; OP_4C : 
+; OP_4D : 
+; OP_4E : 
+; OP_4F : LGW15     Load Global Word #15
+
+0785  2a1203    ld      hl,(#0312)
+
+0788  e60f      and     #0f
+078a  87        add     a,a
+078b  4f        ld      c,a
+
+078c  0600      ld      b,#00
+078e  09        add     hl,bc
+078f  4e        ld      c,(hl)
+0790  23        inc     hl
+0791  46        ld      b,(hl)
+0792  c5        push    bc
+0793  fde9      jp      (iy)
+
+; OP_0C : EXTERN_LOAD mn
+
+0795  1a        ld      a,(de)
+0796  1f        rra     
+0797  1f        rra     
+0798  1f        rra     
+0799  e61e      and     #1e
+079b  ed44      neg     
+079d  d612      sub     #12
+079f  4f        ld      c,a
+07a0  06ff      ld      b,#ff
+07a2  2a1203    ld      hl,(#0312)
+07a5  09        add     hl,bc
+07a6  7e        ld      a,(hl)
+07a7  23        inc     hl
+07a8  66        ld      h,(hl)
+07a9  6f        ld      l,a
+07aa  1a        ld      a,(de)
+07ab  13        inc     de
+07ac  18da      jr      #0788           ; (-38)
+
+; OP_03 : LOAD (IX+6)
+
+07ae  dd6e06    ld      l,(ix+#06)
+07b1  dd6607    ld      h,(ix+#07)
+07b4  e5        push    hl
+07b5  fde9      jp      (iy)
+
+; OP_04 : LOAD (IX+8)
+
+07b7  dd6e08    ld      l,(ix+#08)
+07ba  dd6609    ld      h,(ix+#09)
+07bd  e5        push    hl
+07be  fde9      jp      (iy)
+
+; OP_22 : LLW2      Load Local Word -2
+
+07c0  dd6efc    ld      l,(ix-#04)
+07c3  dd66fd    ld      h,(ix-#03)
+07c6  e5        push    hl
+07c7  fde9      jp      (iy)
+
+; OP_23 : LLW3       Load Local Word -3
+
+07c9  dd6efa    ld      l,(ix-#06)
+07cc  dd66fb    ld      h,(ix-#05)
+07cf  e5        push    hl
+07d0  fde9      jp      (iy)
+
+; OP_24 : LLW4       Load Local Word -4
+
+07d2  dd6ef8    ld      l,(ix-#08)
+07d5  dd66f9    ld      h,(ix-#07)
+07d8  e5        push    hl
+07d9  fde9      jp      (iy)
+
+; OP_08 : LLD n     Load Local Double Word (n signed)
+
+07db  1a        ld      a,(de)
+07dc  13        inc     de
+07dd  c5        push    bc
+07de  87        add     a,a
+07df  4f        ld      c,a
+07e0  3e00      ld      a,#00
+07e2  de00      sbc     a,#00
+07e4  47        ld      b,a
+07e5  dde5      push    ix
+07e7  e1        pop     hl
+07e8  180a      jr      #07f4           ; (10)
+
+; OP_09 :  LGD n    Load Global Double Word
+
+07ea  1a        ld      a,(de)
+07eb  13        inc     de
+07ec  2a1203    ld      hl,(#0312)
+
+07ef  c5        push    bc          ; save bc
+07f0  4f        ld      c,a
+07f1  0600      ld      b,#00
+07f3  09        add     hl,bc
+                                        ; 
+07f4  09        add     hl,bc
+
+07f5  4e        ld      c,(hl)
+07f6  23        inc     hl
+07f7  46        ld      b,(hl)
+07f8  23        inc     hl
+07f9  7e        ld      a,(hl)
+07fa  23        inc     hl
+07fb  66        ld      h,(hl)
+07fc  6f        ld      l,a
+07fd  e3        ex      (sp),hl
+07fe  c5        push    bc
+07ff  44        ld      b,h
+0800  4d        ld      c,l
+0801  fde9      jp      (iy)
+
+; OP_0B: LED n m        Load External Double Word
+
+0803  c5        push    bc
+0804  cdf606    call    #06f6   ; computes Extern Address  stack[dft+next()]+next()
+0807  18ec      jr      #07f5           ; (-20)
+
+; OP_3C :   SLW n       (n < 0: LOCAL_VAR, n>0: PARAM)
+
+0809  1a        ld      a,(de)
+080a  13        inc     de
+080b  87        add     a,a
+080c  4f        ld      c,a
+080d  3e00      ld      a,#00
+080f  de00      sbc     a,#00
+0811  47        ld      b,a
+0812  dde5      push    ix
+0814  e1        pop     hl
+0815  1809      jr      #0820           ; (9)
+
+; OP_3D : SGW n     Store Global Word n
+
+0817  2a1203    ld      hl,(#0312)
+
+081a  1a        ld      a,(de)
+081b  13        inc     de
+081c  4f        ld      c,a
+081d  0600      ld      b,#00
+081f  09        add     hl,bc
+
+0820  09        add     hl,bc
+0821  c1        pop     bc
+0822  71        ld      (hl),c
+0823  23        inc     hl
+0824  70        ld      (hl),b
+0825  fde9      jp      (iy)
+
+; OP_3F : SEW n m   Store External Word
+
+0827  cdf606    call    #06f6   ; computes Extern Address  stack[dft+next()]+next()
+082a  18f5      jr      #0821           ; (-11)
+
+; OP_32 : SLW2      Store Local Word -2
+; OP_33 : SLW3      Store Local Word -3
+; OP_34 : SLW4      Store Local Word -4
+; OP_35 : SLW5      Store Local Word -5
+; OP_36 : SLW6      Store Local Word -6
+; OP_37 : SLW7      Store Local Word -7
+; OP_38 : SLW8      Store Local Word -8
+; OP_39 : SLW9      Store Local Word -9
+; OP_3A : SLW10     Store Local Word -10
+; OP_3B : SLW11     Store Local Word -11
+
+082c  dde5      push    ix
+082e  e1        pop     hl
+082f  e60f      and     #0f
+0831  87        add     a,a
+0832  4f        ld      c,a
+0833  0600      ld      b,#00
+0835  ed42      sbc     hl,bc
+0837  c1        pop     bc
+0838  71        ld      (hl),c
+0839  23        inc     hl
+083a  70        ld      (hl),b
+083b  fde9      jp      (iy)
+
+; OP_13-17 :    SET_PARAM1 .. SET_PARAM5
+
+083d  dde5      push    ix
+083f  e1        pop     hl
+0840  e607      and     #07
+0842  1805      jr      #0849           ; (5)
+
+; OP_52-5F : SGW2 .. SGW15      Store Global Word
+
+0844  2a1203    ld      hl,(#0312)
+0847  e60f      and     #0f
+0849  87        add     a,a
+084a  4f        ld      c,a
+
+084b  0600      ld      b,#00
+084d  09        add     hl,bc
+084e  c1        pop     bc
+084f  71        ld      (hl),c
+0850  23        inc     hl
+0851  70        ld      (hl),b
+0852  fde9      jp      (iy)
+
+; OP_1C : Store Extern
+
+0854  1a        ld      a,(de)
+0855  1f        rra     
+0856  1f        rra     
+0857  1f        rra     
+0858  e61e      and     #1e
+085a  ed44      neg     
+085c  d612      sub     #12
+085e  4f        ld      c,a
+085f  06ff      ld      b,#ff
+0861  2a1203    ld      hl,(#0312)
+0864  09        add     hl,bc
+0865  7e        ld      a,(hl)
+0866  23        inc     hl
+0867  66        ld      h,(hl)
+0868  6f        ld      l,a
+0869  1a        ld      a,(de)
+086a  13        inc     de
+086b  18da      jr      #0847           ; (-38)
+
+; OP_18 :   SLD n   Store Local Double Word n  (n<0: LOCAL_VAR, n>0: PARAM)
+
+086d  1a        ld      a,(de)
+086e  13        inc     de
+086f  ed431a03  ld      (#031a),bc  ; save bc
+0873  87        add     a,a
+0874  4f        ld      c,a
+0875  3e00      ld      a,#00
+0877  de00      sbc     a,#00
+0879  47        ld      b,a
+087a  dde5      push    ix
+087c  e1        pop     hl
+087d  180d      jr      #088c           ; (13)
+
+; OP_19 : SGD n     Store Global Double Word n
+
+087f  1a        ld      a,(de)
+0880  13        inc     de
+0881  2a1203    ld      hl,(#0312)
+0884  ed431a03  ld      (#031a),bc
+
+0888  4f        ld      c,a
+0889  0600      ld      b,#00
+
+088b  09        add     hl,bc
+088c  09        add     hl,bc
+
+088d  c1        pop     bc
+088e  71        ld      (hl),c
+088f  23        inc     hl
+0890  70        ld      (hl),b
+0891  23        inc     hl
+0892  c1        pop     bc
+0893  71        ld      (hl),c
+0894  23        inc     hl
+0895  70        ld      (hl),b
+0896  c3490e    jp      #0e49
+
+; OP_1B : SED n m       Store External Double Word
+
+0899  cdf606    call    #06f6   ; computes Extern Address  stack[dft+next()]+next()
+089c  18ef      jr      #088d           ; (-17)
+
+; OP_82 : LSA n     (Load Stack Address : Pop() + 2n)
+; address on stack must be non-NIL
+
+089e  e1        pop     hl
+089f  7c        ld      a,h
+08a0  b5        or      l
+08a1  c23a07    jp      nz,#073a
+08a4  187d      jr      #0923           ; (125)
+
+; OP_2E : LSW n     Load Stack Word #n
+
+08a6  e1        pop     hl
+08a7  7c        ld      a,h
+08a8  b5        or      l
+08a9  c25b07    jp      nz,#075b
+08ac  1875      jr      #0923           ; (117)
+
+; OP_60-6F : LSW0-15    Load Stack addressed Word
+
+08ae  e1        pop     hl
+08af  e60f      and     #0f
+08b1  87        add     a,a
+08b2  4f        ld      c,a
+08b3  7c        ld      a,h
+08b4  b5        or      l
+08b5  c28c07    jp      nz,#078c
+08b8  1869      jr      #0923           ; (105)
+
+; OP_0A :   LSD n       Load Stack Double Word #n
+
+08ba  e1        pop     hl
+08bb  7c        ld      a,h
+08bc  b5        or      l
+08bd  1a        ld      a,(de)
+08be  13        inc     de
+08bf  c2ef07    jp      nz,#07ef
+08c2  185f      jr      #0923           ; (95)
+
+; OP_41 : LSD0          Load Stack Double Word #0   
+
+08c4  e1        pop     hl
+08c5  c5        push    bc          ; save bc
+08c6  7c        ld      a,h
+08c7  b5        or      l
+08c8  c2f507    jp      nz,#07f5
+08cb  1856      jr      #0923           ; (86)
+
+; OP_3E : SSW          Store Stack Word n
+
+08cd  e1        pop     hl
+08ce  e3        ex      (sp),hl
+08cf  7c        ld      a,h
+08d0  b5        or      l
+08d1  c21a08    jp      nz,#081a
+08d4  184d      jr      #0923           ; (77)
+
+; OP_70..7F : SSW0-15   Store Stack addressed Word #0-15
+
+08d6  e1        pop     hl
+08d7  e3        ex      (sp),hl
+08d8  e60f      and     #0f
+08da  87        add     a,a
+08db  4f        ld      c,a
+08dc  7c        ld      a,h
+08dd  b5        or      l
+08de  c24b08    jp      nz,#084b
+08e1  1840      jr      #0923           ; (64)
+
+; OP_1A : SSD n         Store Stack Double Word #n
+
+08e3  c1        pop     bc
+08e4  e1        pop     hl
+08e5  e3        ex      (sp),hl
+08e6  c5        push    bc
+08e7  7c        ld      a,h
+08e8  b5        or      l
+08e9  1a        ld      a,(de)
+08ea  13        inc     de
+08eb  c28808    jp      nz,#0888
+08ee  1833      jr      #0923           ; (51)
+
+; OP_51 : SSD0          Store Stack Double Word #0
+
+08f0  ed431a03  ld      (#031a),bc
+08f4  c1        pop     bc
+08f5  e1        pop     hl
+08f6  e3        ex      (sp),hl
+08f7  c5        push    bc
+08f8  7c        ld      a,h
+08f9  b5        or      l
+08fa  c28d08    jp      nz,#088d
+08fd  1824      jr      #0923           ; (36)
+
+; OP_0D :   LXB         Load Indexed Byte
+
+08ff  c1        pop     bc
+0900  e1        pop     hl
+0901  7c        ld      a,h
+0902  b5        or      l
+0903  281e      jr      z,#0923         ; (30)
+0905  09        add     hl,bc
+0906  4e        ld      c,(hl)
+0907  0600      ld      b,#00
+0909  c5        push    bc
+090a  fde9      jp      (iy)
+
+; OP_0E :   LXW         Load Indexed Word
+
+090c  c1        pop     bc
+090d  e1        pop     hl
+090e  7c        ld      a,h
+090f  b5        or      l
+0910  c26007    jp      nz,#0760
+0913  180e      jr      #0923           ; (14)
+
+; OP_0F :   LXD         Load Indexed Double word
+
+0915  60        ld      h,b         ; save bc in HL
+0916  69        ld      l,c
+0917  c1        pop     bc          ; get index
+0918  e3        ex      (sp),hl     ; save bc and get the pointer
+0919  7c        ld      a,h
+091a  b5        or      l
+091b  2806      jr      z,#0923     ; check the pointer is not nil 
+091d  09        add     hl,bc
+091e  09        add     hl,bc
+091f  c3f307    jp      #07f3
+0922  d9        exx     
+0923  3e07      ld      a,#07
+0925  c3be0c    jp      #0cbe
+0928  d1        pop     de
+0929  18f8      jr      #0923           ; (-8)
+
+; OP_1D : SXB           Store Indexed Byte
+
+092b  d9        exx     
+092c  d1        pop     de
+092d  c1        pop     bc
+092e  e1        pop     hl
+092f  7c        ld      a,h
+0930  b5        or      l
+0931  28ef      jr      z,#0922         ; (-17)
+0933  09        add     hl,bc
+0934  73        ld      (hl),e
+0935  d9        exx     
+0936  fde9      jp      (iy)
+
+; OP_1E : SXW           Store Indexed Word
+
+0938  d9        exx     
+0939  d1        pop     de
+093a  c1        pop     bc
+093b  e1        pop     hl
+093c  7c        ld      a,h
+093d  b5        or      l
+093e  28e2      jr      z,#0922         ; (-30)
+0940  09        add     hl,bc
+0941  09        add     hl,bc
+0942  73        ld      (hl),e
+0943  23        inc     hl
+0944  72        ld      (hl),d
+0945  d9        exx     
+0946  fde9      jp      (iy)
+
+
+0948  ed431a03  ld      (#031a),bc
+
+; OP_1F :   SXD         Store Indexed Double word
+
+094c  d9        exx     
+094d  e1        pop     hl
+094e  d9        exx     
+094f  e1        pop     hl
+0950  c1        pop     bc
+0951  e3        ex      (sp),hl
+0952  d9        exx     
+0953  e5        push    hl
+0954  d9        exx     
+0955  7c        ld      a,h
+0956  b5        or      l
+0957  28ca      jr      z,#0923         ; (-54)
+0959  09        add     hl,bc
+095a  09        add     hl,bc
+095b  c38b08    jp      #088b
+
+; OP_30 : COPY_BLOCK
+
+095e  cdc806    call    #06c8
+0961  c1        pop     bc
+0962  e1        pop     hl
+0963  d1        pop     de
+0964  7c        ld      a,h
+0965  b5        or      l
+0966  280d      jr      z,#0975         ; (13)
+0968  7a        ld      a,d
+0969  b3        or      e
+096a  2809      jr      z,#0975         ; (9)
+096c  78        ld      a,b
+096d  b1        or      c
+096e  2802      jr      z,#0972         ; (2)
+0970  edb0      ldir    
+0972  c3450e    jp      #0e45
+0975  3e07      ld      a,#07
+0977  c3ba0c    jp      #0cba
+
+097a  cdd106    call    #06d1
+
+; OP_31 : COPY_STRING
+
+097d  c1        pop     bc          ; BC = src size
+097e  0c        inc     c
+097f  04        inc     b
+0980  d9        exx     
+0981  c1        pop     bc          ; BC' = dst size
+0982  0c        inc     c
+0983  04        inc     b
+0984  e1        pop     hl
+0985  eb        ex      de,hl
+0986  e3        ex      (sp),hl     ; save DE'
+0987  eb        ex      de,hl       ; DE' = dst, HL' = src
+0988  7c        ld      a,h
+0989  b5        or      l
+098a  2896      jr      z,#0922     ; error if HL'=0000
+098c  7a        ld      a,d
+098d  b3        or      e
+098e  2892      jr      z,#0922     ; or DE'=0000
+0990  d9        exx     
+0991  0d        dec     c           
+0992  2815      jr      z,#09a9     ; test if src size = 0
+0994  d9        exx     
+0995  7e        ld      a,(hl)
+0996  b7        or      a
+0997  2814      jr      z,#09ad     ; end of string ?
+0999  0d        dec     c
+099a  2805      jr      z,#09a1     ; check that dst size > 0
+099c  12        ld      (de),a
+099d  23        inc     hl
+099e  13        inc     de
+099f  18ef      jr      #0990
+
+09a1  05        dec     b
+09a2  20f8      jr      nz,#099c
+09a4  3e0f      ld      a,#0f
+09a6  c3bf0c    jp      #0cbf
+
+09a9  05        dec     b
+09aa  20e8      jr      nz,#0994    ; go copy if src size > 0
+09ac  d9        exx     
+09ad  0d        dec     c
+09ae  05        dec     b
+09af  78        ld      a,b
+09b0  b1        or      c
+09b1  280c      jr      z,#09bf     ; if dst size = 0, it's finished
+09b3  6b        ld      l,e
+09b4  62        ld      h,d
+09b5  3600      ld      (hl),#00    ; store the end of string
+09b7  0b        dec     bc          ; and complete with 0's
+09b8  78        ld      a,b
+09b9  b1        or      c
+09ba  2803      jr      z,#09bf
+09bc  13        inc     de
+09bd  edb0      ldir    
+09bf  d1        pop     de
+09c0  c3710f    jp      #0f71
+
+; OP_02 : LOAD_PROC_ADDR n
+
+09c3  1a        ld      a,(de)
+09c4  13        inc     de
+09c5  ed44      neg     
+09c7  4f        ld      c,a
+09c8  06ff      ld      b,#ff
+09ca  2a1203    ld      hl,(#0312)
+09cd  2b        dec     hl
+09ce  7e        ld      a,(hl)
+09cf  2b        dec     hl
+09d0  6e        ld      l,(hl)
+09d1  67        ld      h,a
+09d2  09        add     hl,bc
+09d3  09        add     hl,bc
+09d4  4e        ld      c,(hl)
+09d5  23        inc     hl
+09d6  46        ld      b,(hl)
+09d7  09        add     hl,bc
+09d8  e5        push    hl
+09d9  fde9      jp      (iy)
+
+; OP_8C :   CALL_REL +n
+
+09db  1a        ld      a,(de)
+09dc  13        inc     de
+09dd  d5        push    de
+09de  6f        ld      l,a
+09df  2600      ld      h,#00
+09e1  19        add     hl,de
+09e2  eb        ex      de,hl
+09e3  fde9      jp      (iy)
+
+; OP_8D : LIB n    (Load Immediate Byte)
+
+09e5  1a        ld      a,(de)
+09e6  13        inc     de
+09e7  4f        ld      c,a
+09e8  0600      ld      b,#00
+09ea  c5        push    bc
+09eb  fde9      jp      (iy)
+
+; OP_8E : LIW nn   (Load Immediate Word)
+
+09ed  1a        ld      a,(de)
+09ee  13        inc     de
+09ef  4f        ld      c,a
+09f0  1a        ld      a,(de)
+09f1  13        inc     de
+09f2  47        ld      b,a
+09f3  c5        push    bc
+09f4  fde9      jp      (iy)
+
+; OP_8F : LID nnmm  (Load Immediate Double Word)
+
+09f6  eb        ex      de,hl
+09f7  4e        ld      c,(hl)
+09f8  23        inc     hl
+09f9  46        ld      b,(hl)
+09fa  23        inc     hl
+09fb  5e        ld      e,(hl)
+09fc  23        inc     hl
+09fd  56        ld      d,(hl)
+09fe  23        inc     hl
+09ff  d5        push    de
+0a00  c5        push    bc
+0a01  eb        ex      de,hl
+0a02  fde9      jp      (iy)
+
+; OP_92-9F : LI2 - LI15     Load Immediate 2 to 15
+
+0a04  e60f      and     #0f
+0a06  4f        ld      c,a
+0a07  0600      ld      b,#00
+0a09  c5        push    bc
+0a0a  fde9      jp      (iy)
+
+; OP_ED :   PROC_CALL n
+
+0a0c  1a        ld      a,(de)
+0a0d  13        inc     de
+0a0e  1802      jr      #0a12           ; (2)
+
+; OP_F1-FF :    PROC_CALL 1 .. PROC_CALL 15
+
+0a10  e60f      and     #0f
+0a12  010000    ld      bc,#0000
+0a15  d5        push    de                      ; push return address
+0a16  ed44      neg     
+0a18  5f        ld      e,a
+0a19  2a1203    ld      hl,(#0312)              ; GLOBAL pointer ?
+
+0a1c  2b        dec     hl
+0a1d  7e        ld      a,(hl)
+0a1e  2b        dec     hl
+0a1f  6e        ld      l,(hl)
+0a20  67        ld      h,a                     ; HL = (GLOBAL-2)
+0a21  16ff      ld      d,#ff
+0a23  1c        inc     e
+0a24  1d        dec     e
+0a25  2001      jr      nz,#0a28        ; (1)
+0a27  14        inc     d
+0a28  19        add     hl,de
+0a29  19        add     hl,de       ; HL = (GLOBAL-2)-2n
+0a2a  5e        ld      e,(hl)      ; DE = [(GLOBAL-2)-2n] is the relative addr
+0a2b  23        inc     hl
+0a2c  56        ld      d,(hl)  
+0a2d  19        add     hl,de       ; now an absolute addr
+0a2e  eb        ex      de,hl       ; => in IP
+                                    ; enter M-code or ASM routine
+0a2f  1a        ld      a,(de)
+0a30  13        inc     de
+0a31  fe87      cp      #87         ; bytecode 87: ASM routine
+0a33  cab50a    jp      z,#0ab5
+0a36  c3e40a    jp      #0ae4
+
+; OP_EC :   NESTED_PROC_CALL n
+
+0a39  1a        ld      a,(de)
+0a3a  13        inc     de
+0a3b  dde5      push    ix
+0a3d  c1        pop     bc
+0a3e  18d5      jr      #0a15           ; (-43)
+
+; OP_EE : PROC_CALL_WITH_FRAME n
+
+0a40  1a        ld      a,(de)
+0a41  13        inc     de
+0a42  c1        pop     bc
+0a43  18d0      jr      #0a15           ; (-48)
+
+0a45  ed4b1203  ld      bc,(#0312)
+0a49  fd211a04  ld      iy,#041a
+0a4d  1829      jr      #0a78           ; (41)
+
+; OP_EF : EXTERN_PROC m n
+
+0a4f  1a        ld      a,(de)
+0a50  13        inc     de
+0a51  87        add     a,a
+0a52  ed44      neg     
+0a54  d612      sub     #12
+0a56  6f        ld      l,a
+0a57  1a        ld      a,(de)
+0a58  180e      jr      #0a68           ; (14)
+
+; OP_F0 : EXTERN_PROC mn
+; m and n are 4 bits each
+
+0a5a  1a        ld      a,(de)          ; fetch mn
+0a5b  1f        rra     
+0a5c  1f        rra     
+0a5d  1f        rra     
+0a5e  e61e      and     #1e             ; A = m*2
+0a60  ed44      neg     
+0a62  d612      sub     #12             ; A = -18 - 2*m
+0a64  6f        ld      l,a
+0a65  1a        ld      a,(de)          ; fetch mn again
+0a66  e60f      and     #0f
+
+0a68  26ff      ld      h,#ff           ; HL = -18 - 2*m
+0a6a  13        inc     de
+0a6b  d5        push    de              ; push IP
+0a6c  ed4b1203  ld      bc,(#0312)      ; BC is caller's GLOBAL ptr
+0a70  09        add     hl,bc           ; HL = GLOBAL[-18-2*m]
+0a71  5e        ld      e,(hl)
+0a72  23        inc     hl
+0a73  66        ld      h,(hl)
+0a74  6b        ld      l,e
+                                        ; entry point here : HL points to the module, A is the proc number
+0a75  ed44      neg     
+0a77  5f        ld      e,a             ; save A in E
+0a78  7e        ld      a,(hl)          ; get flags of module ?
+0a79  1f        rra     
+0a7a  3819      jr      c,#0a95         ; jump if bit 0 set
+0a7c  221203    ld      (#0312),hl
+0a7f  1f        rra     
+0a80  309a      jr      nc,#0a1c        ; jump if bit 1 clear : MCODE
+                                        ; otherwise prepare for Z80 code
+0a82  2b        dec     hl
+0a83  7e        ld      a,(hl)
+0a84  2b        dec     hl
+0a85  6e        ld      l,(hl)
+0a86  67        ld      h,a
+0a87  16ff      ld      d,#ff
+0a89  1c        inc     e
+0a8a  1d        dec     e
+0a8b  2001      jr      nz,#0a8e        ; (1)
+0a8d  14        inc     d
+0a8e  19        add     hl,de
+0a8f  19        add     hl,de
+0a90  5e        ld      e,(hl)
+0a91  23        inc     hl
+0a92  56        ld      d,(hl)
+0a93  19        add     hl,de
+0a94  e9        jp      (hl)
+                                        ; load an overlay module
+                                        ; first, exchange stack top with DE, keep new module addr in HL
+0a95  eb        ex      de,hl
+0a96  e3        ex      (sp),hl         
+0a97  eb        ex      de,hl
+                                        ; so now DE = IP, proc num is on stack
+0a98  cdaf0b    call    #0baf
+                                        ; exchange stack top with DE again
+0a9b  eb        ex      de,hl
+0a9c  e3        ex      (sp),hl
+0a9d  eb        ex      de,hl
+0a9e  18dc      jr      #0a7c           ; and continue with proc call
+
+
+0aa0  fd211a04  ld      iy,#041a
+0aa4  1802      jr      #0aa8           ; (2)
+
+; OP_EB : EXTERN PROC CALL
+
+0aa6  e1        pop     hl              ; pop module ptr
+0aa7  c1        pop     bc              ; pop proc number
+0aa8  d5        push    de              ; push IP
+0aa9  7c        ld      a,h
+0aaa  b5        or      l
+0aab  79        ld      a,c             ; proc number
+0aac  ed4b1203  ld      bc,(#0312)
+0ab0  20c3      jr      nz,#0a75        ; (-61)
+0ab2  c32309    jp      #0923
+
+; OP_87 : ASMCODE n
+
+0ab5  1a        ld      a,(de)
+0ab6  13        inc     de
+0ab7  fd2a1203  ld      iy,(#0312)      ; save GLOBAL pointer in IY
+0abb  b7        or      a
+0abc  2808      jr      z,#0ac6         ; don't set GLOBAL pointer if n=0
+0abe  78        ld      a,b             
+0abf  b1        or      c
+0ac0  2804      jr      z,#0ac6         ; don't set GLOBAL pointer if BC=0
+0ac2  ed431203  ld      (#0312),bc      ; set GLOBAL pointer with BC
+0ac6  dd221a03  ld      (#031a),ix      ; save IX (frame pointer)
+0aca  21d30a    ld      hl,#0ad3        ; return addr will always be 0ad3
+0acd  e3        ex      (sp),hl         ; replace the IP on stack
+0ace  221c03    ld      (#031c),hl      ; and save IP on context
+0ad1  eb        ex      de,hl           ; keep IP in DE,
+0ad2  e9        jp      (hl)            ; and jump to Z80 code
+
+                                        ; return of ASMCODE
+0ad3  ed5b1c03  ld      de,(#031c)      ; reload DE,IX,BC
+0ad7  dd2a1a03  ld      ix,(#031a)
+0adb  ed4b1203  ld      bc,(#0312)
+0adf  78        ld      a,b
+0ae0  b1        or      c
+0ae1  c38c0b    jp      #0b8c
+
+; OP_D4 : ENTER n
+
+0ae4  dde5      push    ix              ; save frame pointer
+0ae6  c5        push    bc              ; save BC
+0ae7  dd210000  ld      ix,#0000
+0aeb  dd39      add     ix,sp
+0aed  1a        ld      a,(de)          ; get n
+0aee  13        inc     de
+0aef  d5        push    de              ; save Instruction Pointer
+0af0  6f        ld      l,a
+0af1  26ff      ld      h,#ff
+0af3  23        inc     hl
+0af4  39        add     hl,sp
+0af5  3a1703    ld      a,(#0317)       ; check stack pointer
+0af8  bc        cp      h
+0af9  3003      jr      nc,#0afe
+0afb  f9        ld      sp,hl           ; ok if (0316-0317)  < SP
+0afc  fde9      jp      (iy)
+
+0afe  2006      jr      nz,#0b06        ; (6)
+0b00  3a1603    ld      a,(#0316)
+0b03  bd        cp      l
+0b04  38f5      jr      c,#0afb         ; (-11)
+0b06  3e06      ld      a,#06
+0b08  c3be0c    jp      #0cbe
+
+0b0b  dde5      push    ix
+0b0d  c5        push    bc
+0b0e  dd210000  ld      ix,#0000
+0b12  dd39      add     ix,sp
+0b14  d5        push    de
+0b15  39        add     hl,sp
+0b16  3a1703    ld      a,(#0317)
+0b19  bc        cp      h
+0b1a  3003      jr      nc,#0b1f        ; (3)
+0b1c  f9        ld      sp,hl
+0b1d  eb        ex      de,hl
+0b1e  e9        jp      (hl)
+0b1f  20e5      jr      nz,#0b06        ; (-27)
+0b21  3a1603    ld      a,(#0316)
+0b24  bd        cp      l
+0b25  38f5      jr      c,#0b1c         ; (-11)
+0b27  18dd      jr      #0b06           ; (-35)
+
+; OP_84 :   LEAVE n
+
+0b29  1a        ld      a,(de)
+0b2a  1802      jr      #0b2e           ; (2)
+
+; OP_88 :    LEAVE0
+; OP_89 :    LEAVE2
+; OP_8A :    LEAVE4
+; OP_8B :    LEAVE6
+
+0b2c  e683      and     #83
+
+0b2e  87        add     a,a
+0b2f  6f        ld      l,a
+0b30  2600      ld      h,#00
+0b32  08        ex      af,af'
+0b33  ddf9      ld      sp,ix
+0b35  c1        pop     bc
+0b36  dde1      pop     ix
+0b38  d1        pop     de
+0b39  39        add     hl,sp
+0b3a  f9        ld      sp,hl
+
+0b3b  08        ex      af,af'
+0b3c  3004      jr      nc,#0b42        ;
+0b3e  78        ld      a,b
+0b3f  b1        or      c
+0b40  204e      jr      nz,#0b90        ; 
+0b42  fde9      jp      (iy)
+
+; OP_85 : FCT_LEAVE n
+
+0b44  1a        ld      a,(de)
+0b45  e1        pop     hl
+0b46  ddf9      ld      sp,ix
+0b48  c1        pop     bc
+0b49  dde1      pop     ix
+0b4b  d1        pop     de
+0b4c  d9        exx     
+0b4d  87        add     a,a
+0b4e  6f        ld      l,a
+0b4f  2600      ld      h,#00
+0b51  08        ex      af,af'
+0b52  39        add     hl,sp
+0b53  f9        ld      sp,hl
+0b54  d9        exx     
+0b55  e5        push    hl
+0b56  18e3      jr      #0b3b           ; (-29)
+
+; OP_86 :   LONG_FCT_LEAVE n
+;
+; WARNING, BUG: an exx is missing!
+
+0b58  1a        ld      a,(de)
+                                    ; exx is missing here, so that
+0b59  e1        pop     hl          ; the result should be saved in HL'
+0b5a  d1        pop     de          ; and DE'
+0b5b  d9        exx     
+0b5c  ddf9      ld      sp,ix
+0b5e  c1        pop     bc          ; and so that BC is used here
+0b5f  dde1      pop     ix
+0b61  d1        pop     de          ; and DE here, not DE'
+0b62  87        add     a,a
+0b63  6f        ld      l,a
+0b64  2600      ld      h,#00
+0b66  08        ex      af,af'
+0b67  39        add     hl,sp
+0b68  f9        ld      sp,hl
+0b69  d9        exx     
+0b6a  d5        push    de          ; and result pushed from DE'
+0b6b  e5        push    hl          ; and HL'
+0b6c  d9        exx     
+0b6d  18cc      jr      #0b3b           ; (-52)
+
+; LONGREAL 10 n :
+; FCT_LEAVE with LONGREAL result
+; WARNING, BUG: an exx is missing too!
+
+                                    ; exx is missing here!
+0b6f  e1        pop     hl          ; so that result is saved in HL'
+0b70  d1        pop     de          ; ... DE'
+0b71  c1        pop     bc          ; ... BC'
+0b72  fde1      pop     iy          ; ... and IY'
+0b74  d9        exx     
+0b75  ddf9      ld      sp,ix
+0b77  c1        pop     bc
+0b78  dde1      pop     ix
+0b7a  d1        pop     de
+0b7b  87        add     a,a
+0b7c  6f        ld      l,a
+0b7d  2600      ld      h,#00
+0b7f  08        ex      af,af'
+0b80  39        add     hl,sp
+0b81  f9        ld      sp,hl
+0b82  d9        exx     
+0b83  fde5      push    iy          ; push IY' back on stack, and
+0b85  fd211a04  ld      iy,#041a
+0b89  c5        push    bc          ; ... BC'
+0b8a  18de      jr      #0b6a       ; ... and DE' and HL'
+
+
+0b8c  fd211a04  ld      iy,#041a
+
+0b90  fe01      cp      #01             ; A is the OR of the two bytes of #0312
+0b92  2816      jr      z,#0baa
+0b94  ed431203  ld      (#0312),bc
+0b98  0a        ld      a,(bc)
+0b99  1f        rra     
+0b9a  3807      jr      c,#0ba3
+0b9c  1f        rra     
+0b9d  3802      jr      c,#0ba1
+0b9f  fde9      jp      (iy)
+0ba1  eb        ex      de,hl
+0ba2  e9        jp      (hl)
+                                    ;
+0ba3  60        ld      h,b
+0ba4  69        ld      l,c
+0ba5  cdaf0b    call    #0baf
+0ba8  18f2      jr      #0b9c
+
+0baa  3e0a      ld      a,#0a       ; error 10
+0bac  c3be0c    jp      #0cbe
+
+0baf  f5        push    af          ; save flags and A
+0bb0  3e01      ld      a,#01
+0bb2  cdbe0c    call    #0cbe       ; error 1
+0bb5  f1        pop     af
+0bb6  c9        ret     
+
+0bb7  ed431a03  ld      (#031a),bc
+
+; OP_D2 : RESERVE
+
+0bbb  c1        pop     bc
+0bbc  210000    ld      hl,#0000
+0bbf  39        add     hl,sp
+0bc0  ed42      sbc     hl,bc       ; reserve n bytes on stack
+0bc2  3a1703    ld      a,(#0317)
+0bc5  bc        cp      h
+0bc6  3015      jr      nc,#0bdd    ; verify stack overflow
+0bc8  03        inc     bc
+0bc9  cb38      srl     b
+0bcb  cb19      rr      c           ; now BC is # of words
+0bcd  04        inc     b
+0bce  210000    ld      hl,#0000
+0bd1  e5        push    hl
+0bd2  0d        dec     c
+0bd3  c2d10b    jp      nz,#0bd1
+0bd6  10f9      djnz    #0bd1
+0bd8  39        add     hl,sp       ; push a pointer to
+0bd9  e5        push    hl          ; the reserved area
+0bda  c3490e    jp      #0e49
+
+0bdd  c2060b    jp      nz,#0b06
+0be0  3a1603    ld      a,(#0316)
+0be3  bd        cp      l
+0be4  38e2      jr      c,#0bc8         ; (-30)
+0be6  c3060b    jp      #0b06
+
+; OP_D3 : RESERVE_STRING
+
+0be9  cdc806    call    #06c8
+0bec  d1        pop     de
+0bed  c1        pop     bc
+0bee  cb41      bit     0,c
+0bf0  2801      jr      z,#0bf3         ; (1)
+0bf2  03        inc     bc
+0bf3  210000    ld      hl,#0000
+0bf6  39        add     hl,sp
+0bf7  ed42      sbc     hl,bc
+0bf9  3a1703    ld      a,(#0317)
+0bfc  bc        cp      h
+0bfd  300b      jr      nc,#0c0a        ; (11)
+0bff  f9        ld      sp,hl
+0c00  eb        ex      de,hl
+0c01  edb0      ldir    
+0c03  60        ld      h,b
+0c04  69        ld      l,c
+0c05  39        add     hl,sp
+0c06  e5        push    hl
+0c07  c3450e    jp      #0e45
+
+0c0a  2006      jr      nz,#0c12        ; (6)
+0c0c  3a1603    ld      a,(#0316)
+0c0f  bd        cp      l
+0c10  38ed      jr      c,#0bff         ; (-19)
+0c12  3e06      ld      a,#06
+0c14  c3ba0c    jp      #0cba
+
+; Interrupt Handler ?
+
+0c17  f3        di                      ; disable interrupts
+0c18  220e03    ld      (#030e),hl      ; save HL and DE
+0c1b  ed531003  ld      (#0310),de
+0c1f  e1        pop     hl              ; get return address
+0c20  5e        ld      e,(hl)          ; read word at return address
+0c21  23        inc     hl
+0c22  56        ld      d,(hl)
+0c23  23        inc     hl
+0c24  eb        ex      de,hl           ; return address + 2 in DE
+0c25  e3        ex      (sp),hl         ; put it on stack 
+0c26  e5        push    hl              ; save the word that was there
+0c27  eb        ex      de,hl           ; return address + 2 in HL
+0c28  5e        ld      e,(hl)          ; get the word that is there
+0c29  23        inc     hl
+0c2a  56        ld      d,(hl)
+0c2b  e1        pop     hl              ; get back the old word
+0c2c  d5        push    de              ;
+0c2d  e5        push    hl
+0c2e  ed5b1003  ld      de,(#0310)      ; restore DE
+0c32  1804      jr      #0c38           ; HL already saved, skip HL save
+
+; heart of coroutine transfer:
+; this routine is called with two pointers to the coroutines on stack
+; (plus the return address of course)
+
+0c34  f3        di                      ; disable interrupts
+0c35  220e03    ld      (#030e),hl      ; save HL
+
+0c38  e1        pop     hl              ; pop return address
+0c39  d9        exx                    
+0c3a  221003    ld      (#0310),hl      ; save HL'
+0c3d  e1        pop     hl              ; pop coroutine to resume in HL'
+0c3e  d9        exx     
+0c3f  e3        ex      (sp),hl         ; HL=coroutine to suspend, and restore return address on stack
+                                        ; start to save context on stack, from top to bottom
+0c40  f5        push    af              ; push AF
+0c41  08        ex      af,af'
+0c42  f5        push    af              ; push AF'
+0c43  c5        push    bc              ; push BC
+0c44  d5        push    de              ; push DE (IP)
+0c45  d9        exx     
+0c46  c5        push    bc              ; push BC'
+0c47  d5        push    de              ; push DE'
+0c48  dde5      push    ix              ; push IX
+0c4a  fde5      push    iy              ; push IY
+0c4c  d9        exx     
+0c4d  4d        ld      c,l             
+0c4e  44        ld      b,h             ; BC = coroutine to suspend
+0c4f  21f0ff    ld      hl,#fff0        ; substract 16 from stack ptr for [030e-031d]
+0c52  39        add     hl,sp           ; 
+0c53  f9        ld      sp,hl
+0c54  7d        ld      a,l
+0c55  02        ld      (bc),a          ; save pointer of coroutine
+0c56  03        inc     bc
+0c57  7c        ld      a,h
+0c58  02        ld      (bc),a
+
+0c59  d5        push    de
+0c5a  eb        ex      de,hl
+0c5b  210e03    ld      hl,#030e
+0c5e  011000    ld      bc,#0010
+0c61  edb0      ldir                    ; save [030e-031d] on reserved stack space
+0c63  d1        pop     de
+
+0c64  d9        exx     
+0c65  7e        ld      a,(hl)
+0c66  23        inc     hl
+0c67  66        ld      h,(hl)
+0c68  6f        ld      l,a
+0c69  b4        or      h
+0c6a  ca2209    jp      z,#0922
+                                        ; now, switch stack
+0c6d  f9        ld      sp,hl
+0c6e  210400    ld      hl,#0004        ; skip the HL/HL' registers
+0c71  39        add     hl,sp
+0c72  111203    ld      de,#0312
+0c75  010c00    ld      bc,#000c
+0c78  edb0      ldir                    ; and restore [0312-031d]
+0c7a  d9        exx     
+0c7b  e1        pop     hl              ; now pop HL
+0c7c  d9        exx     
+0c7d  d1        pop     de              ; pop HL' and keep it in DE'
+0c7e  210c00    ld      hl,#000c        ; skip the already restored locations
+0c81  39        add     hl,sp
+0c82  f9        ld      sp,hl
+0c83  eb        ex      de,hl           ; and restore HL' from DE'
+0c84  fde1      pop     iy
+0c86  dde1      pop     ix
+0c88  d1        pop     de              ; restore DE'
+0c89  c1        pop     bc              ; restore BC'
+0c8a  d9        exx     
+0c8b  d1        pop     de              ; restore DE (IP)
+0c8c  c1        pop     bc              ; restore BC
+0c8d  f1        pop     af              ; restore AF'
+0c8e  08        ex      af,af'
+0c8f  3a1403    ld      a,(#0314)       ; test IntFlag
+0c92  b7        or      a
+0c93  2001      jr      nz,#0c96        ;
+0c95  fb        ei                      ; enable hardware interrupt flag if necessary
+
+                                        ; restoring context is not finished, but
+                                        ; verify HEAP points to a FREE block
+0c96  e5        push    hl
+0c97  c5        push    bc
+0c98  2a1603    ld      hl,(#0316)
+0c9b  01c4ff    ld      bc,#ffc4
+0c9e  09        add     hl,bc
+0c9f  7e        ld      a,(hl)
+0ca0  fee3      cp      #e3
+0ca2  2012      jr      nz,#0cb6        ; jump to memory error if not
+0ca4  23        inc     hl
+0ca5  7e        ld      a,(hl)
+0ca6  fe3a      cp      #3a
+0ca8  200c      jr      nz,#0cb6        ; jump to memory error if not
+
+                                    ; also check TRANSIENT flag in the restored module
+0caa  2a1203    ld      hl,(#0312)
+0cad  7e        ld      a,(hl)
+0cae  1f        rra     
+0caf  dcaf0b    call    c,#0baf         ; if set, switch to KERNEL mode
+                                        ; to reload module
+0cb2  c1        pop     bc
+0cb3  e1        pop     hl
+                                        ; now finish restoring context
+0cb4  f1        pop     af              ; restore AF
+0cb5  c9        ret                     ; and return to saved return addr
+
+0cb6  3e11      ld      a,#11
+0cb8  1804      jr      #0cbe           ; (4)
+0cba  ed5b1c03  ld      de,(#031c)
+
+; error routine : push error information and then RAISE
+
+0cbe  d9        exx                 ; use HL' to preserve HL
+0cbf  6f        ld      l,a         ; error code
+0cc0  af        xor     a
+0cc1  67        ld      h,a
+0cc2  e5        push    hl          ; push 00nn
+0cc3  6f        ld      l,a
+0cc4  e5        push    hl          ; push 0000
+0cc5  e5        push    hl          ; push 0000
+0cc6  d9        exx                 ; switch back to HL
+
+; OP_01 : RAISE (TRANSFER to Coroutine 0304)
+
+0cc7  d9        exx                 ; use HL' to preserve HL
+0cc8  210603    ld      hl,#0306
+0ccb  e5        push    hl          ; push 0306
+0ccc  2b        dec     hl
+0ccd  2b        dec     hl
+0cce  e5        push    hl          ; push 0304
+0ccf  d9        exx                 ; switch back to HL
+0cd0  cd340c    call    #0c34
+0cd3  d9        exx     
+0cd4  e1        pop     hl
+0cd5  e1        pop     hl
+0cd6  e1        pop     hl
+0cd7  d9        exx     
+0cd8  c9        ret     
+
+; EXT_OP 11 : IOTRANSFER
+
+0cd9  cdc806    call    #06c8       ; save BC and DE
+0cdc  d1        pop     de          ; get interrupt vector number in DE
+0cdd  e1        pop     hl          ; coroutine to transfer to in HL 
+0cde  c1        pop     bc          ; coroutine to save in BC
+0cdf  c5        push    bc          ; push back BC and HL for TRANSFER
+0ce0  e5        push    hl
+0ce1  d9        exx     
+0ce2  21170c    ld      hl,#0c17    ; push interrupt handler address
+0ce5  e5        push    hl
+0ce6  3ecd      ld      a,#cd       ; push Z80 CALL instruction
+0ce8  f5        push    af
+0ce9  d9        exx     
+0cea  c5        push    bc          ; push BC and HL again
+0ceb  e5        push    hl
+0cec  210500    ld      hl,#0005
+0cef  39        add     hl,sp       ; HL is SP+5, points to Z80 CALL
+0cf0  eb        ex      de,hl       ; now HL is vector number
+0cf1  73        ld      (hl),e      ; store address SP+5 in vector
+0cf2  23        inc     hl
+0cf3  72        ld      (hl),d
+0cf4  11fa0c    ld      de,#0cfa    ; this is only for acknowledging
+0cf7  d5        push    de     
+0cf8  ed4d      reti                ;   the interrupt
+0cfa  cd340c    call    #0c34       ; do the TRANSFER
+0cfd  11b50c    ld      de,#0cb5    ; store address 0CB5 in vector
+0d00  72        ld      (hl),d      ;   (it points to a Z80 RET)
+0d01  2b        dec     hl
+0d02  73        ld      (hl),e
+0d03  210800    ld      hl,#0008    ; drop 4 words on stack
+0d06  39        add     hl,sp
+0d07  f9        ld      sp,hl
+0d08  c3450e    jp      #0e45       ; restore BC/DE and continue exec
+
+; EXT_OP 10 : TRANSFER
+
+0d0b  cd340c    call    #0c34
+0d0e  fde9      jp      (iy)
+
+; OP_50 : TRANSFER to Coroutine 0308 (return to SHELL ?)
+
+0d10  210a03    ld      hl,#030a
+0d13  e5        push    hl
+0d14  210803    ld      hl,#0308
+0d17  e5        push    hl
+0d18  cd340c    call    #0c34
+
+; EXT_OP 1 : Push Interrupt Flag and Disable Interrupts
+
+0d1b  f3        di      
+0d1c  2a1403    ld      hl,(#0314)
+0d1f  e5        push    hl
+0d20  3e01      ld      a,#01
+0d22  321403    ld      (#0314),a
+0d25  fde9      jp      (iy)
+
+; EXT_OP 2 : Pop Interrupt Flag
+
+0d27  e1        pop     hl
+0d28  7d        ld      a,l
+0d29  321403    ld      (#0314),a
+0d2c  f3        di      
+0d2d  b7        or      a
+0d2e  2001      jr      nz,#0d31        ; (1)
+0d30  fb        ei      
+0d31  fde9      jp      (iy)
+
+
+0d33 dw 0000,0000,0000,0000,0000,0000,0000,0000
+0d43 dw 041a,0000,0000,0000,0000,0001,0000,0000
+0d53 dw 0000,0000
+
+; EXT_OP 12 : NEWPROCESS
+
+0d57  cdc806    call    #06c8
+0d5a  e1        pop     hl              ; get the Process variable addr
+0d5b  c1        pop     bc              ; and the size of storage
+0d5c  e3        ex      (sp),hl         ; save the process variable addr and get the addr of storage
+0d5d  eb        ex      de,hl           ; DE is now the addr of storage
+0d5e  214500    ld      hl,#0045        ; check that the storage size is at least 70 bytes
+0d61  ed42      sbc     hl,bc
+0d63  d27016    jp      nc,#1670        
+0d66  213c00    ld      hl,#003c        ; add 60 to the addr of storage
+0d69  19        add     hl,de
+0d6a  223b0d    ld      (#0d3b),hl      ; and save that to the context model just above this routine
+0d6d  cd6f15    call    #156f           ; put a 0x3ae3 marker at the beginning of the storage
+0d70  21dcff    ld      hl,#ffdc        ; substracts 36 to the storage size,
+0d73  09        add     hl,bc
+0d74  19        add     hl,de           ; so points to the end of storage size minus 36 bytes
+0d75  eb        ex      de,hl
+0d76  e1        pop     hl              ; restore the process variable addr
+0d77  73        ld      (hl),e          ; and set the variable to point to the future context
+0d78  23        inc     hl
+0d79  72        ld      (hl),d
+0d7a  e1        pop     hl              ; get the module of the procedure
+0d7b  22330d    ld      (#0d33),hl      ; and put it in the context model
+0d7e  22370d    ld      (#0d37),hl      ; (in two places)
+0d81  e1        pop     hl              ; pop the procedure number
+0d82  7d        ld      a,l             ; and
+0d83  32520d    ld      (#0d52),a       ; save it in the context model
+0d86  21750a    ld      hl,#0a75        ; this is an entry point inside the EXTERN PROC opcode
+0d89  22530d    ld      (#0d53),hl
+0d8c  21330d    ld      hl,#0d33        ; finally copy the 36 bytes of the context model to the prepared storage
+0d8f  012400    ld      bc,#0024
+0d92  edb0      ldir    
+0d94  c3450e    jp      #0e45
+
+; OP_E0 :   JP nn   Jump
+
+0d97  eb        ex      de,hl
+0d98  5e        ld      e,(hl)
+0d99  23        inc     hl
+0d9a  56        ld      d,(hl)
+0d9b  19        add     hl,de
+0d9c  eb        ex      de,hl
+0d9d  fde9      jp      (iy)
+
+; OP_E1 :   JPC nn      Jump Conditional
+; Jump if pop()=0
+
+0d9f  f1        pop     af
+0da0  30f5      jr      nc,#0d97        ; (-11)
+0da2  13        inc     de
+0da3  13        inc     de
+0da4  fde9      jp      (iy)
+
+; OP_DE :   ANDJP +n    short circuit AND
+
+0da6  210000    ld      hl,#0000
+0da9  f1        pop     af
+0daa  300c      jr      nc,#0db8
+0dac  13        inc     de
+0dad  fde9      jp      (iy)
+
+; OP_DF :   ORJP +n     short circuit OR
+
+0daf  210100    ld      hl,#0001
+0db2  f1        pop     af
+0db3  3803      jr      c,#0db8         ; (3)
+0db5  13        inc     de
+0db6  fde9      jp      (iy)
+
+0db8  e5        push    hl
+
+; OP_E2 :   JPF +n      Jump Forward
+
+0db9  eb        ex      de,hl
+0dba  5e        ld      e,(hl)
+0dbb  23        inc     hl
+0dbc  1600      ld      d,#00
+0dbe  19        add     hl,de
+0dbf  eb        ex      de,hl
+0dc0  fde9      jp      (iy)
+
+; OP_E3 :   JPFC +n     Jump Forward Conditional
+; jump forward if pop()=0
+
+0dc2  f1        pop     af
+0dc3  30f4      jr      nc,#0db9        ; test bit 0
+0dc5  13        inc     de
+0dc6  fde9      jp      (iy)
+
+; OP_E4 :   JPB -n      Jump Backward
+
+0dc8  eb        ex      de,hl
+0dc9  5e        ld      e,(hl)
+0dca  23        inc     hl
+0dcb  af        xor     a
+0dcc  57        ld      d,a
+0dcd  ed52      sbc     hl,de
+0dcf  eb        ex      de,hl
+0dd0  fde9      jp      (iy)
+
+; OP_E5 :   JPBC -n     Jump Backward Conditional
+
+0dd2  f1        pop     af
+0dd3  30f3      jr      nc,#0dc8        ; (-13)
+0dd5  13        inc     de
+0dd6  fde9      jp      (iy)
+
+; OP_CD : CASE
+
+0dd8  3e01      ld      a,#01	    ; 1 means we are executing MCode
+0dda  eb        ex      de,hl
+				    ; can be called here with A=0 for Z80 code
+0ddb  08        ex      af,af'	    ; save MCode/Z80 flag
+0ddc  eb        ex      de,hl
+0ddd  e3        ex      (sp),hl     ; save IP on stack, get CASE value instead
+0dde  c5        push    bc          ; save BC
+0ddf  1a        ld      a,(de)      ; BC = [DE] : low bound
+0de0  13        inc     de
+0de1  4f        ld      c,a
+0de2  1a        ld      a,(de)
+0de3  13        inc     de
+0de4  47        ld      b,a
+0de5  7c        ld      a,h         ; int to unsigned for comparison
+0de6  c680      add     a,#80
+0de8  67        ld      h,a
+0de9  b7        or      a
+0dea  ed42      sbc     hl,bc
+0dec  4d        ld      c,l         ; => BC = value - low_bound
+0ded  44        ld      b,h
+0dee  1a        ld      a,(de)      ; HL = table size
+0def  13        inc     de
+0df0  6f        ld      l,a
+0df1  1a        ld      a,(de)
+0df2  13        inc     de
+0df3  67        ld      h,a
+0df4  3829      jr      c,#0e1f	    ; jump if value < low bound
+
+0df6  ed42      sbc     hl,bc       ; tablesize - (value - low_bound)
+0df8  3824      jr      c,#0e1e	    ; jump if value - low bound > tablesize
+
+0dfa  1a        ld      a,(de)	    ; HL = [DE] jump table relative address
+0dfb  13        inc     de
+0dfc  6f        ld      l,a
+0dfd  1a        ld      a,(de)
+0dfe  67        ld      h,a
+0dff  08        ex      af,af'
+0e00  b7        or      a
+0e01  2801      jr      z,#0e04     ; jump if Z80 code 
+0e03  19        add     hl,de       ; now HL is absolute addr of jump table
+0e04  08        ex      af,af'
+0e05  13        inc     de          ; and IP is after all the arguments
+0e06  eb        ex      de,hl       ; now HL = IP, and DE = abs addr of jump table
+0e07  09        add     hl,bc	    ; add (value-low bound)x2
+0e08  09        add     hl,bc
+0e09  4e        ld      c,(hl)	    ; get jump value
+0e0a  23        inc     hl
+0e0b  46        ld      b,(hl)
+0e0c  78        ld      a,b
+0e0d  09        add     hl,bc	    ; now HL is final address destination
+0e0e  c1        pop     bc	    ; restore BC
+0e0f  eb        ex      de,hl       ; exchange with IP
+0e10  e3        ex      (sp),hl	    ; exchange with saved IP
+0e11  eb        ex      de,hl
+0e12  87        add     a,a	    ; bit 15 of jump => skip pop
+0e13  3801      jr      c,#0e16
+0e15  f1        pop     af
+
+0e16  08        ex      af,af'
+0e17  b7        or      a
+0e18  2001      jr      nz,#0e1b    ; jump if MCode
+0e1a  e9        jp      (hl)
+
+0e1b  eb        ex      de,hl
+0e1c  fde9      jp      (iy)
+
+0e1e  09        add     hl,bc
+
+0e1f  23        inc     hl
+0e20  23        inc     hl
+0e21  29        add     hl,hl
+0e22  19        add     hl,de
+0e23  c1        pop     bc
+0e24  d1        pop     de
+0e25  18ef      jr      #0e16           ; (-17)
+
+; OP_CE :   JUMP_STACK
+
+0e27  d1        pop     de
+0e28  fde9      jp      (iy)
+
+; OP_CF :   PUSH PC+nn
+
+0e2a  1a        ld      a,(de)
+0e2b  13        inc     de
+0e2c  6f        ld      l,a
+0e2d  1a        ld      a,(de)
+0e2e  67        ld      h,a
+0e2f  19        add     hl,de
+0e30  13        inc     de
+0e31  e5        push    hl
+0e32  fde9      jp      (iy)
+
+; OP_DA : URANGE_CHECK
+
+0e34  cdc806    call    #06c8
+0e37  c1        pop     bc
+0e38  d1        pop     de
+0e39  e1        pop     hl
+0e3a  e5        push    hl
+0e3b  b7        or      a
+0e3c  ed42      sbc     hl,bc
+0e3e  3833      jr      c,#0e73
+0e40  37        scf     
+0e41  ed52      sbc     hl,de
+0e43  302e      jr      nc,#0e73
+0e45  ed5b1c03  ld      de,(#031c)
+
+0e49  ed4b1a03  ld      bc,(#031a)
+0e4d  fde9      jp      (iy)
+
+; OP_DB : IRANGE_CHECK
+
+0e4f  cdc806    call    #06c8
+0e52  c1        pop     bc
+0e53  78        ld      a,b
+0e54  c680      add     a,#80
+0e56  47        ld      b,a
+0e57  d1        pop     de
+0e58  e1        pop     hl
+0e59  e5        push    hl
+0e5a  7c        ld      a,h
+0e5b  c680      add     a,#80
+0e5d  67        ld      h,a
+0e5e  b7        or      a
+0e5f  ed42      sbc     hl,bc
+0e61  3805      jr      c,#0e68         ; (5)
+0e63  37        scf     
+0e64  ed52      sbc     hl,de
+0e66  38dd      jr      c,#0e45         ; (-35)
+
+0e68  78        ld      a,b
+0e69  c680      add     a,#80
+0e6b  47        ld      b,a
+0e6c  3e03      ld      a,#03
+0e6e  eb        ex      de,hl
+0e6f  09        add     hl,bc
+0e70  c3ba0c    jp      #0cba
+
+0e73  3e02      ld      a,#02
+0e75  18f7      jr      #0e6e           ; (-9)
+
+; OP_DC : LIMIT_CHECK
+
+0e77  e1        pop     hl
+0e78  7d        ld      a,l
+0e79  08        ex      af,af'      ; LSB in A'
+0e7a  7c        ld      a,h         ; MSB in A
+0e7b  e1        pop     hl
+0e7c  e5        push    hl
+0e7d  bc        cp      h
+0e7e  3809      jr      c,#0e89     ; error 2 if A<TOP
+0e80  2004      jr      nz,#0e86    ; ok if TOP<A
+0e82  08        ex      af,af'      ; LSB in A, MSB in A'
+0e83  bd        cp      l
+0e84  3802      jr      c,#0e88     ; error 2 if A<TOP
+0e86  fde9      jp      (iy)        ; ok if TOP<=A
+
+0e88  08        ex      af,af'
+0e89  67        ld      h,a
+0e8a  08        ex      af,af'
+0e8b  6f        ld      l,a         ; LIMIT in HL
+0e8c  010000    ld      bc,#0000    ; low bound ?
+0e8f  3e02      ld      a,#02
+0e91  c3be0c    jp      #0cbe
+
+; OP_DD : POSITIVE_CHECK
+
+0e94  f1        pop     af
+0e95  f5        push    af
+0e96  87        add     a,a
+0e97  3802      jr      c,#0e9b
+0e99  fde9      jp      (iy)
+
+0e9b  3e04      ld      a,#04
+0e9d  c3be0c    jp      #0cbe
+
+; OP_AB : EQ0
+
+0ea0  010000    ld      bc,#0000
+0ea3  1801      jr      #0ea6           ; (1)
+
+; OP_A0 : EQUAL
+
+0ea5  c1        pop     bc
+0ea6  e1        pop     hl
+0ea7  b7        or      a
+0ea8  ed42      sbc     hl,bc
+0eaa  2812      jr      z,#0ebe         ; (18)
+
+; OP_90 : LI0       Load Immediate 0
+
+0eac  210000    ld      hl,#0000
+0eaf  e5        push    hl
+0eb0  fde9      jp      (iy)
+
+; OP_CB :   NOT_ZERO
+
+0eb2  010000    ld      bc,#0000
+0eb5  1801      jr      #0eb8           ; (1)
+
+; OP_A1 :   NOT_EQUAL
+
+0eb7  c1        pop     bc
+0eb8  e1        pop     hl
+0eb9  b7        or      a
+0eba  ed42      sbc     hl,bc
+0ebc  28ee      jr      z,#0eac         ; (-18)
+
+; OP_91 : LI1   Load Immediate 1
+
+0ebe  210100    ld      hl,#0001
+0ec1  e5        push    hl
+0ec2  fde9      jp      (iy)
+
+; OP_A2 :   LOWER_THAN
+
+0ec4  c1        pop     bc
+0ec5  e1        pop     hl
+0ec6  b7        or      a
+0ec7  ed42      sbc     hl,bc
+0ec9  38f3      jr      c,#0ebe         ; (-13)
+0ecb  18df      jr      #0eac           ; (-33)
+
+; OP_A3 :   HIGHER_THAN
+
+0ecd  e1        pop     hl
+0ece  c1        pop     bc
+0ecf  18f5      jr      #0ec6           ; (-11)
+
+; OP_A4 :   LOWER_OR_EQUAL
+
+0ed1  e1        pop     hl
+0ed2  c1        pop     bc
+0ed3  b7        or      a
+0ed4  ed42      sbc     hl,bc
+0ed6  30e6      jr      nc,#0ebe        ; (-26)
+0ed8  18d2      jr      #0eac           ; (-46)
+
+; OP_A5 :   HIGHER_OR_EQUAL
+
+0eda  c1        pop     bc
+0edb  e1        pop     hl
+0edc  18f5      jr      #0ed3           ; (-11)
+
+; OP_B2 :   LESS_THAN
+
+0ede  c1        pop     bc
+0edf  e1        pop     hl
+0ee0  78        ld      a,b
+0ee1  c680      add     a,#80
+0ee3  47        ld      b,a
+0ee4  7c        ld      a,h
+0ee5  c680      add     a,#80
+0ee7  67        ld      h,a
+0ee8  18dc      jr      #0ec6           ; (-36)
+
+; OP_B3 :   GREATER_THAN
+
+0eea  e1        pop     hl
+0eeb  c1        pop     bc
+0eec  18f2      jr      #0ee0           ; (-14)
+
+; OP_B4 :   LESS_OR_EQUAL
+
+0eee  e1        pop     hl
+0eef  c1        pop     bc
+0ef0  78        ld      a,b
+0ef1  c680      add     a,#80
+0ef3  47        ld      b,a
+0ef4  7c        ld      a,h
+0ef5  c680      add     a,#80
+0ef7  67        ld      h,a
+0ef8  18d9      jr      #0ed3           ; (-39)
+
+; OP_B5 :   GREATER_OR_EQUAL
+
+0efa  c1        pop     bc
+0efb  e1        pop     hl
+0efc  18f2      jr      #0ef0           ; (-14)
+
+; OP_E7 :   IN_BITSET
+
+0efe  e1        pop     hl
+0eff  e3        ex      (sp),hl
+0f00  7c        ld      a,h
+0f01  b7        or      a
+0f02  7d        ld      a,l
+0f03  e1        pop     hl
+0f04  20a6      jr      nz,#0eac        ; (-90)
+0f06  d610      sub     #10
+0f08  30a2      jr      nc,#0eac        ; (-94)
+0f0a  29        add     hl,hl
+0f0b  3c        inc     a
+0f0c  20fc      jr      nz,#0f0a        ; (-4)
+0f0e  67        ld      h,a
+0f0f  8f        adc     a,a
+0f10  6f        ld      l,a
+0f11  e5        push    hl
+0f12  fde9      jp      (iy)
+
+; OP_D5 : REAL_COMPARE
+
+0f14  cddc06    call    #06dc
+0f17  78        ld      a,b
+0f18  cbb8      res     7,b
+0f1a  87        add     a,a
+0f1b  dc5e11    call    c,#115e     ; negate BC/BC'
+0f1e  7c        ld      a,h
+0f1f  cbbc      res     7,h
+0f21  87        add     a,a
+0f22  dc4911    call    c,#1149     ; negate HL/HL'
+0f25  1803      jr      #0f2a       ; LONGINT compare
+
+; OP_C5 : LONGINT COMPARE
+
+0f27  cddc06    call    #06dc
+0f2a  78        ld      a,b
+0f2b  c680      add     a,#80
+0f2d  47        ld      b,a
+0f2e  7c        ld      a,h
+0f2f  c680      add     a,#80
+0f31  67        ld      h,a
+0f32  b7        or      a
+0f33  ed42      sbc     hl,bc
+0f35  d9        exx     
+0f36  382c      jr      c,#0f64         ; (44)
+0f38  2031      jr      nz,#0f6b        ; (49)
+0f3a  ed42      sbc     hl,bc
+0f3c  3826      jr      c,#0f64         ; (38)
+0f3e  202b      jr      nz,#0f6b        ; (43)
+0f40  181c      jr      #0f5e           ; (28)
+
+; OP_C4 : STRING COMPARE
+
+0f42  cddc06    call    #06dc
+0f45  04        inc     b               ; inc B'
+0f46  0c        inc     c               ; inc C'
+0f47  d9        exx     
+0f48  04        inc     b               ; inc B
+0f49  0c        inc     c               ; inc C
+
+0f4a  d9        exx     
+0f4b  0d        dec     c               ; dec C'
+0f4c  282e      jr      z,#0f7c
+0f4e  7e        ld      a,(hl)          ; ld (HL')    
+0f4f  23        inc     hl              ; inc HL'
+0f50  d9        exx     
+0f51  0d        dec     c               ; dec C
+0f52  282e      jr      z,#0f82
+0f54  be        cp      (hl)            ; cp (HL)
+0f55  23        inc     hl              ; inc HL
+0f56  380c      jr      c,#0f64         ; if inferior
+0f58  2011      jr      nz,#0f6b        ; if superior
+0f5a  b7        or      a
+0f5b  c24a0f    jp      nz,#0f4a        ; if not string end
+0f5e  210000    ld      hl,#0000        ; 0000 if equal strings
+0f61  e5        push    hl
+0f62  180b      jr      #0f6f           ; (11)
+
+0f64  210000    ld      hl,#0000
+0f67  e5        push    hl
+0f68  23        inc     hl
+0f69  1804      jr      #0f6f           ; (4)
+
+0f6b  2601      ld      h,#01           ; BUG? should be ld hl,#0001 ?
+0f6d  e5        push    hl
+0f6e  2b        dec     hl
+0f6f  e5        push    hl
+0f70  d9        exx     
+0f71  ed4b1c03  ld      bc,(#031c)
+0f75  d9        exx     
+0f76  ed4b1a03  ld      bc,(#031a)
+0f7a  fde9      jp      (iy)
+
+0f7c  05        dec     b
+0f7d  20cf      jr      nz,#0f4e        ; (-49)
+0f7f  af        xor     a
+0f80  18ce      jr      #0f50           ; (-50)
+
+0f82  05        dec     b
+0f83  20cf      jr      nz,#0f54        ; (-49)
+0f85  218a0f    ld      hl,#0f8a
+0f88  18ca      jr      #0f54           ; (-54)
+0f8a  00        nop     
+
+
+; OP_AC : INC
+
+0f8b  e1        pop     hl
+0f8c  23        inc     hl
+0f8d  e5        push    hl
+0f8e  fde9      jp      (iy)
+
+; OP_AD : DEC
+
+0f90  e1        pop     hl
+0f91  2b        dec     hl
+0f92  e5        push    hl
+0f93  fde9      jp      (iy)
+
+; OP_AE :   ADD n
+
+0f95  1a        ld      a,(de)
+0f96  13        inc     de
+0f97  4f        ld      c,a
+0f98  0600      ld      b,#00
+0f9a  1808      jr      #0fa4           ; (8)
+
+; OP_AF :   SUB n
+
+0f9c  1a        ld      a,(de)
+0f9d  13        inc     de
+0f9e  4f        ld      c,a
+0f9f  0600      ld      b,#00
+0fa1  1807      jr      #0faa           ; (7)
+
+; OP_A6 : ADD
+
+0fa3  c1        pop     bc
+0fa4  e1        pop     hl
+0fa5  09        add     hl,bc
+0fa6  e5        push    hl
+0fa7  fde9      jp      (iy)
+
+; OP_A7 :   SUB
+
+0fa9  c1        pop     bc
+0faa  e1        pop     hl
+0fab  b7        or      a
+0fac  ed42      sbc     hl,bc
+0fae  e5        push    hl
+0faf  fde9      jp      (iy)
+
+; OP_B0 :   SHL n
+
+0fb1  1a        ld      a,(de)
+0fb2  13        inc     de
+0fb3  e1        pop     hl
+0fb4  29        add     hl,hl
+0fb5  3d        dec     a
+0fb6  20fc      jr      nz,#0fb4        ; (-4)
+0fb8  e5        push    hl
+0fb9  fde9      jp      (iy)
+
+; OP_B1 :   SHR n
+
+0fbb  1a        ld      a,(de)
+0fbc  13        inc     de
+0fbd  e1        pop     hl
+0fbe  cb3c      srl     h
+0fc0  cb1d      rr      l
+0fc2  3d        dec     a
+0fc3  20f9      jr      nz,#0fbe        ; (-7)
+0fc5  e5        push    hl
+0fc6  fde9      jp      (iy)
+
+; OP_A8 :   UMUL
+
+0fc8  69        ld      l,c
+0fc9  60        ld      h,b
+0fca  c1        pop     bc          ; pop operand1
+0fcb  e3        ex      (sp),hl     ; pop operand2, save BC
+0fcc  d5        push    de          ; save DE
+0fcd  eb        ex      de,hl
+0fce  210000    ld      hl,#0000
+0fd1  1804      jr      #0fd7           ; (4)
+
+0fd3  cb21      sla     c
+0fd5  cb10      rl      b
+0fd7  cb3a      srl     d
+0fd9  2808      jr      z,#0fe3         ; (8)
+0fdb  cb1b      rr      e
+0fdd  30f4      jr      nc,#0fd3        ; (-12)
+0fdf  09        add     hl,bc
+0fe0  c3d30f    jp      #0fd3
+0fe3  cb1b      rr      e
+0fe5  1806      jr      #0fed           ; (6)
+0fe7  cb21      sla     c
+0fe9  cb10      rl      b
+0feb  cb3b      srl     e
+0fed  2806      jr      z,#0ff5         ; (6)
+0fef  30f6      jr      nc,#0fe7        ; (-10)
+0ff1  09        add     hl,bc
+0ff2  c3e70f    jp      #0fe7
+0ff5  3001      jr      nc,#0ff8        ; (1)
+0ff7  09        add     hl,bc
+
+0ff8  d1        pop     de
+0ff9  c1        pop     bc
+0ffa  e5        push    hl
+0ffb  fde9      jp      (iy)
+
+; unsigned division
+
+0ffd  79        ld      a,c
+0ffe  b0        or      b
+0fff  281e      jr      z,#101f         ; (30)
+1001  210000    ld      hl,#0000
+1004  3e11      ld      a,#11
+1006  3d        dec     a
+1007  c8        ret     z
+
+1008  cb23      sla     e
+100a  cb12      rl      d
+100c  30f8      jr      nc,#1006        ; (-8)
+100e  ed6a      adc     hl,hl
+1010  ed42      sbc     hl,bc
+1012  3001      jr      nc,#1015        ; (1)
+1014  09        add     hl,bc
+1015  3f        ccf     
+1016  cb13      rl      e
+1018  cb12      rl      d
+101a  3d        dec     a
+101b  c20e10    jp      nz,#100e
+101e  c9        ret     
+
+101f  e1        pop     hl
+1020  d1        pop     de
+1021  3e08      ld      a,#08
+1023  c3be0c    jp      #0cbe
+
+
+; OP_A9 :  UDIV
+
+1026  69        ld      l,c
+1027  60        ld      h,b
+1028  c1        pop     bc
+1029  e3        ex      (sp),hl
+102a  d5        push    de
+102b  eb        ex      de,hl
+102c  cdfd0f    call    #0ffd
+102f  eb        ex      de,hl
+1030  18c6      jr      #0ff8           ; (-58)
+
+; OP_AA :  UMOD
+
+1032  69        ld      l,c
+1033  60        ld      h,b
+1034  c1        pop     bc
+1035  e3        ex      (sp),hl
+1036  d5        push    de
+1037  eb        ex      de,hl
+1038  cdfd0f    call    #0ffd
+103b  18bb      jr      #0ff8           ; (-69)
+
+103d  08        ex      af,af'
+103e  2f        cpl     
+103f  08        ex      af,af'
+1040  2b        dec     hl
+
+1041  7c        ld      a,h
+1042  2f        cpl     
+1043  67        ld      h,a
+1044  7d        ld      a,l
+1045  2f        cpl     
+1046  6f        ld      l,a
+1047  c9        ret     
+
+1048  08        ex      af,af'
+1049  2f        cpl     
+104a  08        ex      af,af'
+104b  0b        dec     bc
+104c  78        ld      a,b
+104d  2f        cpl     
+104e  47        ld      b,a
+104f  79        ld      a,c
+1050  2f        cpl     
+1051  4f        ld      c,a
+1052  c9        ret     
+
+; OP_B9 : IDIV
+
+1053  69        ld      l,c
+1054  60        ld      h,b
+1055  c1        pop     bc
+1056  e3        ex      (sp),hl
+1057  d5        push    de
+1058  af        xor     a
+1059  08        ex      af,af'
+105a  cb78      bit     7,b
+105c  c44810    call    nz,#1048
+105f  cb7c      bit     7,h
+1061  c43d10    call    nz,#103d
+1064  eb        ex      de,hl
+1065  cdfd0f    call    #0ffd
+1068  eb        ex      de,hl
+1069  08        ex      af,af'
+106a  b7        or      a
+106b  c44010    call    nz,#1040
+106e  1888      jr      #0ff8           ; (-120)
+
+; OP_BC :   ABS
+
+1070  e1        pop     hl
+1071  cb7c      bit     7,h
+1073  c44010    call    nz,#1040
+1076  e5        push    hl
+1077  fde9      jp      (iy)
+
+; OP_BD :   INT_TO_LONG
+
+1079  e1        pop     hl
+107a  d9        exx     
+107b  210000    ld      hl,#0000
+107e  d9        exx     
+107f  cb7c      bit     7,h
+1081  d9        exx     
+1082  2801      jr      z,#1085         ; (1)
+1084  2b        dec     hl
+1085  e5        push    hl
+1086  d9        exx     
+1087  e5        push    hl
+1088  fde9      jp      (iy)
+
+; OP_C0 : UADD (check overflow)
+
+108a  c1        pop     bc
+108b  e1        pop     hl
+108c  09        add     hl,bc
+108d  384e      jr      c,#10dd         ; (78)
+108f  e5        push    hl
+1090  fde9      jp      (iy)
+
+; OP_C1 : USUB (check overflow)
+
+1092  c1        pop     bc
+1093  e1        pop     hl
+1094  b7        or      a
+1095  ed42      sbc     hl,bc
+1097  3844      jr      c,#10dd         ; (68)
+1099  e5        push    hl
+109a  fde9      jp      (iy)
+
+; OP_D0 :   IADD (check overflow)
+
+109c  c1        pop     bc
+109d  e1        pop     hl
+109e  b7        or      a
+109f  ed4a      adc     hl,bc
+10a1  eadd10    jp      pe,#10dd
+10a4  e5        push    hl
+10a5  fde9      jp      (iy)
+
+; OP_D1 :   ISUB (check overflow)
+
+10a7  c1        pop     bc
+10a8  e1        pop     hl
+10a9  b7        or      a
+10aa  ed42      sbc     hl,bc
+10ac  eadd10    jp      pe,#10dd
+10af  e5        push    hl
+10b0  fde9      jp      (iy)
+
+10b2  cb21      sla     c
+10b4  cb10      rl      b
+10b6  3823      jr      c,#10db         ; (35)
+
+; unsigned multiply HL = BC x DE, check overflows
+
+10b8  cb3a      srl     d
+10ba  2810      jr      z,#10cc         ; (16)
+10bc  cb1b      rr      e
+10be  30f2      jr      nc,#10b2        ; (-14)
+10c0  09        add     hl,bc
+10c1  d2b210    jp      nc,#10b2
+10c4  1815      jr      #10db           ; (21)
+10c6  cb21      sla     c
+10c8  cb10      rl      b
+10ca  380f      jr      c,#10db         ; (15)
+10cc  cb1b      rr      e
+10ce  2808      jr      z,#10d8         ; (8)
+10d0  30f4      jr      nc,#10c6        ; (-12)
+10d2  09        add     hl,bc
+10d3  d2c610    jp      nc,#10c6
+10d6  1803      jr      #10db           ; (3)
+10d8  d0        ret     nc
+
+10d9  09        add     hl,bc
+10da  d0        ret     nc
+
+10db  e1        pop     hl
+10dc  d1        pop     de
+10dd  3e0c      ld      a,#0c
+10df  c3be0c    jp      #0cbe
+10e2  d9        exx     
+10e3  18f8      jr      #10dd           ; (-8)
+
+; OP_C2 :   UMUL with overflow check
+
+10e5  69        ld      l,c         ; save BC
+10e6  60        ld      h,b
+10e7  c1        pop     bc
+10e8  e3        ex      (sp),hl     ; ... on stack
+10e9  d5        push    de          ; save DE on stack
+10ea  eb        ex      de,hl
+10eb  210000    ld      hl,#0000
+10ee  cdb810    call    #10b8       ; multiply HL=BCxDE
+10f1  c3f80f    jp      #0ff8
+
+; OP_B8 : IMUL
+
+10f4  69        ld      l,c
+10f5  60        ld      h,b
+10f6  c1        pop     bc
+10f7  e3        ex      (sp),hl
+10f8  d5        push    de
+10f9  af        xor     a
+10fa  08        ex      af,af'
+10fb  cb78      bit     7,b
+10fd  c44810    call    nz,#1048
+1100  cb7c      bit     7,h
+1102  c43d10    call    nz,#103d
+1105  eb        ex      de,hl
+1106  210000    ld      hl,#0000
+1109  cdb810    call    #10b8
+110c  cb7c      bit     7,h
+110e  20cc      jr      nz,#10dc        ; (-52)
+1110  08        ex      af,af'
+1111  b7        or      a
+1112  c44010    call    nz,#1040
+1115  c3f80f    jp      #0ff8
+
+; OP_BB :   LONG_TO_INT
+
+1118  e1        pop     hl
+1119  cb7c      bit     7,h
+111b  e3        ex      (sp),hl
+111c  2805      jr      z,#1123         ; (5)
+111e  23        inc     hl
+111f  1802      jr      #1123           ; (2)
+
+; OP_BA :   LONG_TO_CARD
+
+1121  e1        pop     hl
+1122  e3        ex      (sp),hl
+1123  7c        ld      a,h
+1124  b5        or      l
+1125  20b6      jr      nz,#10dd        ; (-74)
+1127  fde9      jp      (iy)
+
+; OP_C6 : DADD          LONGINT Addition
+
+1129  cddc06    call    #06dc
+112c  d9        exx     
+112d  09        add     hl,bc
+112e  d9        exx     
+112f  ed4a      adc     hl,bc
+1131  eae210    jp      pe,#10e2
+1134  c3bb11    jp      #11bb
+
+; OP_C7 : DSUB          LONGINT Subtraction
+
+1137  cddc06    call    #06dc
+113a  d9        exx     
+113b  b7        or      a
+113c  ed42      sbc     hl,bc
+113e  d9        exx     
+113f  ed42      sbc     hl,bc
+1141  eae210    jp      pe,#10e2
+1144  1875      jr      #11bb           ; (117)
+
+1146  08        ex      af,af'
+1147  2f        cpl     
+1148  08        ex      af,af'
+
+; LONGINT negation
+; negate value of HL/HL'
+
+1149  af        xor     a
+114a  d9        exx     
+114b  95        sub     l
+114c  6f        ld      l,a
+114d  3e00      ld      a,#00
+114f  9c        sbc     a,h
+1150  67        ld      h,a
+1151  d9        exx     
+1152  3e00      ld      a,#00
+1154  9d        sbc     a,l
+1155  6f        ld      l,a
+1156  3e00      ld      a,#00
+1158  9c        sbc     a,h
+1159  67        ld      h,a
+115a  c9        ret     
+
+115b  08        ex      af,af'
+115c  2f        cpl     
+115d  08        ex      af,af'
+
+; Negate LONGINT value in BC-BC'
+
+115e  af        xor     a
+115f  d9        exx     
+1160  91        sub     c
+1161  4f        ld      c,a
+1162  3e00      ld      a,#00
+1164  98        sbc     a,b
+1165  47        ld      b,a
+1166  d9        exx     
+1167  3e00      ld      a,#00
+1169  99        sbc     a,c
+116a  4f        ld      c,a
+116b  3e00      ld      a,#00
+116d  98        sbc     a,b
+116e  47        ld      b,a
+116f  c9        ret     
+
+; OP_C8 : DMUL          Double word Multiplication
+
+1170  cddc06    call    #06dc
+1173  cb78      bit     7,b
+1175  c45b11    call    nz,#115b
+1178  cb7c      bit     7,h
+117a  c44611    call    nz,#1146
+117d  d5        push    de
+117e  eb        ex      de,hl
+117f  210000    ld      hl,#0000
+1182  d9        exx     
+1183  d5        push    de
+1184  eb        ex      de,hl
+1185  210000    ld      hl,#0000
+1188  d9        exx     
+1189  3e21      ld      a,#21
+118b  3d        dec     a
+118c  2820      jr      z,#11ae         ; (32)
+118e  d9        exx     
+118f  29        add     hl,hl
+1190  d9        exx     
+1191  ed6a      adc     hl,hl
+1193  3815      jr      c,#11aa         ; (21)
+1195  d9        exx     
+1196  cb13      rl      e
+1198  cb12      rl      d
+119a  d9        exx     
+119b  cb13      rl      e
+119d  cb12      rl      d
+119f  d28b11    jp      nc,#118b
+11a2  d9        exx     
+11a3  09        add     hl,bc
+11a4  d9        exx     
+11a5  ed4a      adc     hl,bc
+11a7  d28b11    jp      nc,#118b
+11aa  d9        exx     
+11ab  c3dc10    jp      #10dc
+11ae  cb7c      bit     7,h
+11b0  20f8      jr      nz,#11aa        ; (-8)
+11b2  08        ex      af,af'
+11b3  b7        or      a
+11b4  c44911    call    nz,#1149
+11b7  d9        exx     
+11b8  d1        pop     de
+11b9  d9        exx     
+11ba  d1        pop     de
+11bb  e5        push    hl
+11bc  d9        exx     
+11bd  c36f0f    jp      #0f6f
+11c0  eb        ex      de,hl
+11c1  210000    ld      hl,#0000
+11c4  78        ld      a,b
+11c5  b1        or      c
+11c6  d9        exx     
+11c7  eb        ex      de,hl
+11c8  210000    ld      hl,#0000
+11cb  b0        or      b
+11cc  b1        or      c
+11cd  ca1f10    jp      z,#101f
+11d0  d9        exx     
+11d1  3e21      ld      a,#21
+11d3  3d        dec     a
+11d4  c8        ret     z
+
+11d5  d9        exx     
+11d6  cb23      sla     e
+11d8  cb12      rl      d
+11da  d9        exx     
+11db  cb13      rl      e
+11dd  cb12      rl      d
+11df  d2d311    jp      nc,#11d3
+11e2  d9        exx     
+11e3  ed6a      adc     hl,hl
+11e5  d9        exx     
+11e6  ed6a      adc     hl,hl
+11e8  d9        exx     
+11e9  ed42      sbc     hl,bc
+11eb  d9        exx     
+11ec  ed42      sbc     hl,bc
+11ee  3005      jr      nc,#11f5        ; (5)
+11f0  d9        exx     
+11f1  09        add     hl,bc
+11f2  d9        exx     
+11f3  ed4a      adc     hl,bc
+11f5  3f        ccf     
+11f6  d9        exx     
+11f7  cb13      rl      e
+11f9  cb12      rl      d
+11fb  d9        exx     
+11fc  cb13      rl      e
+11fe  cb12      rl      d
+1200  3d        dec     a
+1201  c2e211    jp      nz,#11e2
+1204  c9        ret     
+
+1205  d1        pop     de
+1206  c31f10    jp      #101f
+
+; OP_C9 : DDIV              Double word Divide
+
+1209  cddc06    call    #06dc
+120c  cb78      bit     7,b
+120e  c45b11    call    nz,#115b
+1211  cb7c      bit     7,h
+1213  c44611    call    nz,#1146
+1216  d5        push    de
+1217  d9        exx     
+1218  d5        push    de
+1219  d9        exx     
+121a  cdc011    call    #11c0
+121d  d9        exx     
+121e  eb        ex      de,hl
+121f  d9        exx     
+1220  eb        ex      de,hl
+1221  08        ex      af,af'
+1222  b7        or      a
+1223  c44911    call    nz,#1149
+1226  188f      jr      #11b7           ; (-113)
+
+; OP_CA : DMOD          Double word Modulo
+
+1228  cddc06    call    #06dc
+122b  d5        push    de
+122c  d9        exx     
+122d  d5        push    de
+122e  d9        exx     
+122f  cdc011    call    #11c0
+1232  1883      jr      #11b7           ; (-125)
+
+; OP_CC : LONGINT ABS
+
+1234  e1        pop     hl
+1235  d9        exx     
+1236  e1        pop     hl
+1237  cb7c      bit     7,h
+1239  c44911    call    nz,#1149
+123c  e5        push    hl
+123d  d9        exx     
+123e  e5        push    hl
+123f  fde9      jp      (iy)
+
+; EXT_OP 3 : LONG NEGATE
+
+1241  e1        pop     hl
+1242  d9        exx     
+1243  e1        pop     hl
+1244  cd4911    call    #1149
+1247  e5        push    hl
+1248  d9        exx     
+1249  e5        push    hl
+124a  fde9      jp      (iy)
+
+124c  ed431a03  ld      (#031a),bc
+1250  e1        pop     hl
+1251  c1        pop     bc
+1252  d9        exx     
+1253  ed431c03  ld      (#031c),bc
+1257  c1        pop     bc
+1258  d9        exx     
+1259  e3        ex      (sp),hl
+125a  d9        exx     
+125b  e1        pop     hl
+125c  eb        ex      de,hl
+125d  e3        ex      (sp),hl
+125e  d5        push    de
+125f  af        xor     a
+1260  d9        exx     
+1261  cb21      sla     c
+1263  cb10      rl      b
+1265  d9        exx     
+1266  cb11      rl      c
+1268  cb10      rl      b
+126a  8f        adc     a,a
+126b  58        ld      e,b
+126c  0601      ld      b,#01
+126e  d9        exx     
+126f  29        add     hl,hl
+1270  d9        exx     
+1271  ed6a      adc     hl,hl
+1273  8f        adc     a,a
+1274  54        ld      d,h
+1275  2601      ld      h,#01
+1277  08        ex      af,af'
+1278  c9        ret     
+
+1279  cb1c      rr      h
+127b  cb1d      rr      l
+127d  d9        exx     
+127e  cb1c      rr      h
+1280  cb1d      rr      l
+1282  d9        exx     
+1283  d0        ret     nc
+
+1284  d9        exx     
+1285  23        inc     hl
+1286  7c        ld      a,h
+1287  b5        or      l
+1288  d9        exx     
+1289  c0        ret     nz
+
+128a  2c        inc     l
+128b  c0        ret     nz
+
+128c  7c        ld      a,h
+128d  24        inc     h
+128e  ac        xor     h
+128f  e680      and     #80
+1291  c8        ret     z
+
+1292  c32a13    jp      #132a
+
+; OP_D7 :   REAL_SUB
+
+1295  e1        pop     hl
+1296  e3        ex      (sp),hl
+1297  3e80      ld      a,#80
+1299  ac        xor     h
+129a  67        ld      h,a
+129b  e3        ex      (sp),hl
+129c  e5        push    hl
+
+; OP_D6 :   REAL_ADD
+
+129d  cd4c12    call    #124c
+12a0  7b        ld      a,e
+12a1  b7        or      a
+12a2  2003      jr      nz,#12a7        ; (3)
+12a4  08        ex      af,af'
+12a5  1849      jr      #12f0           ; (73)
+12a7  7a        ld      a,d
+12a8  b7        or      a
+12a9  200b      jr      nz,#12b6        ; (11)
+12ab  08        ex      af,af'
+12ac  1f        rra     
+12ad  53        ld      d,e
+12ae  60        ld      h,b
+12af  69        ld      l,c
+12b0  d9        exx     
+12b1  60        ld      h,b
+12b2  69        ld      l,c
+12b3  d9        exx     
+12b4  183a      jr      #12f0           ; (58)
+12b6  93        sub     e
+12b7  3811      jr      c,#12ca         ; (17)
+12b9  5a        ld      e,d
+12ba  281c      jr      z,#12d8         ; (28)
+12bc  cb38      srl     b
+12be  cb19      rr      c
+12c0  d9        exx     
+12c1  cb18      rr      b
+12c3  cb19      rr      c
+12c5  d9        exx     
+12c6  3d        dec     a
+12c7  c3ba12    jp      #12ba
+12ca  cb3c      srl     h
+12cc  cb1d      rr      l
+12ce  d9        exx     
+12cf  cb1c      rr      h
+12d1  cb1d      rr      l
+12d3  d9        exx     
+12d4  3c        inc     a
+12d5  20f3      jr      nz,#12ca        ; (-13)
+12d7  53        ld      d,e
+12d8  08        ex      af,af'
+12d9  1f        rra     
+12da  f5        push    af
+12db  dc4911    call    c,#1149
+12de  f1        pop     af
+12df  1f        rra     
+12e0  dc5e11    call    c,#115e
+12e3  d9        exx     
+12e4  09        add     hl,bc
+12e5  d9        exx     
+12e6  ed4a      adc     hl,bc
+12e8  af        xor     a
+12e9  08        ex      af,af'
+12ea  cb7c      bit     7,h
+12ec  c44611    call    nz,#1146
+12ef  08        ex      af,af'
+12f0  08        ex      af,af'
+12f1  cb4c      bit     1,h
+12f3  280d      jr      z,#1302         ; (13)
+12f5  14        inc     d
+12f6  2832      jr      z,#132a         ; (50)
+12f8  cb3c      srl     h
+12fa  cb1d      rr      l
+12fc  d9        exx     
+12fd  cb1c      rr      h
+12ff  cb1d      rr      l
+1301  d9        exx     
+1302  7a        ld      a,d
+1303  b7        or      a
+1304  2829      jr      z,#132f         ; (41)
+1306  3e18      ld      a,#18
+1308  cb44      bit     0,h
+130a  200d      jr      nz,#1319        ; (13)
+130c  15        dec     d
+130d  2820      jr      z,#132f         ; (32)
+130f  3d        dec     a
+1310  281d      jr      z,#132f         ; (29)
+1312  d9        exx     
+1313  29        add     hl,hl
+1314  d9        exx     
+1315  cb15      rl      l
+1317  30f3      jr      nc,#130c        ; (-13)
+1319  62        ld      h,d
+131a  08        ex      af,af'
+131b  1f        rra     
+131c  cd7912    call    #1279
+131f  d1        pop     de
+1320  e5        push    hl
+1321  ed4b1c03  ld      bc,(#031c)
+1325  d9        exx     
+1326  e5        push    hl
+1327  c3490e    jp      #0e49
+
+132a  3e0b      ld      a,#0b
+132c  c3bf0c    jp      #0cbf
+132f  d1        pop     de
+1330  210000    ld      hl,#0000
+1333  e5        push    hl
+1334  e5        push    hl
+1335  c3710f    jp      #0f71
+
+; OP_D8 :   REAL_MUL
+
+1338  cd4c12    call    #124c
+133b  7b        ld      a,e
+133c  b7        or      a
+133d  28f0      jr      z,#132f         ; (-16)
+133f  7a        ld      a,d
+1340  b7        or      a
+1341  28ec      jr      z,#132f         ; (-20)
+1343  83        add     a,e
+1344  3006      jr      nc,#134c        ; (6)
+1346  d67f      sub     #7f
+1348  30e0      jr      nc,#132a        ; (-32)
+134a  1804      jr      #1350           ; (4)
+134c  d67f      sub     #7f
+134e  38df      jr      c,#132f         ; (-33)
+1350  f5        push    af
+1351  eb        ex      de,hl
+1352  cb3a      srl     d
+1354  7b        ld      a,e
+1355  110803    ld      de,#0308
+1358  1f        rra     
+1359  210000    ld      hl,#0000
+135c  d9        exx     
+135d  d5        push    de
+135e  eb        ex      de,hl
+135f  cb1a      rr      d
+1361  cb1b      rr      e
+1363  6b        ld      l,e
+1364  5a        ld      e,d
+1365  57        ld      d,a
+1366  7d        ld      a,l
+1367  210000    ld      hl,#0000
+136a  d9        exx     
+136b  b7        or      a
+136c  2007      jr      nz,#1375        ; (7)
+136e  d9        exx     
+136f  7b        ld      a,e
+1370  5a        ld      e,d
+1371  d9        exx     
+1372  15        dec     d
+1373  18f6      jr      #136b           ; (-10)
+1375  1f        rra     
+1376  3806      jr      c,#137e         ; (6)
+1378  1d        dec     e
+1379  18fa      jr      #1375           ; (-6)
+137b  1f        rra     
+137c  3005      jr      nc,#1383        ; (5)
+137e  d9        exx     
+137f  09        add     hl,bc
+1380  d9        exx     
+1381  ed4a      adc     hl,bc
+1383  1d        dec     e
+1384  280c      jr      z,#1392         ; (12)
+1386  cb3c      srl     h
+1388  cb1d      rr      l
+138a  d9        exx     
+138b  cb1c      rr      h
+138d  cb1d      rr      l
+138f  d9        exx     
+1390  18e9      jr      #137b           ; (-23)
+1392  d9        exx     
+1393  7b        ld      a,e
+1394  5a        ld      e,d
+1395  d9        exx     
+1396  1e08      ld      e,#08
+1398  15        dec     d
+1399  20eb      jr      nz,#1386        ; (-21)
+139b  d9        exx     
+139c  d1        pop     de
+139d  d9        exx     
+139e  d1        pop     de
+139f  08        ex      af,af'
+13a0  1f        rra     
+13a1  ce00      adc     a,#00
+13a3  c3f012    jp      #12f0
+
+; OP_D9 :   REAL_DIV
+
+13a6  cd4c12    call    #124c
+13a9  7b        ld      a,e
+13aa  b7        or      a
+13ab  2843      jr      z,#13f0         ; (67)
+13ad  7a        ld      a,d
+13ae  b7        or      a
+13af  ca2f13    jp      z,#132f
+13b2  93        sub     e
+13b3  3807      jr      c,#13bc         ; (7)
+13b5  c67e      add     a,#7e
+13b7  da2a13    jp      c,#132a
+13ba  1805      jr      #13c1           ; (5)
+13bc  c67e      add     a,#7e
+13be  d22f13    jp      nc,#132f
+13c1  f5        push    af
+13c2  3e1a      ld      a,#1a
+13c4  d9        exx     
+13c5  d5        push    de
+13c6  1e00      ld      e,#00
+13c8  b7        or      a
+13c9  ed42      sbc     hl,bc
+13cb  d9        exx     
+13cc  ed42      sbc     hl,bc
+13ce  3005      jr      nc,#13d5        ; (5)
+13d0  d9        exx     
+13d1  09        add     hl,bc
+13d2  d9        exx     
+13d3  ed4a      adc     hl,bc
+13d5  3f        ccf     
+13d6  d9        exx     
+13d7  cb13      rl      e
+13d9  cb12      rl      d
+13db  d9        exx     
+13dc  cb13      rl      e
+13de  cb12      rl      d
+13e0  d9        exx     
+13e1  29        add     hl,hl
+13e2  d9        exx     
+13e3  ed6a      adc     hl,hl
+13e5  d9        exx     
+13e6  3d        dec     a
+13e7  c2c813    jp      nz,#13c8
+13ea  eb        ex      de,hl
+13eb  d1        pop     de
+13ec  d9        exx     
+13ed  eb        ex      de,hl
+13ee  18ae      jr      #139e           ; (-82)
+13f0  d9        exx     
+13f1  c32110    jp      #1021
+13f4  cdd106    call    #06d1
+
+; OP_BF :   FLOAT_TO_LONG
+
+13f7  e1        pop     hl
+13f8  29        add     hl,hl
+13f9  d9        exx     
+13fa  e1        pop     hl
+13fb  ed6a      adc     hl,hl
+13fd  08        ex      af,af'
+13fe  7c        ld      a,h
+13ff  d67f      sub     #7f
+1401  da3013    jp      c,#1330
+1404  d618      sub     #18
+1406  3811      jr      c,#1419         ; (17)
+1408  fe07      cp      #07
+140a  d2e210    jp      nc,#10e2
+140d  2601      ld      h,#01
+140f  2816      jr      z,#1427         ; (22)
+1411  d9        exx     
+1412  29        add     hl,hl
+1413  d9        exx     
+1414  ed6a      adc     hl,hl
+1416  3d        dec     a
+1417  18f6      jr      #140f           ; (-10)
+1419  2600      ld      h,#00
+141b  cb1d      rr      l
+141d  d9        exx     
+141e  cb1c      rr      h
+1420  cb1d      rr      l
+1422  d9        exx     
+1423  c601      add     a,#01
+1425  20f4      jr      nz,#141b        ; (-12)
+1427  08        ex      af,af'
+1428  dc4911    call    c,#1149
+142b  e5        push    hl
+142c  d9        exx     
+142d  e5        push    hl
+142e  c3700f    jp      #0f70
+1431  cdd106    call    #06d1
+
+; OP_BE :   LONG_TO_FLOAT
+
+1434  e1        pop     hl
+1435  7c        ld      a,h
+1436  b5        or      l
+1437  d9        exx     
+1438  e1        pop     hl
+1439  b4        or      h
+143a  b5        or      l
+143b  ca3013    jp      z,#1330
+143e  af        xor     a
+143f  08        ex      af,af'
+1440  cb7c      bit     7,h
+1442  c44611    call    nz,#1146
+1445  d5        push    de
+1446  1697      ld      d,#97
+1448  7c        ld      a,h
+1449  b7        or      a
+144a  2812      jr      z,#145e         ; (18)
+144c  fe01      cp      #01
+144e  2817      jr      z,#1467         ; (23)
+1450  cb3f      srl     a
+1452  cb1d      rr      l
+1454  d9        exx     
+1455  cb1c      rr      h
+1457  cb1d      rr      l
+1459  d9        exx     
+145a  14        inc     d
+145b  c34c14    jp      #144c
+145e  d9        exx     
+145f  29        add     hl,hl
+1460  d9        exx     
+1461  cb15      rl      l
+1463  15        dec     d
+1464  d25e14    jp      nc,#145e
+1467  2601      ld      h,#01
+1469  08        ex      af,af'
+146a  c3f012    jp      #12f0
+
+; OP_EA :   POWER2
+
+146d  e1        pop     hl
+146e  2c        inc     l
+146f  7d        ld      a,l
+1470  210000    ld      hl,#0000
+1473  37        scf     
+1474  ed6a      adc     hl,hl
+1476  3d        dec     a
+1477  b7        or      a
+1478  20fa      jr      nz,#1474        ; (-6)
+147a  e5        push    hl
+147b  fde9      jp      (iy)
+
+; EXT_OP 4 : Build Field Mask
+
+147d  e1        pop     hl
+147e  7d        ld      a,l
+147f  e1        pop     hl
+1480  08        ex      af,af'
+1481  7d        ld      a,l
+1482  08        ex      af,af'
+1483  95        sub     l
+1484  210000    ld      hl,#0000
+1487  380e      jr      c,#1497         ; (14)
+1489  3c        inc     a
+148a  29        add     hl,hl
+148b  23        inc     hl
+148c  3d        dec     a
+148d  20fb      jr      nz,#148a        ; (-5)
+148f  08        ex      af,af'
+1490  b7        or      a
+1491  2804      jr      z,#1497         ; (4)
+1493  29        add     hl,hl
+1494  3d        dec     a
+1495  20fc      jr      nz,#1493        ; (-4)
+1497  e5        push    hl
+1498  fde9      jp      (iy)
+
+; OP_B6 :   NOT
+
+149a  e1        pop     hl
+149b  7d        ld      a,l
+149c  2f        cpl     
+149d  e601      and     #01
+149f  6f        ld      l,a
+14a0  e5        push    hl
+14a1  fde9      jp      (iy)
+
+; OP_B7 :   COMPLEMENT
+
+14a3  e1        pop     hl
+14a4  cd4110    call    #1041
+14a7  e5        push    hl
+14a8  fde9      jp      (iy)
+
+; OP_E8 :   AND
+
+14aa  e1        pop     hl
+14ab  c1        pop     bc
+14ac  7d        ld      a,l
+14ad  a1        and     c
+14ae  6f        ld      l,a
+14af  7c        ld      a,h
+14b0  a0        and     b
+14b1  67        ld      h,a
+14b2  e5        push    hl
+14b3  fde9      jp      (iy)
+
+; OP_E6 :   OR
+
+14b5  e1        pop     hl
+14b6  c1        pop     bc
+14b7  7d        ld      a,l
+14b8  b1        or      c
+14b9  6f        ld      l,a
+14ba  7c        ld      a,h
+14bb  b0        or      b
+14bc  67        ld      h,a
+14bd  e5        push    hl
+14be  fde9      jp      (iy)
+
+; OP_E9 :   XOR
+
+14c0  e1        pop     hl
+14c1  c1        pop     bc
+14c2  7d        ld      a,l
+14c3  a9        xor     c
+14c4  6f        ld      l,a
+14c5  7c        ld      a,h
+14c6  a8        xor     b
+14c7  67        ld      h,a
+14c8  e5        push    hl
+14c9  fde9      jp      (iy)
+
+; OP_20 :   DUP
+
+14cb  e1        pop     hl
+14cc  e5        push    hl
+14cd  e5        push    hl
+14ce  fde9      jp      (iy)
+
+; OP_21 :   SWAP
+
+14d0  e1        pop     hl
+14d1  e3        ex      (sp),hl
+14d2  e5        push    hl
+14d3  fde9      jp      (iy)
+
+; EXT_OP 0 : DROP
+
+14d5  e1        pop     hl
+14d6  fde9      jp      (iy)
+
+; OP_C3 :   SYSTEM
+
+14d8  eb        ex      de,hl
+14d9  d1        pop     de
+14da  e3        ex      (sp),hl
+14db  c5        push    bc
+14dc  4d        ld      c,l
+14dd  d9        exx     
+14de  d5        push    de
+14df  c5        push    bc
+14e0  d9        exx     
+14e1  dde5      push    ix
+14e3  fde5      push    iy
+14e5  ed57      ld      a,i
+14e7  f5        push    af
+14e8  fb        ei      
+14e9  cd0500    call    #0005
+14ec  320003    ld      (#0300),a
+14ef  220203    ld      (#0302),hl
+14f2  f1        pop     af
+14f3  fb        ei      
+14f4  eaf814    jp      pe,#14f8
+14f7  f3        di      
+14f8  fde1      pop     iy
+14fa  dde1      pop     ix
+14fc  d9        exx     
+14fd  c1        pop     bc
+14fe  d1        pop     de
+14ff  d9        exx     
+1500  c1        pop     bc
+1501  d1        pop     de
+1502  fde9      jp      (iy)
+
+; EXT_OP 13 : BIOS CALL
+
+1504  eb        ex      de,hl
+1505  d1        pop     de
+1506  e3        ex      (sp),hl
+1507  c5        push    bc
+1508  42        ld      b,d
+1509  4b        ld      c,e
+150a  eb        ex      de,hl
+150b  d9        exx     
+150c  d5        push    de
+150d  c5        push    bc
+150e  d9        exx     
+150f  dde5      push    ix
+1511  fde5      push    iy
+1513  ed57      ld      a,i
+1515  f5        push    af
+1516  fb        ei      
+1517  2a0100    ld      hl,(#0001)
+151a  19        add     hl,de
+151b  19        add     hl,de
+151c  19        add     hl,de
+151d  11ec14    ld      de,#14ec
+1520  d5        push    de
+1521  e9        jp      (hl)
+
+1522  08        ex      af,af'
+1523  af        xor     a
+1524  08        ex      af,af'
+1525  1804      jr      #152b           ; (4)
+
+; OP_40 :  EXT_OP n
+
+1527  37        scf     
+1528  08        ex      af,af'
+1529  1a        ld      a,(de)
+152a  13        inc     de
+152b  c5        push    bc
+152c  87        add     a,a
+152d  4f        ld      c,a
+152e  0600      ld      b,#00
+1530  213a15    ld      hl,#153a
+1533  09        add     hl,bc
+1534  c1        pop     bc
+1535  7e        ld      a,(hl)
+1536  23        inc     hl
+1537  66        ld      h,(hl)
+1538  6f        ld      l,a
+1539  e9        jp      (hl)
+
+153a dw 14d5,0d1b,0d27,1241,147d,15e9,1675,16e5
+     dw 170d,1731,0d0b,0cd9,0d57,1504,1740,175e
+     dw 1775,1781,0be9
+
+1560  cb41      bit     0,c             ; check that the number of bytes in BC is even
+1562  2801      jr      z,#1565         
+1564  03        inc     bc              ; otherwise add 1 byte
+1565  210600    ld      hl,#0006        ; check that the number of bytes is greater than 6
+1568  ed42      sbc     hl,bc
+156a  d8        ret     c
+
+156b  010600    ld      bc,#0006        ; otherwise the number of bytes is 6
+156e  c9        ret     
+
+; put a marker at the beginning of the heap
+; (enter with HL the stack limit)
+
+156f  e5        push    hl
+1570  c5        push    bc
+1571  01c4ff    ld      bc,#ffc4        ; substract 60 bytes from HL
+1574  09        add     hl,bc
+1575  3ee3      ld      a,#e3           ; put a 3ae3 pointer in (HL)
+1577  77        ld      (hl),a
+1578  23        inc     hl
+1579  3e3a      ld      a,#3a
+157b  77        ld      (hl),a
+157c  c1        pop     bc
+157d  e1        pop     hl
+157e  c9        ret     
+
+
+; format a free block at DE,
+; BC is the size of the block
+
+157f  d5        push    de          ; save the block addr
+1580  eb        ex      de,hl
+1581  09        add     hl,bc       ; calculate the addr of the upper part
+1582  2b        dec     hl
+1583  363a      ld      (hl),#3a    ; and store the marker at the end of the lower part
+1585  2b        dec     hl
+1586  36e3      ld      (hl),#e3
+1588  78        ld      a,b
+1589  b7        or      a
+158a  2005      jr      nz,#1591    ; checks if the size is exactly 6 bytes 
+158c  79        ld      a,c
+158d  fe06      cp      #06
+158f  2804      jr      z,#1595     ; jumps if it is 6 bytes
+1591  2b        dec     hl          ; otherwise store the size just before the marker
+1592  70        ld      (hl),b
+1593  2b        dec     hl
+1594  71        ld      (hl),c
+1595  e1        pop     hl          ; restore the addr of the initial block
+1596  e5        push    hl
+1597  36e3      ld      (hl),#e3    ; store a marker in the beginning
+1599  23        inc     hl
+159a  363a      ld      (hl),#3a
+159c  23        inc     hl
+159d  23        inc     hl
+159e  23        inc     hl
+159f  71        ld      (hl),c      ; store the size at offset 4
+15a0  23        inc     hl
+15a1  70        ld      (hl),b
+15a2  eb        ex      de,hl
+15a3  d1        pop     de
+15a4  c9        ret     
+
+; remove block pointed by HL in FREE_LIST if it is present
+; + add its size to BC if it is found, and return with Z=0
+; or return with Z=1 if not present
+
+15a5  e5        push    hl          ; save HL, DE, BC
+15a6  d5        push    de
+15a7  c5        push    bc
+15a8  eb        ex      de,hl
+15a9  13        inc     de
+15aa  13        inc     de          ; DE now points to offset 2 in block
+15ab  011803    ld      bc,#0318    ; get FREE_LIST into HL
+                                    ; loop on FREE_LIST blocks to find the block #2
+15ae  0a        ld      a,(bc)      
+15af  03        inc     bc
+15b0  6f        ld      l,a
+15b1  0a        ld      a,(bc)
+15b2  0b        dec     bc          ; keep pointer to FREE_LIST in BC
+15b3  67        ld      h,a
+15b4  b5        or      l
+15b5  2829      jr      z,#15e0     ; exit with flag Z set if pointer to block == NIL
+15b7  7e        ld      a,(hl)      ; verify marker is present in this block
+15b8  23        inc     hl
+15b9  fee3      cp      #e3
+15bb  2027      jr      nz,#15e4    ; error 14 otherwise
+15bd  7e        ld      a,(hl)
+15be  23        inc     hl
+15bf  fe3a      cp      #3a
+15c1  2021      jr      nz,#15e4    ; again error 14 otherwise
+15c3  b7        or      a
+15c4  ed52      sbc     hl,de       ; compare HL and DE
+15c6  19        add     hl,de       ; flag Z not set by 16-bits add
+15c7  2804      jr      z,#15cd     ; jump if block found
+15c9  44        ld      b,h
+15ca  4d        ld      c,l
+15cb  18e1      jr      #15ae       ; loop to next block
+                                    ; here the block has been found in FREE_LIST
+                                    ; remove it from the list
+15cd  7e        ld      a,(hl)      ; get pointer to next block
+15ce  23        inc     hl
+15cf  02        ld      (bc),a      ; and put it to the current block pointer
+15d0  03        inc     bc
+15d1  7e        ld      a,(hl)
+15d2  23        inc     hl
+15d3  02        ld      (bc),a
+15d4  c1        pop     bc          ; restore size of block to merge with
+15d5  79        ld      a,c
+15d6  86        add     a,(hl)      ; add this block's size
+15d7  4f        ld      c,a
+15d8  23        inc     hl
+15d9  78        ld      a,b
+15da  8e        adc     a,(hl)
+15db  47        ld      b,a
+15dc  c5        push    bc          ; and save it back in BC
+15dd  3e01      ld      a,#01
+15df  b7        or      a           ; exit with flag Z cleared
+15e0  c1        pop     bc
+15e1  d1        pop     de
+15e2  e1        pop     hl
+15e3  c9        ret     
+
+15e4  3e0e      ld      a,#0e
+15e6  c3ba0c    jp      #0cba
+
+; EXT_OP 5 : ALLOCATE
+
+15e9  cdc806    call    #06c8
+15ec  c1        pop     bc              ; get the size to allocate
+15ed  cd6015    call    #1560           ; size = max(6, size)
+15f0  211803    ld      hl,#0318
+                                        ; loop through the free-blocks list
+15f3  5e        ld      e,(hl)
+15f4  23        inc     hl
+15f5  56        ld      d,(hl)          ; DE = start of block
+15f6  2b        dec     hl              ; HL = block ptr
+15f7  7a        ld      a,d
+15f8  b3        or      e
+15f9  2846      jr      z,#1641         ; jump if the pointer is null
+
+15fb  e5        push    hl              ; save block ptr
+15fc  d5        push    de              ; and start of current block
+15fd  1a        ld      a,(de)          ; check that the pointer points to the 3ae3 marker
+15fe  13        inc     de
+15ff  fee3      cp      #e3
+1601  20e1      jr      nz,#15e4        ; (-31)
+1603  1a        ld      a,(de)
+1604  13        inc     de
+1605  fe3a      cp      #3a
+1607  20db      jr      nz,#15e4        ; (-37)
+
+1609  13        inc     de
+160a  13        inc     de
+160b  1a        ld      a,(de)          ; HL = size stored at offset #4 in the block
+160c  6f        ld      l,a
+160d  13        inc     de
+160e  1a        ld      a,(de)
+160f  67        ld      h,a
+1610  b7        or      a
+1611  ed42      sbc     hl,bc           ; HL is now block size minus requested size
+1613  2811      jr      z,#1626         ; if requested size = block size, perfect
+1615  3809      jr      c,#1620         ; if block size < requested size, go to next block
+
+1617  7c        ld      a,h             ; check if splitting the block leaves a small chunk (< 6 bytes)
+1618  b7        or      a
+1619  2019      jr      nz,#1634        ; nope => split block
+161b  7d        ld      a,l
+161c  fe06      cp      #06
+161e  3014      jr      nc,#1634        ; nope => split block
+                                        ; yeap => try another block
+1620  e1        pop     hl              ; pop the current block addr...
+1621  d1        pop     de              ; and drop the ptr on this current block
+1622  23        inc     hl              ; at offset 2 in the block is next block addr
+1623  23        inc     hl
+1624  18cd      jr      #15f3           ; 
+                                        ; perfect size block
+1626  e1        pop     hl              ; pop block addr in HL
+1627  d1        pop     de              ; and ptr to this block in DE
+1628  e5        push    hl              ; save this block addr
+1629  23        inc     hl              ; and point to the next block field
+162a  23        inc     hl
+162b  7e        ld      a,(hl)          ; get next block addr
+162c  12        ld      (de),a          ; and put it into the pointer to this block
+162d  23        inc     hl
+162e  13        inc     de
+162f  7e        ld      a,(hl)
+1630  12        ld      (de),a
+1631  e1        pop     hl
+1632  182b      jr      #165f           ; 
+                                        ; split the block in two blocks
+1634  d1        pop     de              ; pop the current block addr
+1635  c5        push    bc              ; save size
+1636  44        ld      b,h             
+1637  4d        ld      c,l             ; BC is now excess size
+1638  cd7f15    call    #157f
+163b  eb        ex      de,hl
+163c  09        add     hl,bc
+163d  c1        pop     bc              ; restore size
+163e  d1        pop     de              ; and drop ptr to this block
+163f  181e      jr      #165f           ; (30)
+
+1641  2a1603    ld      hl,(#0316)      
+1644  e5        push    hl              ; save pointer $0316
+1645  09        add     hl,bc
+1646  3828      jr      c,#1670         ; error if size exceeds memory size
+1648  eb        ex      de,hl           ; DE is now start+size
+1649  210000    ld      hl,#0000
+164c  39        add     hl,sp           ; HL is now SP
+164d  ed52      sbc     hl,de           ; compare with SP
+164f  e1        pop     hl              ; get back the old pointer 0316
+1650  381e      jr      c,#1670         ; error if block reaches stack
+
+1652  ed531603  ld      (#0316),de      ; updates the stack limit
+1656  eb        ex      de,hl           ; now DE is previous stack limit, and HL the new one
+1657  cd6f15    call    #156f           ; put a marker at the beginning of the heap
+165a  eb        ex      de,hl           ; now HL is the previous stack limit again
+165b  11c4ff    ld      de,#ffc4
+165e  19        add     hl,de           ; computes HL - 60
+
+165f  d1        pop     de              ; pop addr of variable to assign
+1660  7d        ld      a,l             ; store HL in (DE)
+1661  12        ld      (de),a
+1662  13        inc     de
+1663  7c        ld      a,h
+1664  12        ld      (de),a
+1665  5d        ld      e,l             ; prepare to zero the area
+1666  54        ld      d,h
+1667  13        inc     de
+1668  0b        dec     bc
+1669  3600      ld      (hl),#00
+166b  edb0      ldir    
+166d  c3450e    jp      #0e45
+1670  3e05      ld      a,#05
+1672  c3ba0c    jp      #0cba
+
+; EXT_OP 6 : DEALLOCATE
+
+1675  cdc806    call    #06c8
+1678  c1        pop     bc              ; get the size to deallocate
+1679  cd6015    call    #1560           ; size = max(6, size)
+167c  e1        pop     hl              ; get the addr of the pointer variable
+167d  5e        ld      e,(hl)          ; get the pointer to the block
+167e  23        inc     hl
+167f  56        ld      d,(hl)
+1680  af        xor     a               ; and makes the variable == NIL
+1681  77        ld      (hl),a
+1682  2b        dec     hl
+1683  77        ld      (hl),a
+1684  7b        ld      a,e             ; check the pointer is not NIL
+1685  b2        or      d
+1686  ca7509    jp      z,#0975
+1689  62        ld      h,d             ; add the size to deallocate
+168a  6b        ld      l,e
+168b  09        add     hl,bc
+168c  7e        ld      a,(hl)          ; check if a free block is just after
+168d  23        inc     hl
+168e  fee3      cp      #e3
+1690  2007      jr      nz,#1699        
+1692  7e        ld      a,(hl)
+1693  2b        dec     hl
+1694  fe3a      cp      #3a
+1696  cca515    call    z,#15a5         ; remove the following block from the freelist
+                                        ; if the marker is present (and adjust size)
+1699  62        ld      h,d             ; then point again to beginning of block
+169a  6b        ld      l,e
+169b  2b        dec     hl              ; and check if there is a marker before
+169c  7e        ld      a,(hl)
+169d  fe3a      cp      #3a
+169f  2017      jr      nz,#16b8        
+16a1  2b        dec     hl
+16a2  7e        ld      a,(hl)
+16a3  fee3      cp      #e3
+16a5  2011      jr      nz,#16b8
+                                        ; yeap: merge with the block before
+16a7  d5        push    de              ; save the addr of the block
+16a8  2b        dec     hl
+16a9  7e        ld      a,(hl)          ; get the size of the block before in HL
+16aa  2b        dec     hl
+16ab  6e        ld      l,(hl)
+16ac  67        ld      h,a
+16ad  eb        ex      de,hl
+16ae  b7        or      a               ; clear carry to
+16af  ed52      sbc     hl,de           ; substract and get the addr of preceding block
+16b1  d1        pop     de              ; restore the address of this block
+16b2  cda515    call    #15a5           ; remove this block from the freelist
+16b5  2801      jr      z,#16b8         ; if block has been found,
+16b7  eb        ex      de,hl           ; then use the preceding block (extended)
+
+16b8  213c00    ld      hl,#003c        ; add 60 bytes of margin
+16bb  19        add     hl,de
+16bc  d5        push    de              ; save current block addr
+16bd  eb        ex      de,hl           ; now DE is current block + 60
+16be  2a1603    ld      hl,(#0316)      ; get the stack limit
+16c1  b7        or      a
+16c2  ed42      sbc     hl,bc           ; substract the block size
+16c4  eb        ex      de,hl
+16c5  ed52      sbc     hl,de           ; and compare with the block addr + 60
+16c7  eb        ex      de,hl
+16c8  d1        pop     de              ; restore current block addr
+16c9  2008      jr      nz,#16d3        ; jump if it is not the last block allocated
+16cb  221603    ld      (#0316),hl
+16ce  cd6f15    call    #156f           ; put a marker at the beginning of the heap
+16d1  180f      jr      #16e2           ; and finish...
+                                        ; insert the block in the FREE_LIST :
+16d3  cd7f15    call    #157f           ; format the block with all information
+16d6  2a1803    ld      hl,(#0318)      ; get the current FREE_LIST
+16d9  eb        ex      de,hl
+16da  221803    ld      (#0318),hl      ; insert this block at the beginning of list
+16dd  23        inc     hl              ; point the next block link
+16de  23        inc     hl
+16df  73        ld      (hl),e          ; and store the old FREE_LIST
+16e0  23        inc     hl
+16e1  72        ld      (hl),d
+16e2  c3450e    jp      #0e45
+
+; EXT_OP 7 : MARK
+
+16e5  c5        push    bc              ; save BC
+16e6  2a1603    ld      hl,(#0316)      ; heap end
+16e9  23        inc     hl              ; add 2 bytes
+16ea  23        inc     hl
+16eb  221603    ld      (#0316),hl      ; update head end
+16ee  cd6f15    call    #156f           ; put a 3ae3 marker in heap_end - 60
+16f1  01c2ff    ld      bc,#ffc2
+16f4  09        add     hl,bc           ; now HL is old heap end
+16f5  f1        pop     af              ; get old BC backup in tmp
+16f6  c1        pop     bc              ; pop address of variable to set
+16f7  f5        push    af              ; push back BC backup
+16f8  7d        ld      a,l             ; set the variable
+16f9  02        ld      (bc),a
+16fa  03        inc     bc
+16fb  7c        ld      a,h
+16fc  02        ld      (bc),a
+16fd  ed4b1803  ld      bc,(#0318)      ; save the current free-blocks list
+1701  71        ld      (hl),c          ; in the reserved two bytes on heap
+1702  23        inc     hl
+1703  70        ld      (hl),b
+1704  210000    ld      hl,#0000        ; and continue with an empty free-blocks list
+1707  221803    ld      (#0318),hl
+170a  c1        pop     bc
+170b  fde9      jp      (iy)
+
+; EXT_OP 8 : RELEASE
+
+170d  e1        pop     hl              ; get the address of the variable
+170e  c5        push    bc              ; save BC
+170f  4e        ld      c,(hl)          ; get the variable's value, ie. the old heap pointer
+1710  23        inc     hl
+1711  46        ld      b,(hl)
+1712  af        xor     a               ; set the variable to NIL
+1713  77        ld      (hl),a
+1714  2b        dec     hl
+1715  77        ld      (hl),a
+1716  78        ld      a,b             ; check the pointer is not NIL
+1717  b1        or      c
+1718  ca2309    jp      z,#0923
+171b  0a        ld      a,(bc)          ; get the saved freelist
+171c  03        inc     bc
+171d  321803    ld      (#0318),a       ; and restore it
+1720  0a        ld      a,(bc)
+1721  321903    ld      (#0319),a
+1724  213b00    ld      hl,#003b        ; restore the old heap end
+1727  09        add     hl,bc
+1728  221603    ld      (#0316),hl
+172b  cd6f15    call    #156f           ; and put a 0x3ae3 marker at heap end - 60
+172e  c1        pop     bc
+172f  fde9      jp      (iy)
+
+; EXT_OP 9 : FREEMEM
+
+1731  c5        push    bc
+1732  ed4b1603  ld      bc,(#0316)
+1736  210000    ld      hl,#0000
+1739  39        add     hl,sp
+173a  ed42      sbc     hl,bc
+173c  c1        pop     bc
+173d  e5        push    hl
+173e  fde9      jp      (iy)
+
+; EXT_OP 14 : SYSTEM.MOVE PROCEDURE
+
+1740  cdc806    call    #06c8
+1743  c1        pop     bc
+1744  d1        pop     de
+1745  e1        pop     hl
+1746  78        ld      a,b
+1747  b1        or      c
+1748  2811      jr      z,#175b         ; (17)
+174a  ed52      sbc     hl,de
+174c  19        add     hl,de
+174d  3804      jr      c,#1753         ; (4)
+174f  edb0      ldir    
+1751  1808      jr      #175b           ; (8)
+1753  09        add     hl,bc
+1754  2b        dec     hl
+1755  eb        ex      de,hl
+1756  09        add     hl,bc
+1757  2b        dec     hl
+1758  eb        ex      de,hl
+1759  edb8      lddr    
+175b  c3450e    jp      #0e45
+
+; EXT_OP 15 : SYSTEM.FILL PROCEDURE
+
+175e  cdc806    call    #06c8
+1761  d1        pop     de              ; fill value
+1762  c1        pop     bc              ; size
+1763  e1        pop     hl              ; start address
+1764  78        ld      a,b
+1765  b1        or      c
+1766  28f3      jr      z,#175b         ; zero size => finished
+1768  73        ld      (hl),e          ; put a first value
+1769  0b        dec     bc
+176a  78        ld      a,b
+176b  b1        or      c
+176c  28ed      jr      z,#175b         ; size 1 => finished
+176e  54        ld      d,h
+176f  5d        ld      e,l
+1770  13        inc     de
+1771  edb0      ldir    
+1773  18e6      jr      #175b
+
+; EXT_OP 16 : SYSTEM.INP PROCEDURE
+
+1775  e1        pop     hl
+1776  c5        push    bc
+1777  4d        ld      c,l
+1778  44        ld      b,h
+1779  ed68      in      l,(c)
+177b  2600      ld      h,#00
+177d  c1        pop     bc
+177e  e5        push    hl
+177f  fde9      jp      (iy)
+
+; EXT_OP 17 : SYSTEM.OUT PROCEDURE
+
+1781  e1        pop     hl
+1782  7d        ld      a,l
+1783  e1        pop     hl
+1784  c5        push    bc
+1785  4d        ld      c,l
+1786  44        ld      b,h
+1787  ed79      out     (c),a
+1789  c1        pop     bc
+178a  fde9      jp      (iy)
+
+; OP_12 : LONGREAL opcode n
+
+178c  1a        ld      a,(de)
+178d  13        inc     de
+178e  6f        ld      l,a
+178f  1a        ld      a,(de)
+1790  13        inc     de
+1791  ed431a03  ld      (#031a),bc
+1795  2600      ld      h,#00
+1797  29        add     hl,hl
+1798  01a117    ld      bc,#17a1
+179b  09        add     hl,bc
+179c  46        ld      b,(hl)
+179d  23        inc     hl
+179e  66        ld      h,(hl)
+179f  68        ld      l,b
+17a0  e9        jp      (hl)
+
+17a1 dw 17d7, 17eb, 17f5, 17fe, 1810, 1819, 1823, 183b, 1803, 1840, 0b6f
+
+17b7  dde5      push    ix
+17b9  e1        pop     hl
+17ba  87        add     a,a
+17bb  4f        ld      c,a
+17bc  3e00      ld      a,#00
+17be  de00      sbc     a,#00
+17c0  47        ld      b,a
+17c1  09        add     hl,bc
+17c2  c9        ret     
+
+17c3  ed531c03  ld      (#031c),de
+17c7  d1        pop     de
+17c8  3e04      ld      a,#04
+17ca  c1        pop     bc
+17cb  71        ld      (hl),c
+17cc  23        inc     hl
+17cd  70        ld      (hl),b
+17ce  23        inc     hl
+17cf  3d        dec     a
+17d0  20f8      jr      nz,#17ca        ; (-8)
+17d2  2a1c03    ld      hl,(#031c)
+17d5  eb        ex      de,hl
+17d6  e9        jp      (hl)
+
+; LONGREAL 0 n : Load Local LONGREAL
+
+17d7  cdb717    call    #17b7
+17da  010800    ld      bc,#0008
+17dd  09        add     hl,bc
+17de  3e04      ld      a,#04
+17e0  2b        dec     hl
+17e1  46        ld      b,(hl)
+17e2  2b        dec     hl
+17e3  4e        ld      c,(hl)
+17e4  c5        push    bc
+17e5  3d        dec     a
+17e6  20f8      jr      nz,#17e0        ; (-8)
+17e8  c3490e    jp      #0e49
+
+; LONGREAL 1 n : Load Global LONGREAL
+
+17eb  2a1203    ld      hl,(#0312)
+17ee  4f        ld      c,a
+17ef  0600      ld      b,#00
+17f1  09        add     hl,bc
+17f2  09        add     hl,bc
+17f3  18e5      jr      #17da           ; (-27)
+
+; LONGREAL 2 n : Load Stack LONGREAL
+
+17f5  e1        pop     hl
+17f6  4f        ld      c,a
+17f7  7c        ld      a,h
+17f8  b5        or      l
+17f9  20f4      jr      nz,#17ef        ; (-12)
+17fb  c32309    jp      #0923
+
+; LONGREAL 3 n : Load External LONGREAL
+
+17fe  cdf806    call    #06f8
+1801  18d7      jr      #17da           ; (-41)
+
+; LONGREAL 8 n : Load Indexed LONGREAL
+
+1803  e1        pop     hl
+1804  c1        pop     bc
+1805  78        ld      a,b
+1806  b1        or      c
+1807  ca2309    jp      z,#0923
+180a  29        add     hl,hl
+180b  29        add     hl,hl
+180c  29        add     hl,hl
+180d  09        add     hl,bc
+180e  18ca      jr      #17da           ; (-54)
+
+; LONGREAL 4 n : Store Local LONGREAL
+
+1810  cdb717    call    #17b7
+1813  cdc317    call    #17c3
+1816  c3490e    jp      #0e49
+
+; LONGREAL 5 n : Store Global LONGREAL
+
+1819  2a1203    ld      hl,(#0312)
+181c  4f        ld      c,a
+181d  0600      ld      b,#00
+181f  09        add     hl,bc
+1820  09        add     hl,bc
+1821  18f0      jr      #1813           ; (-16)
+
+; LONGREAL 6 n : Store Stack LONGREAL
+
+1823  4f        ld      c,a
+1824  0600      ld      b,#00
+1826  210800    ld      hl,#0008
+1829  39        add     hl,sp
+182a  7e        ld      a,(hl)
+182b  23        inc     hl
+182c  66        ld      h,(hl)
+182d  6f        ld      l,a
+182e  b4        or      h
+182f  ca2309    jp      z,#0923
+1832  09        add     hl,bc
+1833  09        add     hl,bc
+1834  cdc317    call    #17c3
+1837  e1        pop     hl
+1838  c3490e    jp      #0e49
+
+; LONGREAL 7 n : Store External LONGREAL
+
+183b  cdf806    call    #06f8
+183e  18d3      jr      #1813           ; (-45)
+
+; LONGREAL 9 n : Store Indexed LONGREAL
+
+1840  210b00    ld      hl,#000b
+1843  39        add     hl,sp
+1844  46        ld      b,(hl)
+1845  2b        dec     hl
+1846  4e        ld      c,(hl)
+1847  2b        dec     hl
+1848  78        ld      a,b
+1849  b1        or      c
+184a  ca2309    jp      z,#0923
+184d  7e        ld      a,(hl)
+184e  2b        dec     hl
+184f  6e        ld      l,(hl)
+1850  67        ld      h,a
+1851  29        add     hl,hl
+1852  29        add     hl,hl
+1853  29        add     hl,hl
+1854  09        add     hl,bc
+1855  cdc317    call    #17c3
+1858  e1        pop     hl
+1859  18dc      jr      #1837           ; (-36)
+
+
+185b  08        ex      af,af'
+185c  00        nop     
+185d  09        add     hl,bc
+185e  3e04      ld      a,#04
+1860  2b        dec     hl
+1861  46        ld      b,(hl)
+1862  2b        dec     hl
+1863  4e        ld      c,(hl)
+1864  c5        push    bc
+1865  3d        dec     a
+1866  20f8      jr      nz,#1860        ; (-8)
+1868  c3490e    jp      #0e49
+186b  2a1203    ld      hl,(#0312)
+186e  4f        ld      c,a
+186f  0600      ld      b,#00
+1871  09        add     hl,bc
+1872  09        add     hl,bc
+1873  18e5      jr      #185a           ; (-27)
+1875  e1        pop     hl
+1876  4f        ld      c,a
+1877  7c        ld      a,h
+1878  b5        or      l
+1879  20f4      jr      nz,#186f        ; (-12)
+187b  c32309    jp      #0923
+187e  cdf8
+
+; M-Code of KERNEL module (module addr at 21d2)
+.... see file "m2_mcd"
+...
+...
+21ba  dw f6ee -> 18a9 KERNEL's PROC3
+21bc  dw f6cb -> 1888 KERNEL's PROC2
+21be  dw f6c2 -> 1881 KERNEL's PROC1
+21c0  dw ff00 -> 20c1 KERNEL's PROC0 (module init)
+
+21c2  dw 0000   ; GLOBAL[-8] 
+21c4  "KERNEL  "; GLOBAL[-7] : module name
+21cc  dw 1880   ; GLOBAL[-3] : ?
+21ce  dw 0000   ; GLOBAL[-2]
+21d0  dw 21c0   ; GLOBAL[-1] : address of procedures' table
+21d2  dw 2104   ; GLOBAL[0] :
+21d4  dw 0011   ; GLOBAL[1]
+21d6  dw 0000   ; GLOBAL[2]
+21d8  dw 23ce   ; GLOBAL[3]
+
+; find forward a character, and return its address,
+; or 0 if not found 
+
+25a0  87
+25a1  01
+25a2  e1        pop     hl              ; pop return addr
+25a3  d1        pop     de              ; DE = character
+25a4  c1        pop     bc              ; BC = string length
+25a5  e3        ex      (sp),hl         ; push back return addr, and HL = string addr
+25a6  78        ld      a,b
+25a7  b1        or      c
+25a8  2806      jr      z,#25b0         ; jump if BC==0
+25aa  7b        ld      a,e             ; search character E in HL string
+25ab  edb1      cpir    
+25ad  2b        dec     hl
+25ae  2803      jr      z,#25b3         ; skip next instruction if character found
+25b0  210000    ld      hl,#0000        ; return result 0
+25b3  e3        ex      (sp),hl
+25b4  e9        jp      (hl)            ; return
+
+25b5  1140ff
+
+; find backward a character, and return its address,
+; or 0 if not found
+
+25b8  87
+25b9  01
+25ba  e1        pop     hl
+25bb  d1        pop     de
+25bc  c1        pop     bc
+25bd  e3        ex      (sp),hl
+25be  78        ld      a,b
+25bf  b1        or      c
+25c0  2806      jr      z,#25c8         ;
+25c2  7b        ld      a,e
+25c3  edb9      cpdr    
+25c5  23        inc     hl
+25c6  2803      jr      z,#25cb         ; 
+25c8  210000    ld      hl,#0000
+25cb  e3        ex      (sp),hl         ; return with 0 on stack
+25cc  e9        jp      (hl)            ; return
+
+
+2678  87
+2679  01
+267a  e1        pop     hl              ; pop return addr
+267b  e3        ex      (sp),hl         ; exchange with argument :
+267c  45        ld      b,l             ; number of spaces to write
+267d  c5        push    bc              ; save counter
+267e  3e20      ld      a,#20
+2680  cd8304    call    #0483           ; write a space
+2683  c1        pop     bc              ; restore the counter
+2684  10f7      djnz    #267d           ; and decrement down to zero
+2686  c9        ret     
+
+
+            ; procedure TERMINAL.proc2 (BusyRead(VAR c: CHAR))
+3398  87
+3399  01
+339a  fd7e0c    ld   a,(iy+#0c)         ; GLOBAL[6]
+339d  b7        or   a
+339e  fd7e0a    ld   a,(iy+#0a)         ; GLOBAL[5]
+33a1  2007      jr   nz,#33aa
+33a3  fde5      push iy                 ; save GLOBAL ptr
+33a5  cd8004    call #0480
+33a8  fde1      pop  iy
+
+33aa  fd360c00  ld   (iy+#0c),0         ; GLOBAL[6] = 0
+33ae  b7        or   a
+33af  2803      jr   z,+3
+33b1  fd770a    ld   (iy+#0a),a         ; GLOBAL[5] = result
+33b4  e1        pop  hl                 ; return addr (0ad3)
+33b5  d1        pop  de                 ; addr of variable
+33b6  12        ld   (de),a             ; set variable with result
+33b7  13        inc  de
+33b8  af        xor  a
+33b9  12        ld   (de),a             ; 0 in MSB
+33ba  e9        jp   (hl)
+
+;   procedure TERMINAL.proc5 (WriteChar(ch : CHAR))
+3443  87
+3444  01
+3445  e1        pop hl
+3446  e3        ex  (sp),hl
+3447  7d        ld  a,l
+3448  c38304    jmp 0483
+
+34b6  d4    ENTER -11
+34b7  f5
+34b8  04    LOAD (IX+8)
+34b9  43    LOAD (GLOBAL+6)
+34ba  a2    LESS_THAN
+34bb  de    BRANCH_IF_FALSE +3  (and PUSH 0); => 34c0 ?
+34bc  03
+34bd  03    LOAD (IX+6)
+34be  42    LOAD (GLOBAL+4)
+34bf  a2    LESS_THAN
+34c0  e3    BRANCH_IF_FALSE +86
+34c1  56
+34c2  9a    LITT 10
+34c3  34    STORE (IX-8)
+34c4  8d    LOAD #30                        ; ASCII '0'
+34c5  30
+34c6  35    STORE (IX-10)
+34c7  8e    LOAD #0348
+34c8  48
+34c9  03
+34ca  2e    LOAD (POP+#52)
+34cb  29
+34cc  e3    BRANCH_IF_FALSE +6  => 34d4
+34cd  06
+34ce  8e    LOAD #0100
+34cf  00
+34d0  01
+34d1  34    STORE (IX-8)
+34d2  90    LITT 0
+34d3  35    STORE (IX-10)
+
+
+34d4  04    LOAD (IX+8)     ; column
+34d5  33    STORE (IX-6)
+34d6  90    LITT 0          ; couple index (column)
+34d7  32    STORE (IX-4)
+
+
+34d8  23    LOAD (IX-6)     ; column
+34d9  8e    LOAD #0348
+34da  48
+34db  03
+34dc  82    ADDR_ADD #54        => addr 039C (base)
+34dd  2a
+34de  22    LOAD (IX-4)
+34df  0d    LOAD_INDEXED_BYTE
+34e0  a6    ADD             ; column+base
+34e1  33    STORE (IX-6)    ; adjusted column
+
+
+34e2  8e    LOAD #0348
+34e3  48
+34e4  03
+34e5  82    ADDR_ADD #56    ; => 039E (offset of column)
+34e6  2b
+34e7  22    LOAD (IX-4)
+34e8  0d    LOAD_INDEXED_BYTE
+34e9  36    STORE (IX-12)   ; offset to write
+
+
+34ea  8e    LOAD #0348
+34eb  48
+34ec  03
+34ed  82    ADDR_ADD #42    ; => addr 038A (seq string)
+34ee  21
+34ef  26    LOAD (IX-12)    ; offset of column
+34f0  23    LOAD (IX-6)     ; adjusted column
+34f1  24    LOAD (IX-8)     ; 10 or 256
+34f2  aa    MOD             ; column % 10 (or 256)
+34f3  25    LOAD (IX-10)    ; '0' or 0
+34f4  a6    ADD             ; + '0' (or 0)
+34f5  1d    STORE_INDEXED
+
+
+34f6  23    LOAD (IX-6)
+34f7  24    LOAD (IX-8)
+34f8  a9    DIV             ; column / 10 (or 256)
+34f9  33    STORE (IX-6)
+
+
+34fa  26    LOAD (IX-12)
+34fb  ad    DEC             ; go to preceding offset
+34fc  36    STORE (IX-12)
+
+
+34fd  23    LOAD (IX-6)     ; here is the bug
+34fe  ab    EQ0
+34ff  e5    BRANCH_IF_0 -23 ; => 34ea
+3500  17
+
+
+3501  03    LOAD (IX+6)     ; line
+3502  33    STORE (IX-6)
+
+
+3503  22    LOAD (IX-4)     ; increment couple index
+3504  ac    INC
+3505  32    STORE (IX-4)
+
+
+3506  22    LOAD (IX-4)
+3507  91    LITT #1
+3508  a3    SUB
+3509  e5    BRANCH_IF_0 -51 ; redo the same for line
+350a  33
+
+
+350b  8e    LOAD #0348
+350c  48
+350d  03
+350e  82    ADD #42
+350f  21
+3510  9f    LITT #0F
+3511  8e    LOAD #0348
+3512  48
+3513  03
+3514  2e    LOAD (POP+#58)      ; LOAD (#03A0)
+3515  2c
+3516  ed    PROC_CALL 17
+3517  11
+3518  8a    LEAVE4
+3519  ff    RET
+
+; procedure TEXTS.proc37 (WriteChar(t:TEXT; c:CHAR))
+4523  87
+4524  01
+4525  f1        pop     af
+4526  d9        exx
+4527  c1        pop     bc
+4528  d1        pop     de
+4529  d9        exx     
+452a  d5        push    de
+452b  dde5      push    ix
+452d  ed4b1203  ld      bc,(#0312)
+4531  c5        push    bc
+4532  fd221203  ld      (#0312),iy
+4536  dd210000  ld      ix,#0000
+453a  dd39      add     ix,sp
+453c  e5        push    hl
+453d  d9        exx     
+453e  7a        ld      a,d
+453f  b7        or      a
+4540  203c      jr      nz,#457e        ; (60)
+4542  7b        ld      a,e
+4543  3d        dec     a
+4544  fe10      cp      #10
+4546  3036      jr      nc,#457e        ; (54)
+4548  fd6e0e    ld      l,(iy+#0e)
+454b  fd660f    ld      h,(iy+#0f)
+454e  19        add     hl,de
+454f  79        ld      a,c
+4550  fe1e      cp      #1e
+4552  2002      jr      nz,#4556        ; (2)
+4554  36ff      ld      (hl),#ff
+4556  08        ex      af,af'
+4557  34        inc     (hl)
+4558  fd6e14    ld      l,(iy+#14)
+455b  fd6615    ld      h,(iy+#15)
+455e  19        add     hl,de
+455f  7e        ld      a,(hl)
+4560  fe01      cp      #01
+4562  2827      jr      z,#458b         ; (39)
+4564  fe02      cp      #02
+4566  2043      jr      nz,#45ab        ; (67)
+4568  08        ex      af,af'
+4569  2007      jr      nz,#4572        ; (7)
+456b  3e0d      ld      a,#0d
+456d  cd8304    call    #0483
+4570  3e0a      ld      a,#0a
+4572  cd8304    call    #0483
+4575  e1        pop     hl
+4576  c1        pop     bc
+4577  dde1      pop     ix
+4579  e1        pop     hl
+457a  af        xor     a
+457b  c37b04    jp      #047b
+457e  d9        exx     
+457f  211c01    ld      hl,#011c
+4582  e5        push    hl
+4583  210000    ld      hl,#0000
+4586  e5        push    hl
+4587  e5        push    hl
+4588  cd3504    call    #0435
+458b  fd6e16    ld      l,(iy+#16)
+458e  fd6617    ld      h,(iy+#17)
+4591  19        add     hl,de
+4592  19        add     hl,de
+4593  5e        ld      e,(hl)
+4594  23        inc     hl
+4595  56        ld      d,(hl)
+4596  d5        push    de
+4597  1ef3      ld      e,#f3
+4599  fd6eee    ld      l,(iy-#12)
+459c  fd66ef    ld      h,(iy-#11)
+459f  08        ex      af,af'
+45a0  2004      jr      nz,#45a6        ; (4)
+45a2  010d0a    ld      bc,#0a0d
+45a5  1d        dec     e
+45a6  c5        push    bc
+45a7  cd4805    call    #0548
+45aa  88        adc     a,b
+45ab  c5        push    bc
+45ac  d5        push    de
+45ad  210200    ld      hl,#0002
+45b0  39        add     hl,sp
+45b1  e5        push    hl
+45b2  fd6e18    ld      l,(iy+#18)
+45b5  fd6619    ld      h,(iy+#19)
+45b8  eb        ex      de,hl
+45b9  29        add     hl,hl
+45ba  29        add     hl,hl
+45bb  19        add     hl,de
+45bc  5e        ld      e,(hl)
+45bd  23        inc     hl
+45be  56        ld      d,(hl)
+45bf  23        inc     hl
+45c0  4e        ld      c,(hl)
+45c1  c5        push    bc
+45c2  eb        ex      de,hl
+45c3  cd4305    call    #0543
+45c6  88        adc     a,b
+45c7  bc        cp      h
+45c8  2f        cpl     
+45c9  33        inc     sp
+45ca  66        ld      h,(hl)
+45cb  00        nop     
+45cc  00        nop     
+
+
+
+; procedure FILES.9: ReadByte
+
+4ee7  87
+4ee8  01
+4ee9  d9        exx
+4eea  e1        pop     hl          ; HL' = return addr
+4eeb  d1        pop     de          ; DE' = addr of variable
+4eec  e3        ex      (sp),hl     ; HL' = FILE handler, push back return addr
+4eed  e5        push    hl          ; save FILE handler
+4eee  7d        ld      a,l
+4eef  b4        or      h
+4ef0  2827      jr      z,#4f19     ; jump if FILE handler is NIL 
+4ef2  7e        ld      a,(hl)      ; compare first word with $7A39
+4ef3  23        inc     hl
+4ef4  fe39      cp      #39         ;
+4ef6  2021      jr      nz,#4f19    ; jump if not equal
+4ef8  7e        ld      a,(hl)
+4ef9  23        inc     hl
+4efa  fe7a      cp      #7a
+4efc  201b      jr      nz,#4f19    ; jump if not equal
+4efe  4e        ld      c,(hl)      ; take byte pointer in BC'
+4eff  23        inc     hl
+4f00  46        ld      b,(hl)
+4f01  23        inc     hl
+4f02  7e        ld      a,(hl)      ; and third word in HL'
+4f03  23        inc     hl
+4f04  66        ld      h,(hl)
+4f05  6f        ld      l,a
+4f06  ed42      sbc     hl,bc       ; compare HL' and byte pointer
+4f08  380f      jr      c,#4f19     ; jump if byte pointer > HL'
+4f0a  280d      jr      z,#4f19     ; jump if byte pointer = HL'
+4f0c  0a        ld      a,(bc)      ; read byte pointed by BC'
+4f0d  03        inc     bc          ; increment byte pointer
+4f0e  e1        pop     hl          ; restore initial address
+4f0f  23        inc     hl
+4f10  23        inc     hl
+4f11  71        ld      (hl),c      ; update byte pointer in second word
+4f12  23        inc     hl
+4f13  70        ld      (hl),b
+4f14  12        ld      (de),a      ; set variable to the byte read
+4f15  13        inc     de
+4f16  af        xor     a
+4f17  12        ld      (de),a
+4f18  c9        ret     
+
+4f19  d5        push    de          ; push addr of variable
+4f1a  d9        exx     
+4f1b  d5        push    de          ; push Mcode return addr
+4f1c  dde5      push    ix          ; push LOCAL ptr
+4f1e  c5        push    bc          ; push caller's GLOBAL
+4f1f  dd210000  ld      ix,#0000
+4f23  dd39      add     ix,sp       ; LOCAL = SP
+4f25  e5        push    hl          ; push adr of routine (4ee9)
+4f26  fd221203  ld      (#0312),iy  ; save GLOBAL ptr
+4f2a  114c00    ld      de,#004c    ; add relative 
+4f2d  19        add     hl,de       ; => HL = 4ee9+4c = 4f35
+4f2e  eb        ex      de,hl
+4f2f  fd211a04  ld      iy,#041a    ; jmp NEXT to continue
+4f33  fde9      jp      (iy)        ; the MCode routine just after
+
+4f35  03        LOAD_PARAM1         ; load variable addr
+4f36  90        LI0
+4f37  70        SSW0                ; => set variable to 0
+4f38  04        LOAD_PARAM2
+4f39  03        LOAD_PARAM1
+4f3a  91        LI1
+4f3b  ed0c      PROC_CALL 12        ; read 1 byte
+4f3d  91        LI1
+4f3e  a1        NON_EQUAL           ; verify that 1 byte has been read
+4f3f  e304      JPFC +4
+4f41  04        LOAD_PARAM2
+4f42  92        LI2
+4f43  ed1b      PROC_CALL 27
+4f45  8b        LEAVE
+4f47  a900
+4f48  3f        
+4f49  52        
+4f4a  00        
+4f4b  00        
+
+
+; procedure Files.WriteByte(f: FILE; ch:BYTE)
+
+502b  87
+502c  01
+502d  d9        exx
+502e  e1        pop     hl          ; pop return addr
+502f  d1        pop     de          ; pop byte
+5030  7b        ld      a,e         ; move byte to A
+5031  08        ex      af,af'      ; save byte in A'
+5032  e3        ex      (sp),hl     ; restore return addr, and get File
+5033  e5        push    hl          ; save File variable
+5034  7d        ld      a,l
+5035  b4        or      h
+5036  282c      jr      z,#5064     ; jump if NIL
+5038  7e        ld      a,(hl)      ; check marker in file descriptor
+5039  23        inc     hl
+503a  fe39      cp      #39
+503c  2026      jr      nz,#5064    
+503e  7e        ld      a,(hl)
+503f  23        inc     hl
+5040  fe7a      cp      #7a
+5042  2020      jr      nz,#5064
+5044  4e        ld      c,(hl)      ; get current byte pointer
+5045  23        inc     hl
+5046  46        ld      b,(hl)
+5047  23        inc     hl
+5048  23        inc     hl          ; skip end addr of read buffer
+5049  23        inc     hl
+504a  23        inc     hl          ; skip another thing
+504b  23        inc     hl
+504c  5e        ld      e,(hl)      ; get end addr of write buffer
+504d  23        inc     hl
+504e  56        ld      d,(hl)
+504f  23        inc     hl
+5050  eb        ex      de,hl       ; save addr of write flag in DE
+5051  ed42      sbc     hl,bc       ; compare current addr with end
+5053  380f      jr      c,#5064     ; jump if current > end
+5055  280d      jr      z,#5064     ; or current == end
+5057  3e01      ld      a,#01
+5059  12        ld      (de),a      ; flag buffer as written
+505a  08        ex      af,af'
+505b  02        ld      (bc),a      ; write byte at current addr
+505c  03        inc     bc          ; increment current addr
+505d  e1        pop     hl
+505e  23        inc     hl
+505f  23        inc     hl
+5060  71        ld      (hl),c
+5061  23        inc     hl
+5062  70        ld      (hl),b
+5063  c9        ret     
+
+5064  08        ex      af,af'
+5065  5f        ld      e,a
+5066  d5        push    de
+5067  d9        exx     
+5068  d5        push    de
+5069  dde5      push    ix
+506b  c5        push    bc
+506c  dd210000  ld      ix,#0000
+5070  dd39      add     ix,sp
+5072  e5        push    hl
+5073  fd221203  ld      (#0312),iy
+5077  115500    ld      de,#0055
+507a  19        add     hl,de
+507b  eb        ex      de,hl
+507c  fd211a04  ld      iy,#041a
+5080  fde9      jp      (iy)
+                                    ; continue with M-Code
+5082  04        load param4
+5083  80 03     load addr of param3   
+5085  91        load imm 1
+5086  ed 10     call proc 16
+5088  8b        leave 6
+
+
