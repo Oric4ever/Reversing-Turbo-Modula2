@@ -1,0 +1,4233 @@
+module start at 1785
+6021 : Module SHELL
+	depends on TEXTS 
+	depends on FILES 
+	depends on TERMINAL 
+	depends on COMLINE 
+	depends on LOADER 
+	depends on EXEC 
+
+SHELL.SHELL : 1556
+SHELL.proc1: 014a
+SHELL.proc2: 01d4
+SHELL.proc3: 03db
+SHELL.proc4: 02b8
+SHELL.proc5: 0553
+SHELL.DOCREA: 0604
+SHELL.proc7: 061d
+SHELL.proc8: 035b
+SHELL.proc9: 037b
+SHELL.proc10: 03b9
+SHELL.proc11: 0234
+SHELL.proc12: 0257
+SHELL.proc13: 0001
+SHELL.proc14: 00b3
+SHELL.proc15: 00df
+SHELL.proc16: 0178
+SHELL.proc17: 01b9
+SHELL.proc18: 026b
+SHELL.proc19: 0334
+SHELL.proc20: 0418
+SHELL.proc21: 04c9
+SHELL.proc22: 065a
+SHELL.proc23: 06f9
+SHELL.proc24: 07a1
+SHELL. S5733: 07f6
+SHELL.proc26: 0896
+SHELL.proc27: 0874
+SHELL.proc28: 0808
+SHELL.proc29: 0a53
+SHELL.proc30: 0b6c
+SHELL.COPYFI: 0a90
+SHELL.proc32: 0b35
+SHELL.FWRX4R: 0b58
+SHELL.62TQ0F: 0b63
+SHELL.RENAM : 0cb1
+SHELL.KILL  : 0dbe
+SHELL.DELET : 0d99
+SHELL.proc38: 0ed3
+SHELL.proc39: 0f94
+SHELL.proc40: 100a
+SHELL.proc41: 105d
+SHELL.proc42: 109c
+SHELL.proc43: 10e9
+SHELL.proc44: 111b
+SHELL.proc45: 11c5
+SHELL.proc46: 1411
+SHELL.proc47: 1240
+SHELL.proc48: 126d
+SHELL.proc49: 12b2
+SHELL.proc50: 1332
+SHELL.proc51: 134b
+SHELL.proc52: 13aa
+SHELL.C3GYAG: 1406
+
+; SHELL.proc13(VAR buffer: ARRAY OF CHAR ; message: ARRAY OF CHAR) : read command line
+
+0001 d4 fb 	 enter -5
+0003 03 	 load param1        ;
+0004 ac 	 inc
+0005 04 	 load param2
+0006 40 12 	 reserve_string
+0008 14 	 store param2
+0009 04 	 load param2        ; Terminal.WriteString(message);
+000a 03 	 load param1
+000b f0 27 	 call TERMINAL.WriteString
+000d 06 	 load param4        ; buffer := message
+000e 04 	 load param2        
+000f 05 	 load param3       
+0010 ac 	 inc
+0011 03 	 load param1      
+0012 ac 	 inc
+0013 31 	 copy string
+0014 90 	 load immediate 0   ; index := 0
+0015 32 	 store local word-2
+
+0016 22 	 load local word-2  ; WHILE index < HIGH(message)
+0017 03 	 load param1
+0018 a4 	 uless_or_equal
+0019 de 04 	 andjp 001f         ; AND message[index]<>0
+001b 04 	 load param2
+001c 22 	 load local word-2
+001d 0d 	 load indexed byte
+001e cb 	 not_zero
+001f e3 05 	 jpfalse 0026
+0021 22 	 load local word-2  ; DO INC(index) END
+0022 ac 	 inc
+0023 32 	 store local word-2
+0024 e4 10 	 jp 0016
+                                    ;REPEAT
+0026 80 fd 	 load local address -3  ; ReadChar(char)
+0028 f0 21 	 call TERMINAL.ReadChar
+002a 23 	 load local word-3      ; IF char = TAB
+002b 99 	 load immediate 9
+002c a0 	 equal
+002d e3 03 	 jpfalse 0032
+002f 8d 20 	 load immediate 32      ; THEN char = ' '
+0031 33 	 store local word-3     ; END
+
+0032 23 	 load local word-3      ; IF char >= ' '
+0033 8d 20 	 load immediate 32
+0035 a5 	 ugreater_or_equal
+0036 de 04 	 andjp 003c             ; AND char < DEL 
+0038 23 	 load local word-3
+0039 8d 7f 	 load immediate 127
+003b a2 	 uless_than
+003c e3 19 	 jpfalse 0057           ; THEN    
+003e 22 	 load local word-2      ;   IF index < bufsize
+003f 05 	 load param3
+0040 a2 	 uless_than
+0041 e3 12 	 jpfalse 0055
+0043 06 	 load param4            ;   THEN buffer[index] := CAP(char)
+0044 22 	 load local word-2      ;         
+0045 23 	 load local word-3
+0046 20 	 dup
+0047 8d 40 	 load immediate 64
+0049 e8 	 bitwise_and
+004a b1 01 	 shr 1
+004c b7 	 complement
+004d e8 	 bitwise_and
+004e 1d 	 store indexed byte
+004f 23 	 load local word-3      ;       WriteChar(char)
+0050 f0 25 	 call TERMINAL.WriteChar
+0052 22 	 load local word-2      ;       INC(index)
+0053 ac 	 inc
+0054 32 	 store local word-2     ,   END
+0055 e2 43 	 jp 009a                ; ELSE
+0057 23 	 load local word-3      ;   IF char = BackSpace
+0058 98 	 load immediate 8
+0059 a0 	 equal
+005a df 04 	 orjp 0060              ;   OR char = 37C 
+005c 23 	 load local word-3
+005d 8d 1f 	 load immediate 31
+005f a0 	 equal
+0060 df 04 	 orjp 0066              ;   OR char = DEL
+0062 23 	 load local word-3
+0063 8d 7f 	 load immediate 127
+0065 a0 	 equal
+0066 e3 13 	 jpfalse 007b           ;   THEN
+0068 22 	 load local word-2      ;     IF index<>0 
+0069 cb 	 not_zero
+006a e3 0d 	 jpfalse 0079
+006c 98 	 load immediate 8       ;     THEN
+006d f0 25 	 call TERMINAL.WriteChar;       WriteChar(BackSpace)
+006f 8d 20 	 load immediate 32
+0071 f0 25 	 call TERMINAL.WriteChar;       WriteChar(' ')
+0073 98 	 load immediate 8
+0074 f0 25 	 call TERMINAL.WriteChar;       WriteChar(BackSpace)
+0076 22 	 load local word-2      ;       DEC(index)
+0077 ad 	 dec
+0078 32 	 store local word-2     ;     END
+0079 e2 1f 	 jp 009a                ;   ELSE
+007b 23 	 load local word-3      ;     IF char = Ctrl-X
+007c 8d 18 	 load immediate 24
+007e a0 	 equal
+007f df 04 	 orjp 0085              ;     OR char = ESC
+0081 23 	 load local word-3
+0082 8d 1b 	 load immediate 27
+0084 a0 	 equal
+0085 e3 13 	 jpfalse 009a           ;     THEN
+0087 22 	 load local word-2      ;       WHILE index <> 0
+0088 cb 	 not_zero
+0089 e3 0f 	 jpfalse 009a           ;       DO
+008b 98 	 load immediate 8
+008c f0 25 	 call TERMINAL.WriteChar;         WriteChar(BackSpace)
+008e 8d 20 	 load immediate 32
+0090 f0 25 	 call TERMINAL.WriteChar;         WriteChar(' ')
+0092 98 	 load immediate 8
+0093 f0 25 	 call TERMINAL.WriteChar;         WriteChar(BackSpace)
+0095 22 	 load local word-2      ;         DEC(index)
+0096 ad 	 dec
+0097 32 	 store local word-2
+0098 e4 13 	 jp 0087                ;       END
+009a 23 	 load local word-3      ;UNTIL char = CR
+009b 9d 	 load immediate 13
+009c a0 	 equal
+009d df 04 	 orjp 00a3              ;OR char = ESC
+009f 23 	 load local word-3
+00a0 8d 1b 	 load immediate 27
+00a2 a0 	 equal
+00a3 df 03 	 orjp 00a8              ;OR index = bufsize
+00a5 22 	 load local word-2
+00a6 05 	 load param3
+00a7 a0 	 equal
+00a8 e5 84 	 jpfalse 0026           ;
+00aa 06 	 load param4            ;buffer[index] := 0
+00ab 22 	 load local word-2
+00ac 90 	 load immediate 0
+00ad 1d 	 store indexed byte
+00ae f0 26 	 call TERMINAL.WriteLn  ;
+00b0 84 84 	 leave 132
+
+
+00b2 ff 	 
+
+; SHELL.proc14 :
+
+00b3 d4 ff 	 enter -1
+00b5 8d 81 	 load immediate 129     ; IF commandLine[index]-ORD('<') IN {0,2} 
+00b7 48 	 load global word8      ; (* i.e '<' or '>' *)
+00b8 0d 	 load indexed byte
+00b9 af 3c 	 sub 60
+00bb 95 	 load immediate 5
+00bc e7 	 bitwise_in
+00bd e3 0c 	 jpfalse 00cb
+                                    ; THEN
+00bf 48 	 load global word8      ;   REPEAT INC(index)
+00c0 ac 	 inc
+00c1 58 	 store global word8
+00c2 8d 81 	 load immediate 129     ;   UNTIL commandLine[index]<=' ';
+00c4 48 	 load global word8
+00c5 0d 	 load indexed byte
+00c6 8d 20 	 load immediate 32
+00c8 a4 	 uless_or_equal
+00c9 e5 0c 	 jpfalse 00bf
+                                    ; END;
+00cb 03 	 load param1            ; char := commandLine[index];
+00cc 8d 81 	 load immediate 129
+00ce 48 	 load global word8
+00cf 0d 	 load indexed byte
+00d0 70 	 store stack word0
+00d1 03 	 load param1            ; IF char = 0C
+00d2 60 	 load stack word0
+00d3 ab 	 eq0
+00d4 e3 04 	 jpfalse 00da
+00d6 03 	 load param1            ; THEN char = EOT
+00d7 8d 1a 	 load immediate 26
+00d9 70 	 store stack word0      ; END;
+00da 48 	 load global word8      ; INC(index)
+00db ac 	 inc
+00dc 58 	 store global word8
+00dd 8a 	 leave4
+00de ff 	 
+
+; SHELL.proc15: handle redirection
+
+00df d4 fd 	 enter -3
+00e1 90 	 load immediate 0       ; global8 := 0
+00e2 58 	 store global word8
+00e3 81 02 	 load global address 2  ; TEXTS.CloseText(global2)
+00e5 ef 00 19 	 call TEXTS.proc25
+00e8 81 02 	 load global address 2  ; TEXTS.ConnectDriver(global2,PROC14)
+00ea 9e 	 load immediate 14
+00eb 81 00 	 load global address 0
+00ed ef 00 1a 	 call TEXTS.proc26
+00f0 0c 33 	 load COMLINE.word3    ; ComLine.inName := "CON:"
+00f2 8c 04 	 call_rel 00f8
+00f4 "CON:"
+00f8 8d 14 	 load immediate 20
+00fa 94 	 load immediate 4
+00fb 31 	 copy string
+00fc 0c 34 	 load COMLINE.word4    ; ComLine.outName := ComLine.inName
+00fe 0c 33 	 load COMLINE.word3
+0100 8d 14 	 load immediate 20
+0102 30 	 copy block
+                                    ; REPEAT
+0103 8d 81 	 load immediate 129     ;   local2 := commandLine[index];
+0105 48 	 load global word8
+0106 0d 	 load indexed byte
+0107 32 	 store local word-2     ;
+0108 48 	 load global word8      ;   INC(index);
+0109 ac 	 inc
+010a 58 	 store global word8
+010b 22 	 load local word-2      ;   IF ORD(local2)-ORD('<') IN {0,2} (* ie '<' or '>' *)
+010c af 3c 	 sub 60
+010e 95 	 load immediate 5       
+010f e7 	 bitwise_in
+0110 e3 28 	 jpfalse 013a           ;   THEN
+
+0112 8d 81 	 load immediate 129     ;     IF commandLine[index] > ' '
+0114 48 	 load global word8
+0115 0d 	 load indexed byte
+0116 8d 20 	 load immediate 32      ;
+0118 a3 	 ugreater_than
+0119 e3 1f 	 jpfalse 013a           ;     THEN
+011b 22 	 load local word-2      ;       IF local2 = '<'
+011c 8d 3c 	 load immediate 60
+011e a0 	 equal
+011f e3 09 	 jpfalse 012a           ;       THEN
+0121 42 	 load global word2      ;         ReadString(global2,COMLINE.inName)
+0122 0c 33 	 load COMLINE.word3
+0124 8d 13 	 load immediate 19
+0126 f0 02 	 call TEXTS.proc2
+0128 e2 07 	 jp 0131                ;       ELSE
+012a 42 	 load global word2      ;         ReadString(global2,COMLINE.outName)
+012b 0c 34 	 load COMLINE.word4
+012d 8d 13 	 load immediate 19
+012f f0 02 	 call TEXTS.proc2       ;       END
+0131 42 	 load global word2      ;       ReadAgain(global2)
+0132 ef 00 10 	 call TEXTS.proc16
+0135 42 	 load global word2      ;       ReadChar(global2,local2)
+0136 80 fe 	 load local address -2
+0138 f0 01 	 call TEXTS.proc1
+                                    ;     END
+                                    ;   END
+013a 22 	 load local word-2      ; UNTIL (local2 = 0C)
+013b ab 	 eq0
+013c df 04 	 orjp 0142              ;   OR (local2 = EOF)
+013e 22 	 load local word-2      ;
+013f 8d 1a 	 load immediate 26
+0141 a0 	 equal
+0142 e5 41 	 jpfalse 0103           ;
+0144 90 	 load immediate 0       ; global8 := 0
+0145 58 	 store global word8
+0146 91 	 load immediate 1       ; global6 := 1
+0147 56 	 store global word6
+0148 88 	 leave0
+0149 ff 	 
+
+; SHELL.proc1(prompt: ARRAY OF CHAR; default: ARRAY OF CHAR)
+
+014a d4 fb 	 enter -5
+014c 05 	 load param3            ; increment HIGH to have size
+014d ac 	 inc
+014e 06 	 load param4
+014f 40 12 	 reserve_string         ; copy prompt string to a local string
+0151 16 	 store param4           ; and store its address
+0152 03 	 load param1            ; same thing with second parameter
+0153 ac 	 inc
+0154 04 	 load param2
+0155 40 12 	 reserve_string
+0157 14 	 store param2
+0158 47 	 load global word7      ; IF NOT global7
+0159 b6 	 not
+015a df 05 	 orjp 0161              ; OR commandline[1] = 0C
+015c 8d 81 	 load immediate 129
+015e 91 	 load immediate 1
+015f 0d 	 load indexed byte
+0160 ab 	 eq0
+0161 e3 11 	 jpfalse 0174           ; THEN
+0163 f0 26 	 call TERMINAL.WriteLn
+0165 06 	 load param4
+0166 05 	 load param3
+0167 f0 27 	 call TERMINAL.WriteString; WriteString(prompt)
+0169 8d 20 	 load immediate 32
+016b f0 25 	 call TERMINAL.WriteChar;   WriteChar(' ')
+016d 8d 81 	 load immediate 129     ; commandLine buffer addr
+016f 8d 7e 	 load immediate 126     ; commandLine buffer size
+0171 04 	 load param2            ; default value
+0172 03 	 load param1
+0173 fd 	 call proc13            ; read command line
+
+0174 ff 	 call proc15            ; handle redirection
+0175 84 84 	 leave 132
+0177 ff 	 
+
+; SHELL.proc16 :
+
+0178 d4 fd 	 enter -3
+017a 8d 14 	 load immediate 20
+017c d2 	 reserve
+017d 32 	 store local word-2
+017e 90 	 load immediate 0
+017f 58 	 store global word8
+0180 42 	 load global word2
+0181 22 	 load local word-2
+0182 8d 13 	 load immediate 19
+0184 f0 02 	 call TEXTS.proc2
+0186 8d 81 	 load immediate 129
+0188 48 	 load global word8
+0189 a6 	 add
+018a 8d 81 	 load immediate 129
+018c 90 	 load immediate 0
+018d a6 	 add
+018e 8d 7f 	 load immediate 127
+0190 48 	 load global word8
+0191 a7 	 sub
+0192 40 0e 	 MOVE
+0194 8d 80 	 load immediate 128
+0196 90 	 load immediate 0
+0197 90 	 load immediate 0
+0198 1d 	 store indexed byte
+0199 8d 80 	 load immediate 128
+019b 90 	 load immediate 0
+019c 0d 	 load indexed byte
+019d 8d 7e 	 load immediate 126
+019f a2 	 uless_than
+01a0 de 08 	 andjp 01aa
+01a2 8d 81 	 load immediate 129
+01a4 8d 80 	 load immediate 128
+01a6 90 	 load immediate 0
+01a7 0d 	 load indexed byte
+01a8 0d 	 load indexed byte
+01a9 cb 	 not_zero
+01aa e3 0b 	 jpfalse 01b7
+01ac 8d 80 	 load immediate 128
+01ae 90 	 load immediate 0
+01af 8d 80 	 load immediate 128
+01b1 90 	 load immediate 0
+01b2 0d 	 load indexed byte
+01b3 ac 	 inc
+01b4 1d 	 store indexed byte
+01b5 e4 1e 	 jp 0199
+01b7 88 	 leave0
+01b8 ff 	 
+01b9 d4 fb 	 enter -5
+01bb 90 	 load immediate 0
+01bc 32 	 store local word-2
+01bd 04 	 load param2
+01be 22 	 load local word-2
+01bf 0d 	 load indexed byte
+01c0 05 	 load param3
+01c1 a0 	 equal
+01c2 e3 04 	 jpfalse 01c8
+01c4 22 	 load local word-2
+01c5 ac 	 inc
+01c6 85 03 	 fct_leave 3
+01c8 22 	 load local word-2
+01c9 ac 	 inc
+01ca 32 	 store local word-2
+01cb 22 	 load local word-2
+01cc 03 	 load param1
+01cd a3 	 ugreater_than
+01ce e5 13 	 jpfalse 01bd
+01d0 90 	 load immediate 0
+01d1 85 03 	 fct_leave 3
+01d3 ff 	 
+
+
+
+; SHELL.proc2: handle menu
+
+01d4 d4 fb 	 enter -5
+01d6 03 	 load param1
+01d7 ac 	 inc
+01d8 04 	 load param2
+01d9 40 12 	 reserve_string
+01db 14 	 store param2
+01dc f0 26 	 call TERMINAL.WriteLn
+01de 05 	 load param3            ; this is the prompt char
+01df f0 25 	 call TERMINAL.WriteChar
+01e1 80 fd 	 load local address -3
+01e3 f0 21 	 call TERMINAL.ReadChar ; wait for a command char
+01e5 23 	 load local word-3      ; local3 := uppercase(local3)
+01e6 20 	 dup
+01e7 8d 40 	 load immediate 64
+01e9 e8 	 bitwise_and
+01ea b1 01 	 shr 1
+01ec b7 	 complement
+01ed e8 	 bitwise_and
+01ee 33 	 store local word-3
+01ef 23 	 load local word-3      ; IF local3=' '
+01f0 8d 20 	 load immediate 32
+01f2 a0 	 equal
+01f3 e3 2a 	 jpfalse 021f
+
+01f5 8d 20 	 load immediate 32      ; THEN WriteChar(' ')
+01f7 f0 25 	 call TERMINAL.WriteChar
+01f9 8d 81 	 load immediate 129     ; commandLine address
+01fb 8d 7e 	 load immediate 126     ; commandLine size
+01fd 8c 01 	 call_rel 0200          ; an empty string
+01ff 00                             
+0200 90 	 load immediate 0       ;
+0201 fd 	 call proc13            ; read command line
+0202 8d 81 	 load immediate 129     ; command line buffer at 0081
+0204 90 	 load immediate 0
+0205 0d 	 load indexed byte      ; get first char and uppercase it
+0206 20 	 dup
+0207 8d 40 	 load immediate 64
+0209 e8 	 bitwise_and
+020a b1 01 	 shr 1
+020c b7 	 complement
+020d e8 	 bitwise_and
+020e 33 	 store local word-3     ; char in local3
+020f 8d 81 	 load immediate 129     ; replace first char by a space
+0211 90 	 load immediate 0
+0212 8d 20 	 load immediate 32
+0214 1d 	 store indexed byte
+0215 23 	 load local word-3      ; command char as first parameter
+0216 04 	 load param2            ; then address of command table ?
+0217 03 	 load param1            ; and size of command table ?
+0218 ec 11 	 nested_call proc17     ; find command in table
+021a 32 	 store local word-2     ; index of command in local2
+021b 91 	 load immediate 1       ; global7 := 1
+021c 57 	 store global word7
+021d e2 11 	 jp 0230
+                                    ; ELSE (* local3 <> ' ' *)
+021f 23 	 load local word-3      ; 
+0220 04 	 load param2
+0221 03 	 load param1
+0222 ec 11 	 nested_call proc17     ; find command in table
+0224 32 	 store local word-2     ; and store index of command in local2
+0225 22 	 load local word-2
+0226 cb 	 not_zero
+0227 e3 03 	 jpfalse 022c           ; IF index <> 0 THEN
+0229 23 	 load local word-3
+022a f0 25 	 call TERMINAL.proc5    ;   WriteChar(command)
+                                    ; END;
+022c f0 26 	 call TERMINAL.proc6    ; WriteLn
+022e 90 	 load immediate 0       ; global7 := 0
+022f 57 	 store global word7
+                                    ; END (* IF local3 = ' ' *)
+0230 22 	 load local word-2      ; return index of command
+0231 85 83 	 fct_leave 131
+0233 ff 	 
+
+
+; SHELL.proc11 : write a string with the first char highlighted
+
+0234 d4 fd 	 enter -3
+0236 03 	 load param1
+0237 ac 	 inc
+0238 04 	 load param2
+0239 40 12 	 reserve_string
+023b 14 	 store param2
+023c f0 2f 	 call TERMINAL.Highlight
+023e 04 	 load param2            ; get first char and write it
+023f 90 	 load immediate 0
+0240 0d 	 load indexed byte
+0241 f0 25 	 call TERMINAL.WriteChar
+0243 ef 02 10 	 call TERMINAL.Normal
+0246 90 	 load immediate 0
+0247 32 	 store local word-2
+0248 22 	 load local word-2
+0249 ac 	 inc
+024a 32 	 store local word-2
+024b 04 	 load param2
+024c 22 	 load local word-2
+024d 0d 	 load indexed byte
+024e f0 25 	 call TERMINAL.WriteChar
+0250 22 	 load local word-2
+0251 03 	 load param1
+0252 a0 	 equal
+0253 e5 0d 	 jpfalse 0248
+0255 8a 	 leave4
+0256 ff 	 
+
+; SHELL.proc12  clear the screen, or do 2 writeln if no clearscreen sequence
+
+0257 d4 ff 	 enter -1
+0259 8e a2 03 	 load immediate 930
+025c 90 	 load immediate 0
+025d 0d 	 load indexed byte
+025e ab 	 eq0
+025f e3 06 	 jpfalse 0267
+0261 f0 26 	 call TERMINAL.WriteLn
+0263 f0 26 	 call TERMINAL.WriteLn
+0265 e2 02 	 jp 0269
+0267 f0 28 	 call TERMINAL.ClearScreen
+0269 88 	 leave0
+026a ff 	 
+026b d4 fd 	 enter -3
+026d 04 	 load param2
+026e ac 	 inc
+026f 05 	 load param3
+0270 40 12 	 reserve_string
+0272 15 	 store param3
+0273 42 	 load global word2
+0274 ef 00 13 	 call TEXTS.proc19
+0277 b6 	 not
+0278 e3 0f 	 jpfalse 0289
+027a 42 	 load global word2
+027b 03 	 load param1
+027c 8d 13 	 load immediate 19
+027e f0 02 	 call TEXTS.proc2
+0280 03 	 load param1
+0281 90 	 load immediate 0
+0282 0d 	 load indexed byte
+0283 cb 	 not_zero
+0284 e3 03 	 jpfalse 0289
+0286 91 	 load immediate 1
+0287 85 83 	 fct_leave 131
+0289 05 	 load param3
+028a 04 	 load param2
+028b f0 27 	 call TERMINAL.WriteString
+028d 0c 02 	 load TEXTS.dword2
+028f 03 	 load param1
+0290 8d 13 	 load immediate 19
+0292 f0 02 	 call TEXTS.proc2
+0294 0c 02 	 load TEXTS.dword2
+0296 f0 07 	 call TEXTS.proc7
+0298 90 	 load immediate 0
+0299 32 	 store local word-2
+029a 03 	 load param1
+029b 22 	 load local word-2
+029c 03 	 load param1
+029d 22 	 load local word-2
+029e 0d 	 load indexed byte
+029f 20 	 dup
+02a0 8d 40 	 load immediate 64
+02a2 e8 	 bitwise_and
+02a3 b1 01 	 shr 1
+02a5 b7 	 complement
+02a6 e8 	 bitwise_and
+02a7 1d 	 store indexed byte
+02a8 22 	 load local word-2
+02a9 ac 	 inc
+02aa 32 	 store local word-2
+02ab 22 	 load local word-2
+02ac 8d 13 	 load immediate 19
+02ae a3 	 ugreater_than
+02af e5 17 	 jpfalse 029a
+02b1 03 	 load param1
+02b2 90 	 load immediate 0
+02b3 0d 	 load indexed byte
+02b4 cb 	 not_zero
+02b5 85 83 	 fct_leave 131
+02b7 ff 	 
+
+; SHELL.proc4(VAR codepos: CARDINAL): BOOLEAN;
+; VAR local2 : ARRAY [0..10] OF CHAR;
+
+02b8 d4 f5 	 enter -11
+02ba 9b 	 load immediate 11  ; 
+02bb d2 	 reserve
+02bc 32 	 store local word-2
+02bd 46 	 load global word6  ; IF NOT global6 
+02be b6 	 not
+02bf de 03 	 andjp 02c4         ; AND global9 < global10
+02c1 49 	 load global word9
+02c2 4a 	 load global word10
+02c3 a2 	 uless_than
+02c4 e3 09 	 jpfalse 02cf       ; THEN
+02c6 49 	 load global word9      INC(global9)
+02c7 ac 	 inc
+02c8 59 	 store global word9
+02c9 03 	 load param1        ;   codepos := global9
+02ca 49 	 load global word9
+02cb 70 	 store stack word0
+02cc 91 	 load immediate 1       RETURN TRUE
+02cd 85 81 	 fct_leave 129      ; END
+02cf 42 	 load global word2  ; IF Texts.EOT(global2)
+02d0 ef 00 13 	 call TEXTS.proc19
+02d3 e3 03 	 jpfalse 02d8       ; THEN
+02d5 90 	 load immediate 0       RETURN FALSE
+02d6 85 81 	 fct_leave 129      ; END
+02d8 42 	 load global word2  ; Texts.ReadString(global2, local2)
+02d9 22 	 load local word-2
+02da 9a 	 load immediate 10
+02db f0 02 	 call TEXTS.proc2
+02dd 90 	 load immediate 0   ; local3 := 0
+02de 33 	 store local word-3
+02df 90 	 load immediate 0   ; local5 := 0
+02e0 35 	 store local word-5
+02e1 90 	 load immediate 0   ; local6 := FALSE
+02e2 36 	 store local word-6
+02e3 90 	 load immediate 0   ; global6 := 0
+02e4 56 	 store global word6
+                                ; REPEAT
+02e5 22 	 load local word-2  ;   local4 := local2[local3] - ORD('0')
+02e6 23 	 load local word-3
+02e7 0d 	 load indexed byte
+02e8 af 30 	 sub 48
+02ea 34 	 store local word-4
+02eb 23 	 load local word-3  ;   INC(local3)
+02ec ac 	 inc
+02ed 33 	 store local word-3
+02ee 24 	 load local word-4  ;   IF local4 > 9
+02ef 99 	 load immediate 9
+02f0 a3 	 ugreater_than
+02f1 e3 03 	 jpfalse 02f6       ;   THEN
+02f3 90 	 load immediate 0         RETURN FALSE
+02f4 85 81 	 fct_leave 129      ;   END
+02f6 25 	 load local word-5  ;   local5 := local5 * 10 + local4
+02f7 9a 	 load immediate 10
+02f8 a8 	 umul
+02f9 24 	 load local word-4
+02fa a6 	 add
+02fb 35 	 store local word-5
+02fc 26 	 load local word-6  ;   IF NOT local6
+02fd b6 	 not
+02fe e3 13 	 jpfalse 0313       ;   THEN
+0300 22 	 load local word-2  ;     local6 := local2[local3] = '-'
+0301 23 	 load local word-3
+0302 0d 	 load indexed byte
+0303 8d 2d 	 load immediate 45
+0305 a0 	 equal
+0306 36 	 store local word-6
+0307 26 	 load local word-6  ;     IF local6 
+0308 e3 09 	 jpfalse 0313       ;     THEN
+030a 25 	 load local word-5          global9 := local5
+030b 59 	 store global word9 
+030c 25 	 load local word-5          global10 := local5
+030d 5a 	 store global word10
+030e 90 	 load immediate 0           local5 := 0
+030f 35 	 store local word-5
+0310 23 	 load local word-3          INC(local3)
+0311 ac 	 inc
+0312 33 	 store local word-3       END
+                                    END
+0313 23 	 load local word-3    UNTIL local3 > 10
+0314 9a 	 load immediate 10
+0315 a3 	 ugreater_than
+0316 df 04 	 orjp 031c            OR local2[local3] = 0C
+0318 22 	 load local word-2
+0319 23 	 load local word-3
+031a 0d 	 load indexed byte
+031b ab 	 eq0
+031c e5 39 	 jpfalse 02e5
+031e 26 	 load local word-6  ; IF local6
+031f e3 0c 	 jpfalse 032d       ; THEN
+0321 25 	 load local word-5  ;   IF local5 < global9
+0322 49 	 load global word9
+0323 a2 	 uless_than
+0324 e3 03 	 jpfalse 0329           THEN
+0326 90 	 load immediate 0         RETURN FALSE
+0327 85 81 	 fct_leave 129          END
+0329 25 	 load local word-5      global10 := local5
+032a 5a 	 store global word10
+032b 49 	 load global word9      local5 := global9
+032c 35 	 store local word-5 ; END
+032d 03 	 load param1          codepos := local5
+032e 25 	 load local word-5
+032f 70 	 store stack word0
+0330 91 	 load immediate 1     RETURN TRUE
+0331 85 81 	 fct_leave 129
+0333 ff 	 
+0334 d4 ff 	 enter -1
+0336 03 	 load param1
+0337 8d 13 	 load immediate 19
+0339 f0 27 	 call TERMINAL.WriteString
+033b 8c 16 	 call_rel 0353
+033d 20 	 dup
+033e 69 	 load stack word9
+033f 73 	 store stack word3
+0340 20 	 dup
+0341 69 	 load stack word9
+0342 6c 	 load stack word12
+0343 6c 	 load stack word12
+0344 65 	 load stack word5
+0345 67 	 load stack word7
+0346 61 	 load stack word1
+0347 6c 	 load stack word12
+0348 20 	 dup
+0349 66 	 load stack word6
+034a 69 	 load stack word9
+034b 6c 	 load stack word12
+034c 65 	 load stack word5
+034d 20 	 dup
+034e 6e 	 load stack word14
+034f 61 	 load stack word1
+0350 6d 	 load stack word13
+0351 65 	 load stack word5
+0352 2e 8d 	 load stack word 141
+0354 15 	 store param3
+0355 f0 27 	 call TERMINAL.WriteString
+0357 f0 26 	 call TERMINAL.WriteLn
+0359 89 	 leave2
+035a ff 	 
+035b d4 ff 	 enter -1
+035d 03 	 load param1
+035e ac 	 inc
+035f 04 	 load param2
+0360 40 12 	 reserve_string
+0362 14 	 store param2
+0363 04 	 load param2
+0364 03 	 load param1
+0365 f0 27 	 call TERMINAL.WriteString
+0367 8c 0b 	 call_rel 0374
+0369 20 	 dup
+036a 6e 	 load stack word14
+036b 6f 	 load stack word15
+036c 74 	 store stack word4
+036d 20 	 dup
+036e 66 	 load stack word6
+036f 6f 	 load stack word15
+0370 75 	 store stack word5
+0371 6e 	 load stack word14
+0372 64 	 load stack word4
+0373 2e 9a 	 load stack word 154
+0375 f0 27 	 call TERMINAL.WriteString
+0377 f0 26 	 call TERMINAL.WriteLn
+0379 8a 	 leave4
+037a ff 	 
+037b d4 ff 	 enter -1
+037d 03 	 load param1
+037e ac 	 inc
+037f 04 	 load param2
+0380 40 12 	 reserve_string
+0382 14 	 store param2
+0383 8c 17 	 call_rel 039c
+0385 55 	 store global word5
+0386 73 	 store stack word3
+0387 65 	 load stack word5
+0388 20 	 dup
+0389 44 	 load global word4
+038a 69 	 load stack word9
+038b 72 	 store stack word2
+038c 20 	 dup
+038d 63 	 load stack word3
+038e 6f 	 load stack word15
+038f 6d 	 load stack word13
+0390 6d 	 load stack word13
+0391 61 	 load stack word1
+0392 6e 	 load stack word14
+0393 64 	 load stack word4
+0394 20 	 dup
+0395 62 	 load stack word2
+0396 65 	 load stack word5
+0397 66 	 load stack word6
+0398 6f 	 load stack word15
+0399 72 	 store stack word2
+039a 65 	 load stack word5
+039b 20 	 dup
+039c 8d 16 	 load immediate 22
+039e f0 27 	 call TERMINAL.WriteString
+03a0 04 	 load param2
+03a1 03 	 load param1
+03a2 f0 27 	 call TERMINAL.WriteString
+03a4 8c 0c 	 call_rel 03b2
+03a6 20 	 dup
+03a7 62 	 load stack word2
+03a8 79 	 store stack word9
+03a9 20 	 dup
+03aa 6e 	 load stack word14
+03ab 75 	 store stack word5
+03ac 6d 	 load stack word13
+03ad 62 	 load stack word2
+03ae 65 	 load stack word5
+03af 72 	 store stack word2
+03b0 73 	 store stack word3
+03b1 2e 9b 	 load stack word 155
+03b3 f0 27 	 call TERMINAL.WriteString
+03b5 f0 26 	 call TERMINAL.WriteLn
+03b7 8a 	 leave4
+03b8 ff 	 
+03b9 d4 ff 	 enter -1
+03bb 8c 16 	 call_rel 03d3
+03bd "Write error: disk full"
+03d3 8d 15 	 load immediate 21
+03d5 f0 27 	 call TERMINAL.WriteString
+03d7 f0 26 	 call TERMINAL.WriteLn
+03d9 88 	 leave0
+03da ff 	 
+03db d4 fb 	 enter -5
+03dd 03 	 load param1
+03de ac 	 inc
+03df 04 	 load param2
+03e0 40 12 	 reserve_string
+03e2 14 	 store param2
+03e3 04 	 load param2
+03e4 03 	 load param1
+03e5 f0 27 	 call TERMINAL.WriteString
+03e7 8c 08 	 call_rel 03f1
+03e9 20 	 dup
+03ea 28 	 load local word-8
+03eb 59 	 store global word9
+03ec 2f 4e 29 	 load .word78
+03ef 3f 20 97 	 store .word151
+03f2 f0 27 	 call TERMINAL.WriteString
+03f4 80 fd 	 load local address -3
+03f6 f0 21 	 call TERMINAL.ReadChar
+03f8 23 	 load local word-3
+03f9 20 	 dup
+03fa 8d 40 	 load immediate 64
+03fc e8 	 bitwise_and
+03fd b1 01 	 shr 1
+03ff b7 	 complement
+0400 e8 	 bitwise_and
+0401 8d 59 	 load immediate 89
+0403 a0 	 equal
+0404 32 	 store local word-2
+0405 22 	 load local word-2
+0406 e3 06 	 jpfalse 040e
+0408 8d 59 	 load immediate 89
+040a f0 25 	 call TERMINAL.WriteChar
+040c e2 04 	 jp 0412
+040e 8d 4e 	 load immediate 78
+0410 f0 25 	 call TERMINAL.WriteChar
+0412 f0 26 	 call TERMINAL.WriteLn
+0414 22 	 load local word-2
+0415 85 82 	 fct_leave 130
+0417 ff 	 
+
+; SHELL.proc20
+
+0418 d4 f5 	 enter -11
+041a 98 	 load immediate 8
+041b d2 	 reserve
+041c 36 	 store local word-6     ; reserve an 8-bytes array -> local6
+041d 90 	 load immediate 0       ; local5 := 0
+041e 35 	 store local word-5
+041f 90 	 load immediate 0       ; local2 := 0
+0420 32 	 store local word-2
+0421 06 	 load param4            ; IF Upper(param4[0]) >= 'A'
+0422 90 	 load immediate 0
+0423 0d 	 load indexed byte
+0424 20 	 dup
+0425 8d 40 	 load immediate 64
+0427 e8 	 bitwise_and
+0428 b1 01 	 shr 1
+042a b7 	 complement
+042b e8 	 bitwise_and
+042c 8d 41 	 load immediate 65
+042e a5 	 ugreater_or_equal
+042f de 0e 	 andjp 043f             ; AND Upper(param4[0]) <= 'P'
+0431 06 	 load param4
+0432 90 	 load immediate 0
+0433 0d 	 load indexed byte
+0434 20 	 dup
+0435 8d 40 	 load immediate 64
+0437 e8 	 bitwise_and
+0438 b1 01 	 shr 1
+043a b7 	 complement
+043b e8 	 bitwise_and
+043c 8d 50 	 load immediate 80
+043e a4 	 uless_or_equal
+043f e3 15 	 jpfalse 0456           ; THEN
+0441 04 	 load param2            ;   param2 := Upper(param4[0] - 64)
+0442 06 	 load param4
+0443 90 	 load immediate 0
+0444 0d 	 load indexed byte
+0445 20 	 dup
+0446 8d 40 	 load immediate 64
+0448 e8 	 bitwise_and
+0449 b1 01 	 shr 1
+044b b7 	 complement
+044c e8 	 bitwise_and
+044d af 40 	 sub 64
+044f 70 	 store stack word0
+0450 91 	 load immediate 1       ;   local5 := 1
+0451 35 	 store local word-5
+0452 91 	 load immediate 1       ;   local2 :=1
+0453 32 	 store local word-2
+0454 e2 04 	 jp 045a                ; ELSE
+0456 04 	 load param2            ;   param2 := global3 - 1    
+0457 43 	 load global word3
+0458 ac 	 inc
+0459 70 	 store stack word0      ; END
+045a 06 	 load param4            ; IF param4[local2] >= '0'
+045b 22 	 load local word-2
+045c 0d 	 load indexed byte
+045d 8d 30 	 load immediate 48
+045f a5 	 ugreater_or_equal
+0460 de 06 	 andjp 0468             ; AND param4[local2] <= '9'
+0462 06 	 load param4
+0463 22 	 load local word-2
+0464 0d 	 load indexed byte
+0465 8d 39 	 load immediate 57
+0467 a4 	 uless_or_equal
+0468 e3 2a 	 jpfalse 0494           ; THEN 
+046a 91 	 load immediate 1       ;   local5 := 1
+046b 35 	 store local word-5
+046c 06 	 load param4            ;   local4 := param4[local2] - '0'
+046d 22 	 load local word-2
+046e 0d 	 load indexed byte
+046f af 30 	 sub 48
+0471 34 	 store local word-4
+0472 22 	 load local word-2      ;   INC(local2)
+0473 ac 	 inc
+0474 32 	 store local word-2
+0475 06 	 load param4            ;   IF param4[local2] >= '0'
+0476 22 	 load local word-2
+0477 0d 	 load indexed byte
+0478 8d 30 	 load immediate 48
+047a a5 	 ugreater_or_equal
+047b de 06 	 andjp 0483             ;   AND param4[local2] <= '9'
+047d 06 	 load param4
+047e 22 	 load local word-2
+047f 0d 	 load indexed byte
+0480 8d 39 	 load immediate 57
+0482 a4 	 uless_or_equal
+0483 e3 0d 	 jpfalse 0492           ;   THEN
+0485 24 	 load local word-4      ;     local4 := local4 * 10 + param4[local2]-'0'
+0486 9a 	 load immediate 10
+0487 a8 	 umul
+0488 06 	 load param4
+0489 22 	 load local word-2
+048a 0d 	 load indexed byte
+048b af 30 	 sub 48
+048d a6 	 add
+048e 34 	 store local word-4
+048f 22 	 load local word-2      ;     INC(local2)
+0490 ac 	 inc
+0491 32 	 store local word-2         END
+0492 e2 02 	 jp 0496                ; ELSE
+0494 44 	 load global word4      ;   local4 := userNum;
+0495 34 	 store local word-4     ; END
+0496 06 	 load param4            ; local5 :=  param4[local2] = ':'
+0497 22 	 load local word-2
+0498 0d 	 load indexed byte
+0499 8d 3a 	 load immediate 58
+049b a0 	 equal
+049c de 01 	 andjp 049f             ;           AND local5
+049e 25 	 load local word-5
+049f de 04 	 andjp 04a5             ;           AND local4 < 32
+04a1 24 	 load local word-4
+04a2 8d 20 	 load immediate 32
+04a4 a2 	 uless_than
+04a5 35 	 store local word-5
+04a6 25 	 load local word-5      ; IF local5
+04a7 e3 16 	 jpfalse 04bf
+04a9 06 	 load param4            ; THEN MOVE(param4+(local2+1), 
+                                    ;           param4, 
+                                    ;           param3-local2-1)
+04aa 22 	 load local word-2
+04ab ac 	 inc
+04ac a6 	 add
+04ad 06 	 load param4
+04ae 05 	 load param3
+04af 22 	 load local word-2
+04b0 a7 	 sub
+04b1 ad 	 dec
+04b2 40 0e 	 MOVE
+04b4 06 	 load param4            ;      param4[param3-local2] := 0C
+04b5 05 	 load param3
+04b6 22 	 load local word-2
+04b7 a7 	 sub
+04b8 90 	 load immediate 0
+04b9 1d 	 store indexed byte
+04ba 03 	 load param1            ;      param1 := local4
+04bb 24 	 load local word-4
+04bc 70 	 store stack word0
+04bd e2 07 	 jp 04c6                ; ELSE
+04bf 04 	 load param2            ;      param2 := global3 + 1
+04c0 43 	 load global word3
+04c1 ac 	 inc
+04c2 70 	 store stack word0
+04c3 03 	 load param1                   param1 := global4
+04c4 44 	 load global word4
+04c5 70 	 store stack word0
+04c6 84 84 	 leave 132              ; END
+04c8 ff 	 
+
+; SHELL.proc21
+
+04c9 d4 f5 	 enter -11
+04cb 8d 14 	 load immediate 20      ; copy param1 to local space
+04cd 03 	 load param1
+04ce 40 12 	 reserve_string
+04d0 13 	 store param1
+04d1 03 	 load param1            ; PROC20(param1, &drive, &user)
+04d2 8d 13 	 load immediate 19
+04d4 80 fd 	 load local address -3
+04d6 80 fa 	 load local address -6
+04d8 ed 14 	 call proc20
+04da 90 	 load immediate 0       ; local2 := 0
+04db 32 	 store local word-2
+04dc 90 	 load immediate 0       ; local4 := FALSE
+04dd 34 	 store local word-4
+04de 90 	 load immediate 0       ; local5 := 0
+04df 35 	 store local word-5
+04e0 22 	 load local word-2      ; WHILE local2 <= 19
+04e1 8d 13 	 load immediate 19
+04e3 a4 	 uless_or_equal
+04e4 de 04 	 andjp 04ea             ; AND param1[local2] <> 0C 
+04e6 03 	 load param1
+04e7 22 	 load local word-2
+04e8 0d 	 load indexed byte
+04e9 cb 	 not_zero
+04ea e3 54 	 jpfalse 0540           ; DO
+04ec 03 	 load param1            ;   local3 := param1[local2]
+04ed 22 	 load local word-2
+04ee 0d 	 load indexed byte
+04ef 33 	 store local word-3
+04f0 23 	 load local word-3      ;   IF local3 = '.'
+04f1 8d 2e 	 load immediate 46
+04f3 a0 	 equal
+04f4 de 01 	 andjp 04f7             ;       AND local4
+04f6 24 	 load local word-4
+04f7 df 09 	 orjp 0502              ;   OR local3 = ':'
+04f9 23 	 load local word-3
+04fa 8d 3a 	 load immediate 58
+04fc a0 	 equal
+04fd de 03 	 andjp 0502             ;       AND local2 <> 1
+04ff 22 	 load local word-2
+0500 91 	 load immediate 1
+0501 a1 	 not_equal
+0502 df 04 	 orjp 0508              ;   OR local3 = '['
+0504 23 	 load local word-3
+0505 8d 5b 	 load immediate 91
+0507 a0 	 equal
+0508 df 04 	 orjp 050e              ;   OR local3 = ']'
+050a 23 	 load local word-3
+050b 8d 5d 	 load immediate 93
+050d a0 	 equal
+050e df 04 	 orjp 0514              ;   OR local3 = ','
+0510 23 	 load local word-3
+0511 8d 2c 	 load immediate 44
+0513 a0 	 equal
+0514 df 0a 	 orjp 0520              ;   OR local3 >= ';'
+0516 23 	 load local word-3
+0517 8d 3b 	 load immediate 59
+0519 a5 	 ugreater_or_equal
+051a de 04 	 andjp 0520             ;       AND local3 <= '>'
+051c 23 	 load local word-3
+051d 8d 3e 	 load immediate 62 
+051f a4 	 uless_or_equal
+0520 e3 03 	 jpfalse 0525           ;   THEN
+0522 93 	 load immediate 3       ;     RETURN 3
+0523 85 81 	 fct_leave 129          ;   END
+0525 25 	 load local word-5      ;   local5 := local5
+0526 df 04 	 orjp 052c              ;     OR local3 = '*'
+0528 23 	 load local word-3
+0529 8d 2a 	 load immediate 42
+052b a0 	 equal
+052c df 04 	 orjp 0532              ;     OR local3 = '?'
+052e 23 	 load local word-3
+052f 8d 3f 	 load immediate 63
+0531 a0 	 equal
+0532 35 	 store local word-5
+0533 24 	 load local word-4      ;   local4 :=  local4
+0534 df 04 	 orjp 053a              ;             OR local3 = '.'
+0536 23 	 load local word-3
+0537 8d 2e 	 load immediate 46
+0539 a0 	 equal
+053a 34 	 store local word-4
+053b 22 	 load local word-2      ;   INC(local2)
+053c ac 	 inc
+053d 32 	 store local word-2
+053e e4 60 	 jp 04e0                ; END
+0540 03 	 load param1            ; IF param1[0] = 0C
+0541 90 	 load immediate 0
+0542 0d 	 load indexed byte
+0543 ab 	 eq0
+0544 e3 03 	 jpfalse 0549
+0546 92 	 load immediate 2       ; THEN RETURN 2
+0547 85 81 	 fct_leave 129
+0549 25 	 load local word-5      ; ELSIF local5
+054a e3 03 	 jpfalse 054f
+054c 91 	 load immediate 1       ; THEN RETURN 1
+054d 85 81 	 fct_leave 129
+054f 90 	 load immediate 0       ; ELSE RETURN 0
+0550 85 81 	 fct_leave 129
+0552 ff 	 
+
+; SHELL.proc5
+
+
+0553 d4 f1 	 enter -15
+0555 04 	 load param2            ; copy param3 to local string
+0556 ac 	 inc
+0557 05 	 load param3
+0558 40 12 	 reserve_string
+055a 15 	 store param3
+055b 8d 14 	 load immediate 20      ; reserve 20 bytes for name buffer
+055d d2 	 reserve
+055e 35 	 store local word-5
+055f 06 	 load param4            ; PROC20(filename, local7, local8)
+0560 8d 13 	 load immediate 19
+0562 80 f9 	 load local address -7
+0564 80 f8 	 load local address -8
+0566 ed 14 	 call proc20
+0568 90 	 load immediate 0       ; local2 := 0
+0569 32 	 store local word-2
+
+056a 94 	 load immediate 4       ; local3 := 4
+056b 33 	 store local word-3
+056c 90 	 load immediate 0       ; local4 := 0
+056d 34 	 store local word-4
+056e 25 	 load local word-5      ; name[0] := CHR(local7 + 64)
+056f 90 	 load immediate 0
+0570 27 	 load local word-7
+0571 ae 40 	 add 64
+0573 1d 	 store indexed byte
+0574 25 	 load local word-5      ; name[1] := CHR(local8 DIV 10 + 48)
+0575 91 	 load immediate 1
+0576 28 	 load local word-8
+0577 9a 	 load immediate 10
+0578 a9 	 udiv
+0579 ae 30 	 add 48
+057b 1d 	 store indexed byte
+057c 25 	 load local word-5      ; name[2] := CHR(local8 MOD 10 + 48)
+057d 92 	 load immediate 2
+057e 28 	 load local word-8
+057f 9a 	 load immediate 10
+0580 aa 	 umod
+0581 ae 30 	 add 48
+0583 1d 	 store indexed byte
+0584 25 	 load local word-5      ; name[3] := ':'
+0585 93 	 load immediate 3
+0586 8d 3a 	 load immediate 58
+0588 1d 	 store indexed byte
+                                    ; REPEAT
+0589 06 	 load param4            ; local6 := param4[local2]
+058a 22 	 load local word-2
+058b 0d 	 load indexed byte
+058c 36 	 store local word-6
+058d 25 	 load local word-5      ; local5[local3] := local6
+058e 23 	 load local word-3
+058f 26 	 load local word-6
+0590 1d 	 store indexed byte
+0591 22 	 load local word-2      ; INC(local2)
+0592 ac 	 inc
+0593 32 	 store local word-2
+0594 23 	 load local word-3      ; INC(local3)
+0595 ac 	 inc
+0596 33 	 store local word-3
+0597 26 	 load local word-6      ; UNTIL local6 = 0C
+0598 ab 	 eq0
+0599 df 04 	 orjp 059f
+059b 26 	 load local word-6      ; OR local6 = '.'
+059c 8d 2e 	 load immediate 46
+059e a0 	 equal
+059f df 03 	 orjp 05a4              ; OR local3 = 13;
+05a1 23 	 load local word-3
+05a2 9d 	 load immediate 13
+05a3 a0 	 equal
+05a4 e5 1d 	 jpfalse 0589
+
+05a6 25 	 load local word-5      ; local5[local3-1] := '.'
+05a7 23 	 load local word-3
+05a8 ad 	 dec
+05a9 8d 2e 	 load immediate 46
+05ab 1d 	 store indexed byte
+05ac 26 	 load local word-6      ; WHILE local6 <> '.'
+05ad 8d 2e 	 load immediate 46
+05af a1 	 not_equal
+05b0 de 02 	 andjp 05b4             ; AND local6 <> 0C
+05b2 26 	 load local word-6
+05b3 cb 	 not_zero
+05b4 de 04 	 andjp 05ba
+05b6 22 	 load local word-2      ; AND local2 <= 19
+05b7 8d 13 	 load immediate 19
+05b9 a4 	 uless_or_equal
+05ba e3 09 	 jpfalse 05c5
+05bc 06 	 load param4            ; DO local6 := param4[local2]
+05bd 22 	 load local word-2
+05be 0d 	 load indexed byte
+05bf 36 	 store local word-6
+05c0 22 	 load local word-2      ;    INC(local2)
+05c1 ac 	 inc
+05c2 32 	 store local word-2     
+05c3 e4 19 	 jp 05ac                ; END;
+05c5 26 	 load local word-6      ; IF local6 <> '.'
+05c6 8d 2e 	 load immediate 46      
+05c8 a1 	 not_equal
+05c9 df 01 	 orjp 05cc              ; OR param1
+05cb 03 	 load param1
+05cc e3 09 	 jpfalse 05d7           ; THEN
+05ce 06 	 load param4            ;   param4 := param3    (string copy)
+05cf 05 	 load param3
+05d0 8d 14 	 load immediate 20
+05d2 04 	 load param2
+05d3 ac 	 inc
+05d4 31 	 copy string
+05d5 90 	 load immediate 0       ;   local2 := 0
+05d6 32 	 store local word-2     ; END
+05d7 24 	 load local word-4      ; WHILE local4 <= 2
+05d8 92 	 load immediate 2
+05d9 a4 	 uless_or_equal
+05da de 04 	 andjp 05e0             ; AND local2 <= 19
+05dc 22 	 load local word-2
+05dd 8d 13 	 load immediate 19
+05df a4 	 uless_or_equal
+05e0 e3 11 	 jpfalse 05f3           ; DO
+05e2 25 	 load local word-5      ;   local5[local3] := param4[local2]
+05e3 23 	 load local word-3
+05e4 06 	 load param4
+05e5 22 	 load local word-2
+05e6 0d 	 load indexed byte
+05e7 1d 	 store indexed byte
+05e8 22 	 load local word-2      ;   INC(local2)
+05e9 ac 	 inc
+05ea 32 	 store local word-2
+05eb 23 	 load local word-3      ;   INC(local3)
+05ec ac 	 inc
+05ed 33 	 store local word-3
+05ee 24 	 load local word-4      ;   INC(local4)
+05ef ac 	 inc
+05f0 34 	 store local word-4
+05f1 e4 1c 	 jp 05d7                ; END
+05f3 25 	 load local word-5      ; local5[local3] := 0C
+05f4 23 	 load local word-3
+05f5 90 	 load immediate 0
+05f6 1d 	 store indexed byte
+05f7 06 	 load param4            ; param4 := local5  (copy string)
+05f8 25 	 load local word-5
+05f9 8d 14 	 load immediate 20
+05fb 30 	 copy block
+05fc 84 84 	 leave 132              ; RETURN
+05fe 5f
+05ff 0d
+0600 a9
+0601 00
+0602 14
+0603 00
+
+
+0604 d4 ff 	 enter -1
+0606 04 	 load param2
+0607 03 	 load param1
+0608 8d 13 	 load immediate 19
+060a f0 12 	 call FILES.proc2
+060c 8a 	 leave4
+060d ef 01 15 	 call FILES.proc21
+0610 04 	 load param2
+0611 03 	 load param1
+0612 8d 13 	 load immediate 19
+0614 f0 12 	 call FILES.proc2
+0616 8a 	 leave4
+0617 01
+0618 18 03
+061a f2
+061b ff
+061c ff 	 
+061d d4 fb 	 enter -5
+061f 03 	 load param1
+0620 ac 	 inc
+0621 04 	 load param2
+0622 40 12 	 reserve_string
+0624 14 	 store param2
+0625 8d 14 	 load immediate 20
+0627 d2 	 reserve
+0628 33 	 store local word-3
+0629 23 	 load local word-3
+062a 04 	 load param2
+062b 8d 14 	 load immediate 20
+062d 03 	 load param1
+062e ac 	 inc
+062f 31 	 copy string
+0630 23 	 load local word-3
+0631 8c 01 	 call_rel 0634
+0633 00 	 Error16
+0634 90 	 load immediate 0
+0635 90 	 load immediate 0
+0636 f5 	 call proc5
+0637 23 	 load local word-3
+0638 90 	 load immediate 0
+0639 0d 	 load indexed byte
+063a af 41 	 sub 65
+063c 32 	 store local word-2
+063d 05 	 load param3
+063e 04 	 load param2
+063f 03 	 load param1
+0640 f0 11 	 call FILES.proc1
+0642 e3 12 	 jpfalse 0656
+0644 8d 1d 	 load immediate 29
+0646 90 	 load immediate 0
+0647 c3 	 system
+0648 22 	 load local word-2
+0649 8e 00 03 	 load immediate 768
+064c 60 	 load stack word0
+064d e7 	 bitwise_in
+064e e3 03 	 jpfalse 0653
+0650 ef 01 15 	 call FILES.proc21
+0653 91 	 load immediate 1
+0654 85 83 	 fct_leave 131
+0656 90 	 load immediate 0
+0657 85 83 	 fct_leave 131
+0659 ff 	 
+065a d4 f9 	 enter -7
+065c 8d 14 	 load immediate 20
+065e 05 	 load param3
+065f 40 12 	 reserve_string
+0661 15 	 store param3
+0662 05 	 load param3
+0663 8d 13 	 load immediate 19
+0665 90 	 load immediate 0
+0666 1d 	 store indexed byte
+0667 04 	 load param2
+0668 8c 0c 	 call_rel 0676
+066a 40 20 	 
+066c 20 	 dup
+066d 20 	 dup
+066e 20 	 dup
+066f 20 	 dup
+0670 20 	 dup
+0671 20 	 dup
+0672 20 	 dup
+0673 20 	 dup
+0674 20 	 dup
+0675 20 	 dup
+0676 8d 24 	 load immediate 36
+0678 9c 	 load immediate 12
+0679 31 	 copy string
+067a 91 	 load immediate 1
+067b 33 	 store local word-3
+067c 90 	 load immediate 0
+067d 32 	 store local word-2
+067e 05 	 load param3
+067f 8d 13 	 load immediate 19
+0681 80 fc 	 load local address -4
+0683 03 	 load param1
+0684 ed 14 	 call proc20
+0686 04 	 load param2
+0687 90 	 load immediate 0
+0688 24 	 load local word-4
+0689 1d 	 store indexed byte
+068a 05 	 load param3
+068b 22 	 load local word-2
+068c 0d 	 load indexed byte
+068d 34 	 store local word-4
+068e 24 	 load local word-4
+068f 8d 2e 	 load immediate 46
+0691 a0 	 equal
+0692 e3 35 	 jpfalse 06c9
+0694 99 	 load immediate 9
+0695 33 	 store local word-3
+0696 22 	 load local word-2
+0697 ac 	 inc
+0698 32 	 store local word-2
+0699 05 	 load param3
+069a 22 	 load local word-2
+069b 0d 	 load indexed byte
+069c cb 	 not_zero
+069d e3 2a 	 jpfalse 06c9
+069f 05 	 load param3
+06a0 22 	 load local word-2
+06a1 0d 	 load indexed byte
+06a2 34 	 store local word-4
+06a3 24 	 load local word-4
+06a4 8d 2a 	 load immediate 42
+06a6 a0 	 equal
+06a7 e3 0f 	 jpfalse 06b8
+06a9 23 	 load local word-3
+06aa 9b 	 load immediate 11
+06ab a4 	 uless_or_equal
+06ac e3 0a 	 jpfalse 06b8
+06ae 04 	 load param2
+06af 23 	 load local word-3
+06b0 8d 3f 	 load immediate 63
+06b2 1d 	 store indexed byte
+06b3 23 	 load local word-3
+06b4 ac 	 inc
+06b5 33 	 store local word-3
+06b6 e4 0f 	 jp 06a9
+06b8 23 	 load local word-3
+06b9 9b 	 load immediate 11
+06ba a4 	 uless_or_equal
+06bb e3 07 	 jpfalse 06c4
+06bd 04 	 load param2
+06be 23 	 load local word-3
+06bf 24 	 load local word-4
+06c0 1d 	 store indexed byte
+06c1 23 	 load local word-3
+06c2 ac 	 inc
+06c3 33 	 store local word-3
+06c4 22 	 load local word-2
+06c5 ac 	 inc
+06c6 32 	 store local word-2
+06c7 e4 30 	 jp 0699
+06c9 24 	 load local word-4
+06ca 8d 2a 	 load immediate 42
+06cc a0 	 equal
+06cd e3 0f 	 jpfalse 06de
+06cf 23 	 load local word-3
+06d0 98 	 load immediate 8
+06d1 a4 	 uless_or_equal
+06d2 e3 0a 	 jpfalse 06de
+06d4 04 	 load param2
+06d5 23 	 load local word-3
+06d6 8d 3f 	 load immediate 63
+06d8 1d 	 store indexed byte
+06d9 23 	 load local word-3
+06da ac 	 inc
+06db 33 	 store local word-3
+06dc e4 0f 	 jp 06cf
+06de 23 	 load local word-3
+06df 98 	 load immediate 8
+06e0 a4 	 uless_or_equal
+06e1 de 02 	 andjp 06e5
+06e3 24 	 load local word-4
+06e4 cb 	 not_zero
+06e5 e3 07 	 jpfalse 06ee
+06e7 04 	 load param2
+06e8 23 	 load local word-3
+06e9 24 	 load local word-4
+06ea 1d 	 store indexed byte
+06eb 23 	 load local word-3
+06ec ac 	 inc
+06ed 33 	 store local word-3
+06ee 22 	 load local word-2
+06ef ac 	 inc
+06f0 32 	 store local word-2
+06f1 05 	 load param3
+06f2 22 	 load local word-2
+06f3 0d 	 load indexed byte
+06f4 ab 	 eq0
+06f5 e5 6d 	 jpfalse 068a
+06f7 8b 	 leave6
+06f8 ff 	 
+06f9 d4 f5 	 enter -11
+06fb 8d 14 	 load immediate 20
+06fd 03 	 load param1
+06fe 40 12 	 reserve_string
+0700 13 	 store param1
+0701 8d 24 	 load immediate 36
+0703 d2 	 reserve
+0704 34 	 store local word-4
+0705 8d 80 	 load immediate 128
+0707 d2 	 reserve
+0708 35 	 store local word-5
+0709 03 	 load param1
+070a 24 	 load local word-4
+070b 81 0d 	 load global address 13
+070d ed 16 	 call proc22
+070f 8d 20 	 load immediate 32
+0711 4d 	 load global word13
+0712 c3 	 system
+0713 8d 1a 	 load immediate 26
+0715 25 	 load local word-5
+0716 c3 	 system
+0717 8d 11 	 load immediate 17
+0719 24 	 load local word-4
+071a c3 	 system
+071b 8e 00 03 	 load immediate 768
+071e 60 	 load stack word0
+071f 33 	 store local word-3
+0720 90 	 load immediate 0
+0721 5c 	 store global word12
+0722 4c 	 load global word12
+0723 8d ff 	 load immediate 255
+0725 a4 	 uless_or_equal
+0726 de 04 	 andjp 072c
+0728 23 	 load local word-3
+0729 8d ff 	 load immediate 255
+072b a1 	 not_equal
+072c e3 6d 	 jpfalse 079b
+072e 4c 	 load global word12
+072f ac 	 inc
+0730 5c 	 store global word12
+0731 4b 	 load global word11
+0732 4c 	 load global word12
+0733 ad 	 dec
+0734 8d 14 	 load immediate 20
+0736 a8 	 umul
+0737 a6 	 add
+0738 36 	 store local word-6
+0739 26 	 load local word-6
+073a 91 	 load immediate 1
+073b 79 	 store stack word9
+073c 26 	 load local word-6
+073d 90 	 load immediate 0
+073e 24 	 load local word-4
+073f 90 	 load immediate 0
+0740 0d 	 load indexed byte
+0741 ae 40 	 add 64
+0743 1d 	 store indexed byte
+0744 26 	 load local word-6
+0745 91 	 load immediate 1
+0746 4d 	 load global word13
+0747 9a 	 load immediate 10
+0748 a9 	 udiv
+0749 ae 30 	 add 48
+074b 1d 	 store indexed byte
+074c 26 	 load local word-6
+074d 92 	 load immediate 2
+074e 4d 	 load global word13
+074f 9a 	 load immediate 10
+0750 aa 	 umod
+0751 ae 30 	 add 48
+0753 1d 	 store indexed byte
+0754 26 	 load local word-6
+0755 93 	 load immediate 3
+0756 8d 3a 	 load immediate 58
+0758 1d 	 store indexed byte
+0759 91 	 load immediate 1
+075a 32 	 store local word-2
+075b 26 	 load local word-6
+075c 22 	 load local word-2
+075d ae 03 	 add 3
+075f 25 	 load local word-5
+0760 23 	 load local word-3
+0761 b0 05 	 shl 5
+0763 22 	 load local word-2
+0764 a6 	 add
+0765 0d 	 load indexed byte
+0766 8d 7f 	 load immediate 127
+0768 e8 	 bitwise_and
+0769 1d 	 store indexed byte
+076a 22 	 load local word-2
+076b ac 	 inc
+076c 32 	 store local word-2
+076d 22 	 load local word-2
+076e 98 	 load immediate 8
+076f a3 	 ugreater_than
+0770 e5 17 	 jpfalse 075b
+0772 26 	 load local word-6
+0773 9c 	 load immediate 12
+0774 8d 2e 	 load immediate 46
+0776 1d 	 store indexed byte
+0777 99 	 load immediate 9
+0778 32 	 store local word-2
+0779 26 	 load local word-6
+077a 22 	 load local word-2
+077b ae 04 	 add 4
+077d 25 	 load local word-5
+077e 23 	 load local word-3
+077f b0 05 	 shl 5
+0781 22 	 load local word-2
+0782 a6 	 add
+0783 0d 	 load indexed byte
+0784 8d 7f 	 load immediate 127
+0786 e8 	 bitwise_and
+0787 1d 	 store indexed byte
+0788 22 	 load local word-2
+0789 ac 	 inc
+078a 32 	 store local word-2
+078b 22 	 load local word-2
+078c 9b 	 load immediate 11
+078d a3 	 ugreater_than
+078e e5 17 	 jpfalse 0779
+0790 8d 12 	 load immediate 18
+0792 24 	 load local word-4
+0793 c3 	 system
+0794 8e 00 03 	 load immediate 768
+0797 60 	 load stack word0
+0798 33 	 store local word-3
+0799 e4 79 	 jp 0722
+079b 8d 20 	 load immediate 32
+079d 44 	 load global word4
+079e c3 	 system
+079f 89 	 leave2
+07a0 ff 	 
+07a1 d4 f5 	 enter -11
+07a3 8d 1d 	 load immediate 29      ; BDOS(DRVROVEC, 0)
+07a5 90 	 load immediate 0
+07a6 c3 	 system
+07a7 03 	 load param1            ; IF param1 IN HLRESULT
+07a8 8e 02 03 	 load immediate 770
+07ab 60 	 load stack word0
+07ac e7 	 bitwise_in
+07ad e3 03 	 jpfalse 07b2           ; THEN FILES.proc21
+07af ef 01 15 	 call FILES.proc21  ; END
+07b2 9e 	 load immediate 14      ; BDOS(DRVSET, param1)
+07b3 03 	 load param1
+07b4 c3 	 system
+07b5 8d 1f 	 load immediate 31      ; BDOS(DRVDPB, 0)
+07b7 90 	 load immediate 0
+07b8 c3 	 system
+07b9 8e 02 03 	 load immediate 770 ; local2 := HLRESULT + 3
+07bc 60 	 load stack word0
+07bd ae 03 	 add 3
+07bf 32 	 store local word-2
+07c0 8d 1b 	 load immediate 27      ; BDOS(DRVALLOCVEC)
+07c2 90 	 load immediate 0
+07c3 c3 	 system
+07c4 8e 02 03 	 load immediate 770 ; local3 := HLRESULT
+07c7 60 	 load stack word0 
+07c8 33 	 store local word-3
+07c9 90 	 load immediate 0       ; local4 := 0
+07ca 34 	 store local word-4
+07cb 90 	 load immediate 0       ; local5 := 0
+07cc 35 	 store local word-5 
+07cd 22 	 load local word-2      ; local6 := local2[1]; (* nb of blocks on the disk
+07ce 61 	 load stack word1
+07cf 36 	 store local word-6
+07d0 25 	 load local word-5      ; WHILE local5 <= local6
+07d1 26 	 load local word-6
+07d2 a4 	 uless_or_equal
+07d3 e3 14 	 jpfalse 07e9           ; DO
+07d5 24 	 load local word-4      ;   local4 := local4 + ORD(NOT ((7 - (local5 MOD 8)) IN local3[local5 DIV 8]))
+07d6 97 	 load immediate 7
+07d7 25 	 load local word-5
+07d8 97 	 load immediate 7
+07d9 e8 	 bitwise_and
+07da a7 	 sub
+07db 23 	 load local word-3
+07dc 25 	 load local word-5
+07dd b1 03 	 shr 3
+07df 0d 	 load indexed byte
+07e0 e7 	 bitwise_in
+07e1 b6 	 not
+07e2 a6 	 add
+07e3 34 	 store local word-4
+07e4 25 	 load local word-5      ;   INC(local5)
+07e5 ac 	 inc
+07e6 35 	 store local word-5
+07e7 e4 19 	 jp 07d0                ; END
+07e9 9e 	 load immediate 14      ; BDOS(DRVSET, global3)
+07ea 43 	 load global word3
+07eb c3 	 system
+07ec 24 	 load local word-4      ; RETURN local4 * ((local2[0]+1) DIV 8)
+07ed 22 	 load local word-2
+07ee 90 	 load immediate 0
+07ef 0d 	 load indexed byte
+07f0 ac 	 inc
+07f1 b1 03 	 shr 3
+07f3 a8 	 umul
+07f4 85 81 	 fct_leave 129
+
+07f6 "No files present."
+
+0808 d4 f7 	 enter -9
+080a 04 	 load param2
+080b 32 	 store local word-2
+080c 03 	 load param1
+080d 33 	 store local word-3
+080e 4e 	 load global word14
+080f 04 	 load param2
+0810 03 	 load param1
+0811 a6 	 add
+0812 b1 01 	 shr 1
+0814 ad 	 dec
+0815 0e 	 load indexed word
+0816 34 	 store local word-4
+0817 4e 	 load global word14
+0818 22 	 load local word-2
+0819 ad 	 dec
+081a 0e 	 load indexed word
+081b 24 	 load local word-4
+081c 8d 11 	 load immediate 17
+081e 8d 11 	 load immediate 17
+0820 c4 	 string_comp
+0821 a2 	 uless_than
+0822 e3 05 	 jpfalse 0829
+0824 22 	 load local word-2
+0825 ac 	 inc
+0826 32 	 store local word-2
+0827 e4 12 	 jp 0817
+0829 24 	 load local word-4
+082a 4e 	 load global word14
+082b 23 	 load local word-3
+082c ad 	 dec
+082d 0e 	 load indexed word
+082e 8d 11 	 load immediate 17
+0830 8d 11 	 load immediate 17
+0832 c4 	 string_comp
+0833 a2 	 uless_than
+0834 e3 05 	 jpfalse 083b
+0836 23 	 load local word-3
+0837 ad 	 dec
+0838 33 	 store local word-3
+0839 e4 12 	 jp 0829
+083b 22 	 load local word-2
+083c 23 	 load local word-3
+083d a4 	 uless_or_equal
+083e e3 18 	 jpfalse 0858
+0840 4e 	 load global word14
+0841 22 	 load local word-2
+0842 ad 	 dec
+0843 0e 	 load indexed word
+0844 35 	 store local word-5
+0845 4e 	 load global word14
+0846 22 	 load local word-2
+0847 ad 	 dec
+0848 4e 	 load global word14
+0849 23 	 load local word-3
+084a ad 	 dec
+084b 0e 	 load indexed word
+084c 1e 	 store indexed word
+084d 4e 	 load global word14
+084e 23 	 load local word-3
+084f ad 	 dec
+0850 25 	 load local word-5
+0851 1e 	 store indexed word
+0852 22 	 load local word-2
+0853 ac 	 inc
+0854 32 	 store local word-2
+0855 23 	 load local word-3
+0856 ad 	 dec
+0857 33 	 store local word-3
+0858 22 	 load local word-2
+0859 23 	 load local word-3
+085a a3 	 ugreater_than
+085b e5 46 	 jpfalse 0817
+085d 04 	 load param2
+085e 23 	 load local word-3
+085f a2 	 uless_than
+0860 e3 05 	 jpfalse 0867
+0862 04 	 load param2
+0863 23 	 load local word-3
+0864 10 	 load (ix)
+0865 ee 1c 	 call_with_frame proc28
+0867 22 	 load local word-2
+0868 03 	 load param1
+0869 a2 	 uless_than
+086a e3 05 	 jpfalse 0871
+086c 22 	 load local word-2
+086d 03 	 load param1
+086e 10 	 load (ix)
+086f ee 1c 	 call_with_frame proc28
+0871 84 02 	 leave 2
+0873 ff 	 
+0874 d4 fb 	 enter -5
+0876 91 	 load immediate 1
+0877 32 	 store local word-2
+0878 4c 	 load global word12
+0879 33 	 store local word-3
+087a 22 	 load local word-2
+087b 23 	 load local word-3
+087c a4 	 uless_or_equal
+087d e3 10 	 jpfalse 088f
+087f 4e 	 load global word14
+0880 22 	 load local word-2
+0881 ad 	 dec
+0882 4b 	 load global word11
+0883 22 	 load local word-2
+0884 ad 	 dec
+0885 8d 14 	 load immediate 20
+0887 a8 	 umul
+0888 a6 	 add
+0889 1e 	 store indexed word
+088a 22 	 load local word-2
+088b ac 	 inc
+088c 32 	 store local word-2
+088d e4 15 	 jp 087a
+088f 91 	 load immediate 1
+0890 4c 	 load global word12
+0891 ec 1c 	 nested_call proc28
+0893 84 00 	 leave 0
+0895 ff 	 
+
+
+; SHELL.proc26
+
+0896 d4 e5 	 enter -27
+0898 8d 14 	 load immediate 20
+089a d2 	 reserve
+089b 32 	 store local word-2
+089c 8d 14 	 load immediate 20
+089e d2 	 reserve
+089f 33 	 store local word-3
+08a0 8e 00 01 	 load immediate 256
+08a3 d2 	 reserve
+08a4 3c f2 	 store local word -14
+08a6 8c 0f 	 call_rel 08b7
+08a8 "Directory mask:"
+08b7 9e 	 load immediate 14
+08b8 8c 01 	 call_rel 08bb
+08ba 00
+08bb 90 	 load immediate 0
+08bc f1 	 call proc1
+08bd 42 	 load global word2
+08be 22 	 load local word-2
+08bf 8d 13 	 load immediate 19
+08c1 f0 02 	 call TEXTS.proc2
+08c3 22 	 load local word-2
+08c4 91 	 load immediate 1
+08c5 0d 	 load indexed byte
+08c6 ab 	 eq0
+08c7 de 07 	 andjp 08d0
+08c9 22 	 load local word-2
+08ca 90 	 load immediate 0
+08cb 0d 	 load indexed byte
+08cc af 41 	 sub 65
+08ce 9f 	 load immediate 15
+08cf a4 	 uless_or_equal
+08d0 e3 09 	 jpfalse 08db
+08d2 22 	 load local word-2
+08d3 91 	 load immediate 1
+08d4 8d 3a 	 load immediate 58
+08d6 1d 	 store indexed byte
+08d7 22 	 load local word-2
+08d8 92 	 load immediate 2
+08d9 90 	 load immediate 0
+08da 1d 	 store indexed byte
+08db 23 	 load local word-3
+08dc 22 	 load local word-2
+08dd 8d 14 	 load immediate 20
+08df 30 	 copy block
+08e0 23 	 load local word-3
+08e1 8d 13 	 load immediate 19
+08e3 80 f4 	 load local address -12
+08e5 81 10 	 load global address 16
+08e7 ed 14 	 call proc20
+08e9 2c f4 	 load local word -12
+08eb ae 40 	 add 64
+08ed 3c f4 	 store local word -12
+08ef 23 	 load local word-3
+08f0 90 	 load immediate 0
+08f1 0d 	 load indexed byte
+08f2 ab 	 eq0
+08f3 e3 25 	 jpfalse 091a
+08f5 22 	 load local word-2
+08f6 8c 07 	 call_rel 08ff
+08f8 40 30 	 
+08fa 30 	 copy block
+08fb 3a 	 store local word-10
+08fc 2a 	 load local word-10
+08fd 2e 2a 	 load stack word 42
+08ff 8d 14 	 load immediate 20
+0901 97 	 load immediate 7
+0902 31 	 copy string
+0903 22 	 load local word-2
+0904 90 	 load immediate 0
+0905 2c f4 	 load local word -12
+0907 1d 	 store indexed byte
+0908 22 	 load local word-2
+0909 91 	 load immediate 1
+090a 2d 10 	 load global word 16
+090c 9a 	 load immediate 10
+090d a9 	 udiv
+090e ae 30 	 add 48
+0910 1d 	 store indexed byte
+0911 22 	 load local word-2
+0912 92 	 load immediate 2
+0913 2d 10 	 load global word 16
+0915 9a 	 load immediate 10
+0916 aa 	 umod
+0917 ae 30 	 add 48
+0919 1d 	 store indexed byte
+091a 22 	 load local word-2
+091b ed 17 	 call proc23
+091d 4c 	 load global word12     ; IF global12 <> 0
+091e cb 	 not_zero
+091f e1 28 01 	 jpfalse 0a49       ; THEN
+0922 ec 1b 	 nested_call proc27
+0924 0c 22 	 load TERMINAL.word2
+0926 af 06 	 sub 6
+0928 3a 	 store local word-10
+0929 0c 23 	 load TERMINAL.word3
+092b ae 02 	 add 2
+092d 8d 14 	 load immediate 20
+092f a9 	 udiv
+0930 3b 	 store local word-11
+0931 f0 32 	 call COMLINE.proc2     ; COMLINE.RedirectOutput
+0933 90 	 load immediate 0
+0934 37 	 store local word-7
+0935 27 	 load local word-7
+0936 2a 	 load local word-10
+0937 2b 	 load local word-11
+0938 a8 	 umul
+0939 a6 	 add
+093a 38 	 store local word-8
+093b 28 	 load local word-8
+093c 4c 	 load global word12
+093d a3 	 ugreater_than
+093e e3 02 	 jpfalse 0942
+0940 4c 	 load global word12
+0941 38 	 store local word-8
+0942 90 	 load immediate 0
+0943 36 	 store local word-6
+0944 27 	 load local word-7
+0945 39 	 store local word-9
+0946 26 	 load local word-6
+0947 34 	 store local word-4
+0948 90 	 load immediate 0
+0949 35 	 store local word-5
+094a 25 	 load local word-5
+094b 2a 	 load local word-10
+094c a1 	 not_equal
+094d de 05 	 andjp 0954
+094f 27 	 load local word-7
+0950 24 	 load local word-4
+0951 a6 	 add
+0952 28 	 load local word-8
+0953 a2 	 uless_than
+0954 e3 11 	 jpfalse 0967
+0956 2c f2 	 load local word -14
+0958 24 	 load local word-4
+0959 29 	 load local word-9
+095a 1d 	 store indexed byte
+095b 29 	 load local word-9
+095c ac 	 inc
+095d 39 	 store local word-9
+095e 24 	 load local word-4
+095f 2b 	 load local word-11
+0960 a6 	 add
+0961 34 	 store local word-4
+0962 25 	 load local word-5
+0963 ac 	 inc
+0964 35 	 store local word-5
+0965 e4 1d 	 jp 094a
+0967 26 	 load local word-6
+0968 ac 	 inc
+0969 36 	 store local word-6
+096a 26 	 load local word-6
+096b 2b 	 load local word-11
+096c a5 	 ugreater_or_equal
+096d e5 29 	 jpfalse 0946
+096f 90 	 load immediate 0
+0970 34 	 store local word-4
+0971 90 	 load immediate 0
+0972 36 	 store local word-6
+0973 0c 03 	 load TEXTS.dword3
+0975 26 	 load local word-6
+0976 8d 14 	 load immediate 20
+0978 a8 	 umul
+0979 ef 00 15 	 call TEXTS.proc21
+097c 0c 03 	 load TEXTS.dword3
+097e 2c f2 	 load local word -14
+0980 24 	 load local word-4
+0981 0d 	 load indexed byte
+0982 ac 	 inc
+0983 93 	 load immediate 3
+0984 f0 0b 	 call TEXTS.proc11
+0986 0c 03 	 load TEXTS.dword3
+0988 8d 3a 	 load immediate 58
+098a f0 08 	 call TEXTS.proc8
+098c 0c 03 	 load TEXTS.dword3
+098e 8d 20 	 load immediate 32
+0990 f0 08 	 call TEXTS.proc8
+0992 0c 03 	 load TEXTS.dword3
+0994 4e 	 load global word14
+0995 2c f2 	 load local word -14
+0997 24 	 load local word-4
+0998 0d 	 load indexed byte
+0999 0e 	 load indexed word
+099a 82 02 	 load stack address 2
+099c 9b 	 load immediate 11
+099d f0 09 	 call TEXTS.proc9
+099f 24 	 load local word-4
+09a0 ac 	 inc
+09a1 34 	 store local word-4
+09a2 27 	 load local word-7
+09a3 ac 	 inc
+09a4 37 	 store local word-7
+09a5 26 	 load local word-6
+09a6 ac 	 inc
+09a7 36 	 store local word-6
+09a8 27 	 load local word-7
+09a9 28 	 load local word-8
+09aa a0 	 equal
+09ab df 03 	 orjp 09b0
+09ad 26 	 load local word-6
+09ae 2b 	 load local word-11
+09af a5 	 ugreater_or_equal
+09b0 e5 3f 	 jpfalse 0973
+09b2 0c 03 	 load TEXTS.dword3
+09b4 f0 0e 	 call TEXTS.proc14
+09b6 27 	 load local word-7
+09b7 28 	 load local word-8
+09b8 a5 	 ugreater_or_equal
+09b9 e5 4a 	 jpfalse 0971
+09bb 28 	 load local word-8
+09bc 4c 	 load global word12
+09bd a1 	 not_equal
+09be e3 31 	 jpfalse 09f1
+09c0 f0 26 	 call TERMINAL.WriteLn
+09c2 8c 11 	 call_rel 09d5
+'"C" to continue >"
+09d5 8d 10	 load immediate 16
+09d7 f0 27 	 call TERMINAL.WriteString
+09d9 80 f3 	 load local address -13
+09db f0 21 	 call TERMINAL.ReadChar
+09dd 2c f3 	 load local word -13
+09df 20 	 dup
+09e0 8d 40 	 load immediate 64
+09e2 e8 	 bitwise_and
+09e3 b1 01 	 shr 1
+09e5 b7 	 complement
+09e6 e8 	 bitwise_and
+09e7 3c f3 	 store local word -13
+09e9 2c f3 	 load local word -13
+09eb f0 25 	 call TERMINAL.WriteChar
+09ed f0 26 	 call TERMINAL.WriteLn
+09ef f0 26 	 call TERMINAL.WriteLn
+09f1 28 	 load local word-8      ; UNTIL local8=global12 
+09f2 4c 	 load global word12
+09f3 a0 	 equal
+09f4 df 05 	 orjp 09fb              ;   OR local13 <> 67
+09f6 2c f3 	 load local word -13
+09f8 8d 43 	 load immediate 67
+09fa a1 	 not_equal
+09fb e5 c8 	 jpfalse 0935
+09fd 0c 03 	 load TEXTS.word3       ; WRITE("Bytes remaining on ",local12,':',' ');
+09ff 8c 13 	 call_rel 0a14
+0a01 "Bytes remaining on "
+0a14 8d 12 	 load immediate 18
+0a16 f0 09 	 call TEXTS.proc9       ; 
+0a18 0c 03 	 load TEXTS.word3       ;
+0a1a 2c f4 	 load local word -12
+0a1c f0 08 	 call TEXTS.proc8
+0a1e 0c 03 	 load TEXTS.word3
+0a20 8d 3a 	 load immediate 58
+0a22 f0 08 	 call TEXTS.proc8
+0a24 0c 03 	 load TEXTS.word3
+0a26 8d 20 	 load immediate 32
+0a28 f0 08 	 call TEXTS.proc8
+0a2a 0c 03 	 load TEXTS.word3       ; WRITE(proc24(local1 - 041H),'k')
+0a2c 2c f4 	 load local word -12
+0a2e af 41 	 sub 65
+0a30 ed 18 	 call proc24
+0a32 90 	 load immediate 0
+0a33 f0 0b 	 call TEXTS.proc11
+0a35 0c 03 	 load TEXTS.word3
+0a37 8d 4b 	 load immediate 75
+0a39 f0 08 	 call TEXTS.proc8
+0a3b 0c 03 	 load TEXTS.word3
+0a3d f0 0e 	 call TEXTS.proc14      ; WRITELN
+0a3f 83 00 03 	 load address TEXTS.WORD3   ; CloseText(output)
+0a42 ef 00 19 	 call TEXTS.proc25
+0a45 91 	 load immediate 1
+0a46 5f 	 store global word15
+0a47 e2 08 	 jp 0a51
+0a49 02 19 	 load proc_addr proc25  ; WriteString("
+0a4b 8d 10 	 load immediate 16
+0a4d f0 27 	 call TERMINAL.WriteString
+0a4f f0 26 	 call TERMINAL.WriteLn
+0a51 88 	 leave0
+0a52 ff 	 
+0a53 d4 ff 	 enter -1
+0a55 03 	 load param1
+0a56 ad 	 dec
+0a57 4c 	 load global word12
+0a58 a2 	 uless_than
+0a59 de 05 	 andjp 0a60
+0a5b 4e 	 load global word14
+0a5c 03 	 load param1
+0a5d ad 	 dec
+0a5e 0e 	 load indexed word
+0a5f 69 	 load stack word9
+0a60 e3 03 	 jpfalse 0a65
+0a62 91 	 load immediate 1
+0a63 85 81 	 fct_leave 129
+0a65 8c 14 	 call_rel 0a7b
+0a67 4e 	 load global word14
+0a68 6f 	 load stack word15
+0a69 20 	 dup
+0a6a 66 	 load stack word6
+0a6b 69 	 load stack word9
+0a6c 6c 	 load stack word12
+0a6d 65 	 load stack word5
+0a6e 20 	 dup
+0a6f 77 	 store stack word7
+0a70 69 	 load stack word9
+0a71 74 	 store stack word4
+0a72 68 	 load stack word8
+0a73 20 	 dup
+0a74 6e 	 load stack word14
+0a75 75 	 store stack word5
+0a76 6d 	 load stack word13
+0a77 62 	 load stack word2
+0a78 65 	 load stack word5
+0a79 72 	 store stack word2
+0a7a 20 	 dup
+0a7b 8d 13 	 load immediate 19
+0a7d f0 27 	 call TERMINAL.WriteString
+0a7f 0c 04 	 load TEXTS.word4
+0a81 03 	 load param1
+0a82 90 	 load immediate 0
+0a83 f0 0b 	 call TEXTS.proc11
+0a85 f0 26 	 call TERMINAL.WriteLn
+0a87 90 	 load immediate 0
+0a88 85 81 	 fct_leave 129
+0a8a b2 	 iless_than
+0a8b 56 	 store global word6
+0a8c f6 	 call proc6
+0a8d 2d a1 	 load global word 161
+0a8f 00 	 Error16
+0a90 d4 ef 	 enter -17
+0a92 8d 14 	 load immediate 20
+0a94 04 	 load param2
+0a95 d3 	 string_reserve
+0a96 14 	 store param2
+0a97 8d 14 	 load immediate 20
+0a99 03 	 load param1
+0a9a d3 	 string_reserve
+0a9b 13 	 store param1
+0a9c 8d 14 	 load immediate 20
+0a9e d2 	 reserve
+0a9f 33 	 store local word-3
+0aa0 03 	 load param1
+0aa1 ed 15 	 call proc21
+0aa3 92 	 load immediate 2
+0aa4 a0 	 equal
+0aa5 e3 1d 	 jpfalse 0ac4
+0aa7 03 	 load param1
+0aa8 8c 01 	 call_rel 0aab
+0aaa 00 	 Error16
+0aab 90 	 load immediate 0
+0aac 90 	 load immediate 0
+0aad f5 	 call proc5
+0aae 04 	 load param2
+0aaf 8c 01 	 call_rel 0ab2
+0ab1 00 	 Error16
+0ab2 90 	 load immediate 0
+0ab3 90 	 load immediate 0
+0ab4 f5 	 call proc5
+0ab5 23 	 load local word-3
+0ab6 03 	 load param1
+0ab7 8d 14 	 load immediate 20
+0ab9 30 	 copy block
+0aba 03 	 load param1
+0abb 04 	 load param2
+0abc 8d 14 	 load immediate 20
+0abe 30 	 copy block
+0abf 23 	 load local word-3
+0ac0 03 	 load param1
+0ac1 93 	 load immediate 3
+0ac2 40 0e 	 MOVE
+0ac4 23 	 load local word-3
+0ac5 03 	 load param1
+0ac6 8d 14 	 load immediate 20
+0ac8 30 	 copy block
+0ac9 23 	 load local word-3
+0aca 8c 03 	 call_rel 0acf
+0acc 24 	 load local word-4
+0acd 24 	 load local word-4
+0ace 24 	 load local word-4
+0acf 92 	 load immediate 2
+0ad0 91 	 load immediate 1
+0ad1 f5 	 call proc5
+0ad2 80 f8 	 load local address -8
+0ad4 40 07 	 MARK
+0ad6 80 fb 	 load local address -5
+0ad8 23 	 load local word-3
+0ad9 f6 	 call proc6
+0ada 80 fc 	 load local address -4
+0adc 04 	 load param2
+0add 8d 13 	 load immediate 19
+0adf f0 11 	 call FILES.proc1
+0ae1 e3 32 	 jpfalse 0b15
+0ae3 40 09 	 FREEMEM
+0ae5 8e 0c fe 	 load immediate 65036
+0ae8 a6 	 add
+0ae9 37 	 store local word-7
+0aea 80 fe 	 load local address -2
+0aec 27 	 load local word-7
+0aed 40 05 	 ALLOCATE
+0aef 24 	 load local word-4
+0af0 ef 01 14 	 call FILES.proc20
+0af3 25 	 load local word-5
+0af4 ef 01 14 	 call FILES.proc20
+0af7 24 	 load local word-4
+0af8 22 	 load local word-2
+0af9 27 	 load local word-7
+0afa f0 1c 	 call FILES.proc12
+0afc 36 	 store local word-6
+0afd 25 	 load local word-5
+0afe 22 	 load local word-2
+0aff 26 	 load local word-6
+0b00 ef 01 10 	 call FILES.proc16
+0b03 26 	 load local word-6
+0b04 27 	 load local word-7
+0b05 a2 	 uless_than
+0b06 e5 11 	 jpfalse 0af7
+0b08 80 fc 	 load local address -4
+0b0a f0 13 	 call FILES.proc3
+0b0c 80 fb 	 load local address -5
+0b0e 03 	 load param1
+0b0f 8d 13 	 load immediate 19
+0b11 f0 15 	 call FILES.proc5
+0b13 e2 08 	 jp 0b1d
+0b15 80 fb 	 load local address -5
+0b17 f0 14 	 call FILES.proc4
+0b19 04 	 load param2
+0b1a 8d 13 	 load immediate 19
+0b1c f8 	 call proc8
+0b1d 80 f8 	 load local address -8
+0b1f 40 08 	 RELEASE
+0b21 91 	 load immediate 1
+0b22 85 02 	 fct_leave 2
+0b24 fa 	 call proc10
+0b25 80 fb 	 load local address -5
+0b27 f0 14 	 call FILES.proc4
+0b29 80 f8 	 load local address -8
+0b2b 40 08 	 RELEASE
+0b2d 90 	 load immediate 0
+0b2e 85 02 	 fct_leave 2
+0b30 01
+0b31 1a 03
+0b33 f0 ff
+
+0b35 "Second argument must be drive-code."
+0b58 "Copy to  : "
+0b63 "Copying "
+0b6b ff 	 
+
+; SHELL.proc30 : FILECOPY command
+
+0b6c d4 ef 	 enter -17
+0b6e 8d 14 	 load immediate 20
+0b70 d2 	 reserve
+0b71 32 	 store local word-2
+0b72 8d 14 	 load immediate 20
+0b74 d2 	 reserve
+0b75 33 	 store local word-3
+0b76 8c 0a 	 call_rel 0b82
+0b78 43 	 load global word3
+0b79 6f 	 load stack word15
+0b7a 70 	 store stack word0
+0b7b 79 	 store stack word9
+0b7c 20 	 dup
+0b7d 66 	 load stack word6
+0b7e 72 	 store stack word2
+0b7f 6f 	 load stack word15
+0b80 6d 	 load stack word13
+0b81 3a 	 store local word-10
+0b82 99 	 load immediate 9
+0b83 8c 01 	 call_rel 0b86
+0b85 00
+0b86 90 	 load immediate 0
+0b87 f1 	 call proc1
+0b88 42 	 load global word2
+0b89 80 f8 	 load local address -8
+0b8b f0 01 	 call TEXTS.proc1
+0b8d 28 	 load local word-8
+0b8e af 30 	 sub 48
+0b90 99 	 load immediate 9
+0b91 a4 	 uless_or_equal
+0b92 e3 78 	 jpfalse 0c0c
+0b94 4f 	 load global word15
+0b95 e3 68 	 jpfalse 0bff
+0b97 42 	 load global word2
+0b98 ef 00 10 	 call TEXTS.proc16
+0b9b 02 21 	 load proc_addr proc33
+0b9d 9a 	 load immediate 10
+0b9e f0 27 	 call TERMINAL.WriteString
+0ba0 0c 02 	 load TEXTS.dword2
+0ba2 23 	 load local word-3
+0ba3 8d 13 	 load immediate 19
+0ba5 f0 02 	 call TEXTS.proc2
+0ba7 0c 02 	 load TEXTS.dword2
+0ba9 f0 07 	 call TEXTS.proc7
+0bab 23 	 load local word-3
+0bac 90 	 load immediate 0
+0bad 0d 	 load indexed byte
+0bae cb 	 not_zero
+0baf e3 4c 	 jpfalse 0bfd
+0bb1 23 	 load local word-3
+0bb2 ed 15 	 call proc21
+0bb4 92 	 load immediate 2
+0bb5 a0 	 equal
+0bb6 e3 3d 	 jpfalse 0bf5
+0bb8 23 	 load local word-3
+0bb9 90 	 load immediate 0
+0bba 23 	 load local word-3
+0bbb 90 	 load immediate 0
+0bbc 0d 	 load indexed byte
+0bbd 20 	 dup
+0bbe 8d 40 	 load immediate 64
+0bc0 e8 	 bitwise_and
+0bc1 b1 01 	 shr 1
+0bc3 b7 	 complement
+0bc4 e8 	 bitwise_and
+0bc5 1d 	 store indexed byte
+0bc6 80 fa 	 load local address -6
+0bc8 f4 	 call proc4
+0bc9 de 03 	 andjp 0bce
+0bcb 26 	 load local word-6
+0bcc ed 1d 	 call proc29
+0bce 37 	 store local word-7
+0bcf 27 	 load local word-7
+0bd0 e3 1d 	 jpfalse 0bef
+0bd2 4e 	 load global word14
+0bd3 26 	 load local word-6
+0bd4 ad 	 dec
+0bd5 0e 	 load indexed word
+0bd6 39 	 store local word-9
+0bd7 02 22 	 load proc_addr proc34
+0bd9 97 	 load immediate 7
+0bda f0 27 	 call TERMINAL.WriteString
+0bdc 29 	 load local word-9
+0bdd 8d 10 	 load immediate 16
+0bdf f0 27 	 call TERMINAL.WriteString
+0be1 f0 26 	 call TERMINAL.WriteLn
+0be3 22 	 load local word-2
+0be4 29 	 load local word-9
+0be5 8d 14 	 load immediate 20
+0be7 8d 11 	 load immediate 17
+0be9 31 	 copy string
+0bea 22 	 load local word-2
+0beb 23 	 load local word-3
+0bec ec 1f 	 nested_call proc31
+0bee 37 	 store local word-7
+0bef 27 	 load local word-7
+0bf0 b6 	 not
+0bf1 e5 2d 	 jpfalse 0bc6
+0bf3 e2 08 	 jp 0bfd
+0bf5 02 20 	 load proc_addr proc32
+0bf7 8d 22 	 load immediate 34
+0bf9 f0 27 	 call TERMINAL.WriteString
+0bfb f0 26 	 call TERMINAL.WriteLn
+0bfd e2 0b 	 jp 0c0a
+0bff 8c 07 	 call_rel 0c08
+0c01 63 	 load stack word3
+0c02 6f 	 load stack word15
+0c03 70 	 store stack word0
+0c04 79 	 store stack word9
+0c05 69 	 load stack word9
+0c06 6e 	 load stack word14
+0c07 67 	 load stack word7
+0c08 96 	 load immediate 6
+0c09 f9 	 call proc9
+0c0a e2 9e 	 jp 0caa
+0c0c 42 	 load global word2
+0c0d ef 00 10 	 call TEXTS.proc16
+0c10 42 	 load global word2
+0c11 22 	 load local word-2
+0c12 8d 13 	 load immediate 19
+0c14 f0 02 	 call TEXTS.proc2
+0c16 22 	 load local word-2
+0c17 90 	 load immediate 0
+0c18 0d 	 load indexed byte
+0c19 cb 	 not_zero
+0c1a e3 8e 	 jpfalse 0caa
+0c1c 22 	 load local word-2
+0c1d ed 15 	 call proc21
+0c1f 34 	 store local word-4
+0c20 02 21 	 load proc_addr proc33
+0c22 9a 	 load immediate 10
+0c23 23 	 load local word-3
+0c24 ed 12 	 call proc18
+0c26 e3 82 	 jpfalse 0caa
+0c28 23 	 load local word-3
+0c29 ed 15 	 call proc21
+0c2b 35 	 store local word-5
+0c2c 25 	 load local word-5
+0c2d 9a 	 load immediate 10
+0c2e e7 	 bitwise_in
+0c2f e3 05 	 jpfalse 0c36
+0c31 23 	 load local word-3
+0c32 ed 13 	 call proc19
+0c34 e2 74 	 jp 0caa
+0c36 24 	 load local word-4
+0c37 9c 	 load immediate 12
+0c38 e7 	 bitwise_in
+0c39 e3 05 	 jpfalse 0c40
+0c3b 22 	 load local word-2
+0c3c ed 13 	 call proc19
+0c3e e2 6a 	 jp 0caa
+0c40 24 	 load local word-4
+0c41 91 	 load immediate 1
+0c42 a0 	 equal
+0c43 e3 59 	 jpfalse 0c9e
+0c45 25 	 load local word-5
+0c46 ab 	 eq0
+0c47 e3 0a 	 jpfalse 0c53
+0c49 02 20 	 load proc_addr proc32
+0c4b 8d 22 	 load immediate 34
+0c4d f0 27 	 call TERMINAL.WriteString
+0c4f f0 26 	 call TERMINAL.WriteLn
+0c51 e2 49 	 jp 0c9c
+0c53 22 	 load local word-2
+0c54 ed 17 	 call proc23
+0c56 90 	 load immediate 0
+0c57 5f 	 store global word15
+0c58 4c 	 load global word12
+0c59 cb 	 not_zero
+0c5a e3 38 	 jpfalse 0c94
+0c5c 90 	 load immediate 0
+0c5d 36 	 store local word-6
+0c5e 26 	 load local word-6
+0c5f ac 	 inc
+0c60 36 	 store local word-6
+0c61 4b 	 load global word11
+0c62 26 	 load local word-6
+0c63 ad 	 dec
+0c64 8d 14 	 load immediate 20
+0c66 a8 	 umul
+0c67 a6 	 add
+0c68 39 	 store local word-9
+0c69 8c 08 	 call_rel 0c73
+0c6b 43 	 load global word3
+0c6c 6f 	 load stack word15
+0c6d 70 	 store stack word0
+0c6e 79 	 store stack word9
+0c6f 69 	 load stack word9
+0c70 6e 	 load stack word14
+0c71 67 	 load stack word7
+0c72 20 	 dup
+0c73 97 	 load immediate 7
+0c74 f0 27 	 call TERMINAL.WriteString
+0c76 29 	 load local word-9
+0c77 8d 10 	 load immediate 16
+0c79 f0 27 	 call TERMINAL.WriteString
+0c7b f0 26 	 call TERMINAL.WriteLn
+0c7d 22 	 load local word-2
+0c7e 29 	 load local word-9
+0c7f 8d 14 	 load immediate 20
+0c81 8d 11 	 load immediate 17
+0c83 31 	 copy string
+0c84 22 	 load local word-2
+0c85 23 	 load local word-3
+0c86 ec 1f 	 nested_call proc31
+0c88 37 	 store local word-7
+0c89 27 	 load local word-7
+0c8a b6 	 not
+0c8b df 03 	 orjp 0c90
+0c8d 26 	 load local word-6
+0c8e 4c 	 load global word12
+0c8f a5 	 ugreater_or_equal
+0c90 e5 34 	 jpfalse 0c5e
+0c92 e2 08 	 jp 0c9c
+0c94 02 19 	 load proc_addr proc25
+0c96 8d 10 	 load immediate 16
+0c98 f0 27 	 call TERMINAL.WriteString
+0c9a f0 26 	 call TERMINAL.WriteLn
+0c9c e2 0c 	 jp 0caa
+0c9e 22 	 load local word-2
+0c9f 8c 01 	 call_rel 0ca2
+0ca1 00 	 Error16
+0ca2 90 	 load immediate 0
+0ca3 90 	 load immediate 0
+0ca4 f5 	 call proc5
+0ca5 22 	 load local word-2
+0ca6 23 	 load local word-3
+0ca7 ec 1f 	 nested_call proc31
+0ca9 37 	 store local word-7
+0caa 88 	 leave0
+0cab fd
+0cac 49
+0cad 7c
+0cae d2
+0caf de 00
+
+; SHELL.proc35: RENAME command
+
+0cb1 d4 f3 	 enter -13
+0cb3 8d 14 	 load immediate 20
+0cb5 d2 	 reserve
+0cb6 32 	 store local word-2
+0cb7 8d 14 	 load immediate 20
+0cb9 d2 	 reserve
+0cba 33 	 store local word-3
+0cbb 8c 0c 	 call_rel 0cc9
+0cbd "Rename from:"
+0cc9 9b 	 load immediate 11
+0cca 8c 01 	 call_rel 0ccd
+0ccc 00
+0ccd 90 	 load immediate 0
+0cce f1 	 call proc1
+0ccf 42 	 load global word2
+0cd0 22 	 load local word-2
+0cd1 8d 13 	 load immediate 19
+0cd3 f0 02 	 call TEXTS.proc2
+0cd5 22 	 load local word-2
+0cd6 90 	 load immediate 0
+0cd7 0d 	 load indexed byte
+0cd8 cb 	 not_zero
+0cd9 de 13 	 andjp 0cee
+0cdb 8c 0d 	 call_rel 0cea
+0cdd "Rename to  : "
+0cea 9c 	 load immediate 12
+0ceb 23 	 load local word-3
+0cec ed 12 	 call proc18
+0cee e3 81 	 jpfalse 0d71
+0cf0 90 	 load immediate 0
+0cf1 5f 	 store global word15
+0cf2 23 	 load local word-3
+0cf3 ed 15 	 call proc21
+0cf5 ab 	 eq0
+0cf6 e3 76 	 jpfalse 0d6e
+0cf8 22 	 load local word-2
+0cf9 8c 01 	 call_rel 0cfc
+0cfb 00 	 Error16
+0cfc 90 	 load immediate 0
+0cfd 90 	 load immediate 0
+0cfe f5 	 call proc5
+0cff 23 	 load local word-3
+0d00 8c 01 	 call_rel 0d03
+0d02 00 	 Error16
+0d03 90 	 load immediate 0
+0d04 90 	 load immediate 0
+0d05 f5 	 call proc5
+0d06 23 	 load local word-3
+0d07 90 	 load immediate 0
+0d08 22 	 load local word-2
+0d09 90 	 load immediate 0
+0d0a 0d 	 load indexed byte
+0d0b 1d 	 store indexed byte
+0d0c 23 	 load local word-3
+0d0d 91 	 load immediate 1
+0d0e 22 	 load local word-2
+0d0f 91 	 load immediate 1
+0d10 0d 	 load indexed byte
+0d11 1d 	 store indexed byte
+0d12 23 	 load local word-3
+0d13 92 	 load immediate 2
+0d14 22 	 load local word-2
+0d15 92 	 load immediate 2
+0d16 0d 	 load indexed byte
+0d17 1d 	 store indexed byte
+0d18 80 fa 	 load local address -6
+0d1a 22 	 load local word-2
+0d1b 8d 13 	 load immediate 19
+0d1d f0 11 	 call FILES.proc1
+0d1f e3 47 	 jpfalse 0d68
+0d21 80 f9 	 load local address -7
+0d23 23 	 load local word-3
+0d24 8d 13 	 load immediate 19
+0d26 f0 11 	 call FILES.proc1
+0d28 e3 35 	 jpfalse 0d5f
+0d2a 23 	 load local word-3
+0d2b 8d 13 	 load immediate 19
+0d2d f0 27 	 call TERMINAL.WriteString
+0d2f 8c 12 	 call_rel 0d43
+0d31 20 	 dup
+0d32 65 	 load stack word5
+0d33 78 	 store stack word8
+0d34 69 	 load stack word9
+0d35 73 	 store stack word3
+0d36 74 	 store stack word4
+0d37 73 	 store stack word3
+0d38 2c 20 	 load local word +32
+0d3a 6f 	 load stack word15
+0d3b 76 	 store stack word6
+0d3c 65 	 load stack word5
+0d3d 72 	 store stack word2
+0d3e 77 	 store stack word7
+0d3f 72 	 store stack word2
+0d40 69 	 load stack word9
+0d41 74 	 store stack word4
+0d42 65 	 load stack word5
+0d43 8d 11 	 load immediate 17
+0d45 f3 	 call proc3
+0d46 e3 0d 	 jpfalse 0d55
+0d48 80 f9 	 load local address -7
+0d4a f0 14 	 call FILES.proc4
+0d4c 80 fa 	 load local address -6
+0d4e 23 	 load local word-3
+0d4f 8d 13 	 load immediate 19
+0d51 f0 15 	 call FILES.proc5
+0d53 e2 08 	 jp 0d5d
+0d55 80 f9 	 load local address -7
+0d57 f0 13 	 call FILES.proc3
+0d59 80 fa 	 load local address -6
+0d5b f0 13 	 call FILES.proc3
+0d5d e2 07 	 jp 0d66
+0d5f 80 fa 	 load local address -6
+0d61 23 	 load local word-3
+0d62 8d 13 	 load immediate 19
+0d64 f0 15 	 call FILES.proc5
+0d66 e2 04 	 jp 0d6c
+0d68 22 	 load local word-2
+0d69 8d 13 	 load immediate 19
+0d6b f8 	 call proc8
+0d6c e2 03 	 jp 0d71
+0d6e 23 	 load local word-3
+0d6f ed 13 	 call proc19
+0d71 88 	 leave0
+0d72 ef 01 15 	 call FILES.proc21
+0d75 80 fa 	 load local address -6
+0d77 f0 13 	 call FILES.proc3
+0d79 80 f9 	 load local address -7
+0d7b f0 14 	 call FILES.proc4
+0d7d 80 fa 	 load local address -6
+0d7f 22 	 load local word-2
+0d80 8d 13 	 load immediate 19
+0d82 f0 11 	 call FILES.proc1
+0d84 e3 07 	 jpfalse 0d8d
+0d86 80 fa 	 load local address -6
+0d88 23 	 load local word-3
+0d89 8d 13 	 load immediate 19
+0d8b f0 15 	 call FILES.proc5
+0d8d 88 	 leave0
+
+0d8e 01 	 Exception Table:
+0d8f 18 03 e0 ff
+
+0d99 d4 fd 	 enter -3
+0d9b 80 fe 	 load local address -2
+0d9d 03 	 load param1
+0d9e 8d 10 	 load immediate 16
+0da0 f0 11 	 call FILES.proc1
+0da2 e3 04 	 jpfalse 0da8
+0da4 80 fe 	 load local address -2
+0da6 f0 14 	 call FILES.proc4
+0da8 84 01 	 leave 1
+0daa ef 01 15 	 call FILES.proc21
+0dad 80 fe 	 load local address -2
+0daf f0 14 	 call FILES.proc4
+0db1 84 01 	 leave 1
+0db3 01 	 Raise
+0db4 18 03 	 store local dword +3
+0db6 f3 	 call proc3
+0db7 ff 	 call proc15
+0db8 46 	 load global word6
+0db9 3f 3d d6 	 store .word214
+0dbc 10 	 load (ix)
+0dbd 01 	 Raise
+
+; SHELL.proc36: KILL (Delete file) command
+
+0dbe d4 f1 	 enter -15
+0dc0 8d 14 	 load immediate 20
+0dc2 d2 	 reserve
+0dc3 32 	 store local word-2
+0dc4 8c 0a 	 call_rel 0dd0
+0dc6 4b 	 load global word11
+0dc7 69 	 load stack word9
+0dc8 6c 	 load stack word12
+0dc9 6c 	 load stack word12
+0dca 20 	 dup
+0dcb 66 	 load stack word6
+0dcc 69 	 load stack word9
+0dcd 6c 	 load stack word12
+0dce 65 	 load stack word5
+0dcf 3a 	 store local word-10
+0dd0 99 	 load immediate 9
+0dd1 8c 01 	 call_rel 0dd4
+0dd3 00
+0dd4 90 	 load immediate 0
+0dd5 f1 	 call proc1
+0dd6 42 	 load global word2
+0dd7 80 fb 	 load local address -5
+0dd9 f0 01 	 call TEXTS.proc1
+0ddb 25 	 load local word-5
+0ddc af 30 	 sub 48
+0dde 99 	 load immediate 9
+0ddf a4 	 uless_or_equal
+0de0 e3 40 	 jpfalse 0e22
+0de2 4f 	 load global word15
+0de3 e3 2f 	 jpfalse 0e14
+0de5 42 	 load global word2
+0de6 ef 00 10 	 call TEXTS.proc16
+0de9 80 fc 	 load local address -4
+0deb f4 	 call proc4
+0dec de 03 	 andjp 0df1
+0dee 24 	 load local word-4
+0def ed 1d 	 call proc29
+0df1 e3 1f 	 jpfalse 0e12
+0df3 4e 	 load global word14
+0df4 24 	 load local word-4
+0df5 ad 	 dec
+0df6 0e 	 load indexed word
+0df7 38 	 store local word-8
+0df8 8c 07 	 call_rel 0e01
+0dfa 44 	 load global word4
+0dfb 65 	 load stack word5
+0dfc 6c 	 load stack word12
+0dfd 65 	 load stack word5
+0dfe 74 	 store stack word4
+0dff 65 	 load stack word5
+0e00 20 	 dup
+0e01 96 	 load immediate 6
+0e02 f0 27 	 call TERMINAL.WriteString
+0e04 28 	 load local word-8
+0e05 8d 10 	 load immediate 16
+0e07 f3 	 call proc3
+0e08 e3 06 	 jpfalse 0e10
+0e0a 28 	 load local word-8
+0e0b ec 25 	 nested_call proc37
+0e0d 28 	 load local word-8
+0e0e 90 	 load immediate 0
+0e0f 79 	 store stack word9
+0e10 e4 29 	 jp 0de9
+0e12 e2 0c 	 jp 0e20
+0e14 8c 08 	 call_rel 0e1e
+0e16 64 	 load stack word4
+0e17 65 	 load stack word5
+0e18 6c 	 load stack word12
+0e19 65 	 load stack word5
+0e1a 74 	 store stack word4
+0e1b 69 	 load stack word9
+0e1c 6e 	 load stack word14
+0e1d 67 	 load stack word7
+0e1e 97 	 load immediate 7
+0e1f f9 	 call proc9
+0e20 e2 a2 	 jp 0ec4
+0e22 42 	 load global word2
+0e23 ef 00 10 	 call TEXTS.proc16
+0e26 42 	 load global word2
+0e27 22 	 load local word-2
+0e28 8d 13 	 load immediate 19
+0e2a f0 02 	 call TEXTS.proc2
+0e2c 22 	 load local word-2
+0e2d 90 	 load immediate 0
+0e2e 0d 	 load indexed byte
+0e2f cb 	 not_zero
+0e30 e3 92 	 jpfalse 0ec4
+0e32 22 	 load local word-2
+0e33 ed 15 	 call proc21
+0e35 33 	 store local word-3
+0e36 90 	 load immediate 0
+0e37 5f 	 store global word15
+0e38 23 	 load local word-3
+0e39 9c 	 load immediate 12
+0e3a e7 	 bitwise_in
+0e3b e3 05 	 jpfalse 0e42
+0e3d 22 	 load local word-2
+0e3e ed 13 	 call proc19
+0e40 e2 82 	 jp 0ec4
+0e42 23 	 load local word-3
+0e43 91 	 load immediate 1
+0e44 a0 	 equal
+0e45 e3 6a 	 jpfalse 0eb1
+0e47 22 	 load local word-2
+0e48 22 	 load local word-2
+0e49 91 	 load immediate 1
+0e4a 0d 	 load indexed byte
+0e4b 8d 3a 	 load immediate 58
+0e4d a0 	 equal
+0e4e b0 01 	 shl 1
+0e50 a6 	 add
+0e51 37 	 store local word-7
+0e52 27 	 load local word-7
+0e53 8c 03 	 call_rel 0e58
+0e55 2a 	 load local word-10
+0e56 2e 2a 	 load stack word 42
+0e58 93 	 load immediate 3
+0e59 93 	 load immediate 3
+0e5a c4 	 string_comp
+0e5b a1 	 not_equal
+0e5c df 14 	 orjp 0e72
+0e5e 8c 10 	 call_rel 0e70
+0e60 44 	 load global word4
+0e61 65 	 load stack word5
+0e62 6c 	 load stack word12
+0e63 65 	 load stack word5
+0e64 74 	 store stack word4
+0e65 65 	 load stack word5
+0e66 20 	 dup
+0e67 61 	 load stack word1
+0e68 6c 	 load stack word12
+0e69 6c 	 load stack word12
+0e6a 20 	 dup
+0e6b 66 	 load stack word6
+0e6c 69 	 load stack word9
+0e6d 6c 	 load stack word12
+0e6e 65 	 load stack word5
+0e6f 73 	 store stack word3
+0e70 9f 	 load immediate 15
+0e71 f3 	 call proc3
+0e72 e3 3b 	 jpfalse 0eaf
+0e74 22 	 load local word-2
+0e75 ed 17 	 call proc23
+0e77 4c 	 load global word12
+0e78 cb 	 not_zero
+0e79 e3 2c 	 jpfalse 0ea7
+0e7b 90 	 load immediate 0
+0e7c 34 	 store local word-4
+0e7d 24 	 load local word-4
+0e7e ac 	 inc
+0e7f 34 	 store local word-4
+0e80 4b 	 load global word11
+0e81 24 	 load local word-4
+0e82 ad 	 dec
+0e83 8d 14 	 load immediate 20
+0e85 a8 	 umul
+0e86 a6 	 add
+0e87 38 	 store local word-8
+0e88 8c 09 	 call_rel 0e93
+0e8a 44 	 load global word4
+0e8b 65 	 load stack word5
+0e8c 6c 	 load stack word12
+0e8d 65 	 load stack word5
+0e8e 74 	 store stack word4
+0e8f 69 	 load stack word9
+0e90 6e 	 load stack word14
+0e91 67 	 load stack word7
+0e92 20 	 dup
+0e93 98 	 load immediate 8
+0e94 f0 27 	 call TERMINAL.WriteString
+0e96 28 	 load local word-8
+0e97 8d 10 	 load immediate 16
+0e99 f0 27 	 call TERMINAL.WriteString
+0e9b f0 26 	 call TERMINAL.WriteLn
+0e9d 28 	 load local word-8
+0e9e ec 25 	 nested_call proc37
+0ea0 24 	 load local word-4
+0ea1 4c 	 load global word12
+0ea2 a5 	 ugreater_or_equal
+0ea3 e5 28 	 jpfalse 0e7d
+0ea5 e2 08 	 jp 0eaf
+0ea7 02 19 	 load proc_addr proc25
+0ea9 8d 10 	 load immediate 16
+0eab f0 27 	 call TERMINAL.WriteString
+0ead f0 26 	 call TERMINAL.WriteLn
+0eaf e2 13 	 jp 0ec4
+0eb1 80 fa 	 load local address -6
+0eb3 22 	 load local word-2
+0eb4 8d 13 	 load immediate 19
+0eb6 f0 11 	 call FILES.proc1
+0eb8 e3 06 	 jpfalse 0ec0
+0eba 80 fa 	 load local address -6
+0ebc f0 14 	 call FILES.proc4
+0ebe e2 04 	 jp 0ec4
+0ec0 22 	 load local word-2
+0ec1 8d 13 	 load immediate 19
+0ec3 f8 	 call proc8
+0ec4 88 	 leave0
+0ec5 ef 01 15 	 call FILES.proc21
+0ec8 80 fa 	 load local address -6
+0eca f0 14 	 call FILES.proc4
+0ecc 88 	 leave0
+0ecd 01 	 Raise
+0ece 18 03 	 store local dword +3
+0ed0 f4 	 call proc4
+0ed1 ff 	 call proc15
+0ed2 ff 	 
+
+; SHELL.proc38: TYPE command
+
+0ed3 d4 f5 	 enter -11
+0ed5 8d 14 	 load immediate 20
+0ed7 d2 	 reserve
+0ed8 32 	 store local word-2
+0ed9 8c 0a 	 call_rel 0ee5
+0edb "Type file:"
+0ee5 99 	 load immediate 9
+0ee6 8c 01 	 call_rel 0ee9
+0ee8 00
+0ee9 90 	 load immediate 0
+0eea f1 	 call proc1
+0eeb 42 	 load global word2
+0eec 22 	 load local word-2
+0eed 8d 13 	 load immediate 19
+0eef f0 02 	 call TEXTS.proc2
+0ef1 22 	 load local word-2
+0ef2 90 	 load immediate 0
+0ef3 0d 	 load indexed byte
+0ef4 cb 	 not_zero
+0ef5 e3 9b 	 jpfalse 0f92
+0ef7 80 fd 	 load local address -3
+0ef9 22 	 load local word-2
+0efa 8d 13 	 load immediate 19
+0efc f0 11 	 call FILES.proc1
+0efe e3 8e 	 jpfalse 0f8e
+0f00 23 	 load local word-3
+0f01 ef 01 14 	 call FILES.proc20
+0f04 f0 26 	 call TERMINAL.WriteLn
+0f06 23 	 load local word-3
+0f07 f0 18 	 call FILES.proc8
+0f09 b6 	 not
+0f0a e3 80 	 jpfalse 0f8c
+0f0c f0 32 	 call COMLINE.proc2     ; COMLINE.RedirectOutput
+0f0e 0c 34 	 load COMLINE.word4     ; local6 := ComLine.outName = "CON:"
+0f10 8c 04 	 call_rel 0f16
+"CON:"
+0f16 8d 14 	 load immediate 20
+0f18 94 	 load immediate 4
+0f19 c4 	 string_comp
+0f1a a0 	 equal
+0f1b 36 	 store local word-6
+0f1c 23 	 load local word-3
+0f1d 80 fc 	 load local address -4
+0f1f f0 19 	 call FILES.proc9
+0f21 24 	 load local word-4
+0f22 9d 	 load immediate 13
+0f23 a0 	 equal
+0f24 e3 2e 	 jpfalse 0f54
+0f26 0c 03 	 load TEXTS.dword3
+0f28 f0 0e 	 call TEXTS.proc14
+0f2a 26 	 load local word-6
+0f2b e3 25 	 jpfalse 0f52
+0f2d 80 fb 	 load local address -5
+0f2f f0 22 	 call TERMINAL.BusyRead
+0f31 25 	 load local word-5
+0f32 cb 	 not_zero
+0f33 e3 1d 	 jpfalse 0f52
+0f35 25 	 load local word-5
+0f36 8d 13 	 load immediate 19
+0f38 a0 	 equal
+0f39 e3 0f 	 jpfalse 0f4a
+0f3b 80 fb 	 load local address -5
+0f3d f0 21 	 call TERMINAL.ReadChar
+0f3f 25 	 load local word-5
+0f40 93 	 load immediate 3
+0f41 a0 	 equal
+0f42 df 04 	 orjp 0f48
+0f44 25 	 load local word-5
+0f45 8d 13 	 load immediate 19
+0f47 a0 	 equal
+0f48 e5 0f 	 jpfalse 0f3b
+0f4a 25 	 load local word-5
+0f4b 93 	 load immediate 3
+0f4c a0 	 equal
+0f4d e3 03 	 jpfalse 0f52
+0f4f 8d 1a 	 load immediate 26
+0f51 34 	 store local word-4
+0f52 e2 26 	 jp 0f7a
+0f54 24 	 load local word-4
+0f55 99 	 load immediate 9
+0f56 a0 	 equal
+0f57 e3 11 	 jpfalse 0f6a
+0f59 0c 03 	 load TEXTS.dword3
+0f5b 0c 03 	 load TEXTS.dword3
+0f5d ef 00 14 	 call TEXTS.proc20
+0f60 b1 03 	 shr 3
+0f62 ac 	 inc
+0f63 b0 03 	 shl 3
+0f65 ef 00 15 	 call TEXTS.proc21
+0f68 e2 10 	 jp 0f7a
+0f6a 24 	 load local word-4
+0f6b 8d 1a 	 load immediate 26
+0f6d a1 	 not_equal
+0f6e de 03 	 andjp 0f73
+0f70 24 	 load local word-4
+0f71 9a 	 load immediate 10
+0f72 a1 	 not_equal
+0f73 e3 05 	 jpfalse 0f7a
+0f75 0c 03 	 load TEXTS.dword3
+0f77 24 	 load local word-4
+0f78 f0 08 	 call TEXTS.proc8
+0f7a 24 	 load local word-4
+0f7b 8d 1a 	 load immediate 26
+0f7d a0 	 equal
+0f7e e5 64 	 jpfalse 0f1c
+0f80 83 00 03 	 load address TEXTS.WORD3
+0f83 ef 00 19 	 call TEXTS.proc25
+0f86 80 fd 	 load local address -3
+0f88 f0 13 	 call FILES.proc3
+0f8a f0 26 	 call TERMINAL.WriteLn
+0f8c e2 04 	 jp 0f92
+0f8e 22 	 load local word-2
+0f8f 8d 13 	 load immediate 19
+0f91 f8 	 call proc8
+0f92 88 	 leave0
+0f93 ff 	 
+
+; SHELL.proc : Select drive command
+
+0f94 d4 f7 	 enter -9
+0f96 8d 14 	 load immediate 20
+0f98 d2 	 reserve
+0f99 32 	 store local word-2
+0f9a 8c 0a 	 call_rel 0fa6
+0f9c "New drive:"
+0fa6 99 	 load immediate 9
+0fa7 8c 01 	 call_rel 0faa
+0fa9 00
+0faa 90 	 load immediate 0
+0fab f1 	 call proc1
+0fac 42 	 load global word2
+0fad 22 	 load local word-2
+0fae 8d 13 	 load immediate 19
+0fb0 f0 02 	 call TEXTS.proc2
+0fb2 ef 01 15 	 call FILES.proc21
+0fb5 90 	 load immediate 0
+0fb6 35 	 store local word-5
+0fb7 25 	 load local word-5
+0fb8 8d 13 	 load immediate 19
+0fba a2 	 uless_than
+0fbb de 04 	 andjp 0fc1
+0fbd 22 	 load local word-2
+0fbe 25 	 load local word-5
+0fbf 0d 	 load indexed byte
+0fc0 cb 	 not_zero
+0fc1 e3 05 	 jpfalse 0fc8
+0fc3 25 	 load local word-5
+0fc4 ac 	 inc
+0fc5 35 	 store local word-5
+0fc6 e4 11 	 jp 0fb7
+0fc8 22 	 load local word-2
+0fc9 25 	 load local word-5
+0fca 8d 3a 	 load immediate 58
+0fcc 1d 	 store indexed byte
+0fcd 22 	 load local word-2
+0fce 8d 13 	 load immediate 19
+0fd0 80 fc 	 load local address -4
+0fd2 81 10 	 load global address 16
+0fd4 ed 14 	 call proc20
+0fd6 24 	 load local word-4
+0fd7 ad 	 dec
+0fd8 33 	 store local word-3
+0fd9 23 	 load local word-3
+0fda 9f 	 load immediate 15
+0fdb a4 	 uless_or_equal
+0fdc e3 12 	 jpfalse 0ff0
+0fde 90 	 load immediate 0
+0fdf 5f 	 store global word15
+0fe0 23 	 load local word-3
+0fe1 53 	 store global word3
+0fe2 9e 	 load immediate 14
+0fe3 23 	 load local word-3
+0fe4 c3 	 system
+0fe5 94 	 load immediate 4
+0fe6 90 	 load immediate 0
+0fe7 94 	 load immediate 4
+0fe8 90 	 load immediate 0
+0fe9 0d 	 load indexed byte
+0fea 8d f0 	 load immediate 240
+0fec e8 	 bitwise_and
+0fed 23 	 load local word-3
+0fee a6 	 add
+0fef 1d 	 store indexed byte
+0ff0 88 	 leave0
+
+
+; SHELL internal module INIT
+
+0ff1 90 	 load immediate 0
+0ff2 5f 	 store global word15
+0ff3 8d 19 	 load immediate 25
+0ff5 90 	 load immediate 0
+0ff6 c3 	 system                     ; DRV_GET
+0ff7 8e 00 03 	 load immediate 768
+0ffa 60 	 load stack word0
+0ffb 53 	 store global word3         ; store drive in global3
+0ffc 8d 20 	 load immediate 32
+0ffe 8d ff 	 load immediate 255
+1000 c3 	 system                     ; F_USERNUM
+1001 8e 00 03 	 load immediate 768
+1004 60 	 load stack word0
+1005 54 	 store global word4         ; store usernum in global4
+1006 e0 53 05 	 jp 155b                ; jump back to SHELL's INIT
+
+; SHELL.proc40 : WORKFILE
+
+100a d4 ff 	 enter -1
+100c 8c 0e 	 call_rel 101c              ; PromptString("Workfile name:", "");
+100e "Workfile name:"
+101c 9d 	 load immediate 13
+101d 8c 01 	 call_rel 1020
+101f 00
+1020 90 	 load immediate 0
+1021 f1 	 call proc1
+1022 42 	 load global word2          ; TEXTS.ReadString(text, global17);
+1023 2d 11 	 load global word 17
+1025 8d 13 	 load immediate 19
+1027 f0 02 	 call TEXTS.proc2
+1029 2d 11 	 load global word 17        ; global17[19] := 0C;
+102b 8d 13 	 load immediate 19
+102d 90 	 load immediate 0
+102e 1d 	 store indexed byte
+102f 2d 11 	 load global word 17        ; IF PROC21(global17) IN { 1, 3 }
+1031 ed 15 	 call proc21
+1033 9a 	 load immediate 10
+1034 e7 	 bitwise_in
+1035 e3 09 	 jpfalse 1040
+1037 2d 11 	 load global word 17        ; THEN PROC19(global17)
+1039 ed 13 	 call proc19
+103b 2d 11 	 load global word 17        ;      global17[0] := 0C
+103d 90 	 load immediate 0
+103e 90 	 load immediate 0
+103f 1d 	 store indexed byte         ; END
+1040 2d 11 	 load global word 17        ; IF global17[0] <> 0C 
+1042 90 	 load immediate 0
+1043 0d 	 load indexed byte
+1044 cb 	 not_zero
+1045 e3 0a 	 jpfalse 1051
+1047 2d 11 	 load global word 17        ; THEN PROC5(global17,"MOD",0)
+1049 8c 03 	 call_rel 104e              ;
+104b "MOD"
+104e 92 	 load immediate 2
+104f 90 	 load immediate 0
+1050 f5 	 call proc5                 ; END
+1051 8e 5c 05 	 load immediate 1372    ; kernelBuf := global17
+1054 2d 11 	 load global word 17
+1056 8d 11 	 load immediate 17
+1058 8d 14 	 load immediate 20
+105a 31 	 copy string
+105b 88 	 leave0
+105c ff 	 
+
+;SHELL.proc41(prompt: ARRAY OF CHAR; VAR answer: ARRAY OF CHAR):BOOLEAN
+;  => Input a filename
+
+105d d4 fb 	 enter -5
+105f 04 	 load param2            ; prompt string is copied locally
+1060 ac 	 inc
+1061 05 	 load param3
+1062 40 12 	 reserve_string
+1064 15 	 store param3
+1065 8d 11 	 load immediate 17      ; reserve a 17-bytes buffer
+1067 d2 	 reserve
+1068 32 	 store local word-2     ; -> addr in local2
+1069 22 	 load local word-2      ; copy 17 bytes from 055c
+106a 8e 5c 05 	 load immediate 1372
+106d 8d 11 	 load immediate 17
+106f 30 	 copy block
+1070 90 	 load immediate 0       ; index := 0
+1071 33 	 store local word-3
+                                    ; WHILE buffer[index]<>'.'
+1072 22 	 load local word-2
+1073 23 	 load local word-3
+1074 0d 	 load indexed byte
+1075 8d 2e 	 load immediate 46
+1077 a1 	 not_equal
+1078 de 04 	 andjp 107e             ; AND buffer[index]<>0C
+107a 22 	 load local word-2
+107b 23 	 load local word-3
+107c 0d 	 load indexed byte
+107d cb 	 not_zero
+107e e3 05 	 jpfalse 1085
+1080 23 	 load local word-3      ; DO INC(index)
+1081 ac 	 inc
+1082 33 	 store local word-3
+1083 e4 13 	 jp 1072                ; END
+1085 22 	 load local word-2      ; buffer[index] := 0C
+1086 23 	 load local word-3
+1087 90 	 load immediate 0
+1088 1d 	 store indexed byte
+1089 05 	 load param3            ; PROC1(param3, buffer)
+108a 04 	 load param2
+108b 22 	 load local word-2
+108c 8d 10 	 load immediate 16
+108e f1 	 call proc1
+108f 42 	 load global word2      ; TEXTS.ReadString(text, param1)
+1090 03 	 load param1
+1091 8d 13 	 load immediate 19
+1093 f0 02 	 call TEXTS.proc2
+1095 03 	 load param1            ; RETURN param1[0] <> 0C
+1096 90 	 load immediate 0
+1097 0d 	 load indexed byte
+1098 cb 	 not_zero
+1099 85 83 	 fct_leave 131
+109b ff 	 
+
+; SHELL.proc42(prompt: ARRAY OF CHAR; execute: CARDINAL) : edit or compile
+; VAR local2: ARRAY [0..19] OF CHAR;
+
+109c d4 fd 	 enter -3
+109e 04 	 load param2            ; copy param string to local string
+109f ac 	 inc
+10a0 05 	 load param3
+10a1 40 12 	 reserve_string
+10a3 15 	 store param3
+10a4 8d 14 	 load immediate 20      ; reserve a 20 bytes string
+10a6 d2 	 reserve
+10a7 32 	 store local word-2     ; -> local2
+10a8 8e 5c 05 	 load immediate 1372; IF workfile[0] = 0
+10ab 90 	 load immediate 0
+10ac 0d 	 load indexed byte
+10ad ab 	 eq0
+10ae e3 0a 	 jpfalse 10ba           
+10b0 ed 28 	 call proc40            ; THEN PROC40
+10b2 22 	 load local word-2      ;      local2 := global17
+10b3 2d 11 	 load global word 17
+10b5 8d 14 	 load immediate 20
+10b7 30 	 copy block
+10b8 e2 0e 	 jp 10c8                ; ELSE
+10ba 05 	 load param3            ;  PROC1(prompt,workfile)
+10bb 04 	 load param2
+10bc 8e 5c 05 	 load immediate 1372
+10bf 8d 10 	 load immediate 16
+10c1 f1 	 call proc1
+10c2 42 	 load global word2      ;  TEXTS.ReadString(global2,local2)
+10c3 22 	 load local word-2
+10c4 8d 13 	 load immediate 19
+10c6 f0 02 	 call TEXTS.proc2
+                                    ; END
+10c8 22 	 load local word-2      ; IF local2[0] <> 0C
+10c9 90 	 load immediate 0
+10ca 0d 	 load indexed byte
+10cb cb 	 not_zero
+10cc e3 19 	 jpfalse 10e7
+10ce 22 	 load local word-2      ; THEN PROC5(local2,"MOD",0)
+10cf 8c 03 	 call_rel 10d4          ;   
+10d1 "MOD"
+10d4 92 	 load immediate 2
+10d5 90 	 load immediate 0
+10d6 f5 	 call proc5             ;  
+10d7 0c 33 	 load COMLINE.word3     ;   COMLINE.inName := local2
+10d9 22 	 load local word-2
+10da 8d 14 	 load immediate 20
+10dc 30 	 copy block
+10dd 0c 35 	 load COMLINE.word5     ;   COMLINE.progname[0] := 1
+10df 90 	 load immediate 0
+10e0 91 	 load immediate 1
+10e1 1d 	 store indexed byte
+10e2 91 	 load immediate 1       ;   global5 := 1
+10e3 55 	 store global word5
+10e4 03 	 load param1            ;   COMLINE.execute := execute
+10e5 1c 36 	 store COMLINE.word6    ; END
+10e7 8b 	 leave6                 ;
+10e8 ff 	 
+
+; SHELL.proc43: LINK command
+
+10e9 d4 fd 	 enter -3
+10eb 8d 14 	 load immediate 20
+10ed d2 	 reserve
+10ee 32 	 store local word-2
+10ef 8c 11 	 call_rel 1102
+"Link main module:"
+1102 8d 10 	 load immediate 16
+1104 22 	 load local word-2
+1105 ed 29 	 call proc41
+1107 e3 10 	 jpfalse 1119
+1109 0c 35 	 load COMLINE.word5     ; ComLine.progname := "LINK"
+110b 8c 04 	 call_rel 1111
+"LINK"
+1111 98 	 load immediate 8
+1112 94 	 load immediate 4
+1113 31 	 copy string
+1114 91 	 load immediate 1       ; global5 := 1
+1115 55 	 store global word5
+1116 91 	 load immediate 1       ; ComLine.execute := 1
+1117 1c 36 	 store COMLINE.word6
+1119 88 	 leave0
+111a ff 	 
+111b d4 f1 	 enter -15
+111d 8d 24 	 load immediate 36      ; VAR fcb2, fcb1 : FCB;
+111f d2 	 reserve
+1120 32 	 store local word-2
+1121 8d 24 	 load immediate 36
+1123 d2 	 reserve
+1124 33 	 store local word-3
+1125 8d 14 	 load immediate 20      ; VAR name1,name2: ARRAY [0..19] OF CHAR;
+1127 d2 	 reserve
+1128 34 	 store local word-4
+1129 8d 14 	 load immediate 20
+112b d2 	 reserve
+112c 35 	 store local word-5
+112d f0 52 	 call EXEC.proc2        ; EXEC.proc2
+112f 8c 11 	 call_rel 1142          ; proc1("Execute COM-file:", "");
+1131 "Execute COM-file:"
+1142 8d 10 	 load immediate 16
+1144 8c 01 	 call_rel 1147
+1146 00
+1147 90 	 load immediate 0
+1148 f1 	 call proc1
+1149 42 	 load global word2      ; TEXTS.ReadString(global2, name1)
+114a 24 	 load local word-4
+114b 8d 13 	 load immediate 19
+114d f0 02 	 call TEXTS.proc2
+114f 24 	 load local word-4      ; IF name1[0] <> 0C 
+1150 90 	 load immediate 0
+1151 0d 	 load indexed byte
+1152 cb 	 not_zero
+1153 e3 6e 	 jpfalse 11c3           ; THEN
+1155 24 	 load local word-4      ;   proc5(name1, "COM", TRUE);
+1156 8c 03 	 call_rel 115b
+1158 "COM"
+115b 92 	 load immediate 2
+115c 91 	 load immediate 1
+115d f5 	 call proc5
+115e 24 	 load local word-4      ;   proc22(name1, fcb1, local8)
+115f 23 	 load local word-3
+1160 80 f8 	 load local address -8
+1162 ed 16 	 call proc22
+1164 80 fa 	 load local address -6  ;   IF FILES.Open(local6, name1)
+1166 24 	 load local word-4
+1167 8d 13 	 load immediate 19
+1169 f0 11 	 call FILES.proc1
+116b e3 52 	 jpfalse 11bf           ;   THEN
+116d 80 fa 	 load local address -6  ;     FILES.Close(local6);
+116f f0 13 	 call FILES.proc3
+1171 8d 20 	 load immediate 32      ;     BDOS(FUSERNUM, local8);
+1173 28 	 load local word-8
+1174 c3 	 system
+1175 90 	 load immediate 0       ;     local7 := 0
+1176 37 	 store local word-7
+                                    ;     REPEAT
+1177 42 	 load global word2      ;       TEXTS.ReadString(global2, name2);
+1178 25 	 load local word-5
+1179 8d 13 	 load immediate 19
+117b f0 02 	 call TEXTS.proc2   
+117d 25 	 load local word-5      ;       proc22(name2, fcb2, local8);
+117e 22 	 load local word-2
+117f 80 f8 	 load local address -8
+1181 ed 16 	 call proc22
+1183 22 	 load local word-2      ;       MOVE(fcb2, 92+local7*16, 16)
+1184 8d 5c 	 load immediate 92
+1186 27 	 load local word-7
+1187 b0 04 	 shl 4
+1189 a6 	 add
+118a 8d 10 	 load immediate 16
+118c 40 0e 	 MOVE
+118e 27 	 load local word-7      ;       INC(local7)
+118f ac 	 inc
+1190 37 	 store local word-7
+1191 27 	 load local word-7      ;     UNTIL local7 > 1
+1192 91 	 load immediate 1
+1193 a3 	 ugreater_than
+1194 e5 1f 	 jpfalse 1177
+1196 ed 10 	 call proc16            ;     proc16
+1198 8d 80 	 load immediate 128     ;     IF MEM(128) <> 0C
+119a 90 	 load immediate 0
+119b 0d 	 load indexed byte
+119c cb 	 not_zero
+119d e3 1b 	 jpfalse 11ba           ;     THEN
+119f 8d 81 	 load immediate 129     ;       MOVE(129, 129+1, 126)
+11a1 90 	 load immediate 0
+11a2 a6 	 add
+11a3 8d 81 	 load immediate 129
+11a5 91 	 load immediate 1
+11a6 a6 	 add
+11a7 8d 7e 	 load immediate 126
+11a9 40 0e 	 MOVE
+11ab 8d 81 	 load immediate 129     ;       MEM(129) := ' '
+11ad 90 	 load immediate 0
+11ae 8d 20 	 load immediate 32
+11b0 1d 	 store indexed byte
+11b1 8d 80 	 load immediate 128     ;       MEM(128) := MEM(128) + 1
+11b3 90 	 load immediate 0
+11b4 8d 80 	 load immediate 128
+11b6 90 	 load immediate 0
+11b7 0d 	 load indexed byte
+11b8 ac 	 inc
+11b9 1d 	 store indexed byte     ;     END
+11ba 23 	 load local word-3      ;     EXEC.proc1(fcb1)
+11bb f0 51 	 call EXEC.proc1
+11bd e2 04 	 jp 11c3                ;   ELSE
+11bf 24 	 load local word-4      ;     proc8(name1)
+11c0 8d 13 	 load immediate 19
+11c2 f8 	 call proc8             ;   END
+                                    ; END
+11c3 88 	 leave0
+11c4 ff 	 
+
+; SHELL.proc45: RUN command
+
+11c5 d4 f5 	 enter -11
+11c7 8d 14 	 load immediate 20      ; reserve a buffer of 20 chars
+11c9 d2 	 reserve
+11ca 32 	 store local word-2     ; addr of buffer in local2
+11cb 8c 0d 	 call_rel 11da          ; push address of following string:
+11cd                                ; "Run MCD-file:"
+
+11da 9c 	 load immediate 12      ; 12 chars max
+11db 22 	 load local word-2
+11dc ed 29 	 call proc41            ; Input a string
+11de e3 5e 	 jpfalse 123e           ; if empty, RETURN
+11e0 22 	 load local word-2
+11e1 8c 03 	 call_rel 11e6          ; push address of following string:
+11e3                                ; "MCD"
+11e6 92 	 load immediate 2
+11e7 91 	 load immediate 1
+11e8 f5 	 call proc5             ; get extension ?
+11e9 43 	 load global word3
+11ea 1c 42 	 store LOADER.dword2
+11ec 80 fc 	 load local address -4  ; FILE handle at local4
+11ee 22 	 load local word-2
+11ef 8d 13 	 load immediate 19
+11f1 f0 11 	 call FILES.proc1       ; Open file
+11f3 e3 45 	 jpfalse 123a           ; jump if failure to open
+11f5 80 fc 	 load local address -4
+11f7 f0 13 	 call FILES.proc3       ; close the file
+11f9 91 	 load immediate 1
+11fa 55 	 store global word5
+11fb 22 	 load local word-2
+11fc 8d 13 	 load immediate 19
+11fe 80 fb 	 load local address -5
+1200 80 fa 	 load local address -6
+1202 ed 14 	 call proc20            ; ????
+1204 22 	 load local word-2      ; MOVE(local2, ComLine.progname, 8)
+1205 0c 35 	 load COMLINE.word5 
+1207 98 	 load immediate 8
+1208 40 0e 	 MOVE                
+120a 90 	 load immediate 0       ; index := 0
+120b 33 	 store local word-3
+120c 23 	 load local word-3      ; WHILE index < 8
+120d 98 	 load immediate 8
+120e a2 	 uless_than
+120f de 07 	 andjp 1218             ; AND COMLINE.progname[index]<>'.'
+1211 0c 35 	 load COMLINE.word5
+1213 23 	 load local word-3
+1214 0d 	 load indexed byte
+1215 8d 2e 	 load immediate 46
+1217 a1 	 not_equal
+1218 e3 05 	 jpfalse 121f           ; DO INC(index)
+121a 23 	 load local word-3
+121b ac 	 inc
+121c 33 	 store local word-3
+121d e4 13 	 jp 120c                ; END
+121f 23 	 load local word-3      ; IF index < 8
+1220 98 	 load immediate 8
+1221 a2 	 uless_than
+1222 e3 05 	 jpfalse 1229           
+1224 0c 35 	 load COMLINE.word5    ; THEN COMLINE.progname[index] := 0C
+1226 23 	 load local word-3
+1227 90 	 load immediate 0
+1228 1d 	 store indexed byte     ; END
+1229 25 	 load local word-5      ; 
+122a ad 	 dec
+122b 1c 42 	 store LOADER.dword2
+122d 8d 20 	 load immediate 32      ; BDOS function USERNUM
+122f 26 	 load local word-6
+1230 c3 	 system
+1231 91 	 load immediate 1       ; ComLine.execute := 1
+1232 1c 36 	 store COMLINE.word6
+1234 f0 26 	 call TERMINAL.WriteLn
+1236 ed 10 	 call proc16            ; ???
+1238 e2 04 	 jp 123e
+                                    ; here the file couldn't be opened
+123a 22 	 load local word-2
+123b 8d 13 	 load immediate 19
+123d f8 	 call proc8
+                                    ; RETURN
+123e 88 	 leave0
+123f ff 	 
+
+
+
+
+1240 d4 ff 	 enter -1
+1242 8c 03 	 call_rel 1247
+1244 20 	 dup
+1245 28 	 load local word-8
+1246 4f 	 load global word15
+1247 92 	 load immediate 2
+1248 f0 27 	 call TERMINAL.WriteString
+124a 03 	 load param1
+124b 8e 48 03 	 load immediate 840
+124e 60 	 load stack word0
+124f e7 	 bitwise_in
+1250 e3 09 	 jpfalse 125b
+1252 8c 02 	 call_rel 1256
+1254 4e 	 load global word14
+1255 20 	 dup
+1256 91 	 load immediate 1
+1257 f0 27 	 call TERMINAL.WriteString
+1259 e2 07 	 jp 1262
+125b 8c 02 	 call_rel 125f
+125d 46 	 load global word6
+125e 46 	 load global word6
+125f 91 	 load immediate 1
+1260 f0 27 	 call TERMINAL.WriteString
+1262 8c 03 	 call_rel 1267
+1264 29 	 load local word-9
+1265 20 	 dup
+1266 20 	 dup
+1267 92 	 load immediate 2
+1268 f0 27 	 call TERMINAL.WriteString
+126a 84 01 	 leave 1
+126c ff 	 
+126d d4 f7 	 enter -9
+126f 90 	 load immediate 0
+1270 32 	 store local word-2
+1271 90 	 load immediate 0
+1272 34 	 store local word-4
+1273 90 	 load immediate 0
+1274 33 	 store local word-3
+1275 8e da 03 	 load immediate 986
+1278 24 	 load local word-4
+1279 b0 03 	 shl 3
+127b 23 	 load local word-3
+127c a6 	 add
+127d 0d 	 load indexed byte
+127e 35 	 store local word-5
+127f 25 	 load local word-5
+1280 cb 	 not_zero
+1281 e3 0a 	 jpfalse 128d
+1283 03 	 load param1
+1284 22 	 load local word-2
+1285 25 	 load local word-5
+1286 1d 	 store indexed byte
+1287 22 	 load local word-2
+1288 ac 	 inc
+1289 32 	 store local word-2
+128a 23 	 load local word-3
+128b ac 	 inc
+128c 33 	 store local word-3
+128d 23 	 load local word-3
+128e 98 	 load immediate 8
+128f a0 	 equal
+1290 df 02 	 orjp 1294
+1292 25 	 load local word-5
+1293 ab 	 eq0
+1294 e5 21 	 jpfalse 1275
+1296 03 	 load param1
+1297 22 	 load local word-2
+1298 8d 20 	 load immediate 32
+129a 1d 	 store indexed byte
+129b 22 	 load local word-2
+129c ac 	 inc
+129d 32 	 store local word-2
+129e 24 	 load local word-4
+129f ac 	 inc
+12a0 34 	 store local word-4
+12a1 24 	 load local word-4
+12a2 98 	 load immediate 8
+12a3 a0 	 equal
+12a4 df 02 	 orjp 12a8
+12a6 23 	 load local word-3
+12a7 ab 	 eq0
+12a8 e5 37 	 jpfalse 1273
+12aa 03 	 load param1
+12ab 22 	 load local word-2
+12ac ad 	 dec
+12ad 90 	 load immediate 0
+12ae 1d 	 store indexed byte
+12af 84 01 	 leave 1
+12b1 ff 	 
+12b2 d4 f7 	 enter -9
+12b4 8d 14 	 load immediate 20
+12b6 d2 	 reserve
+12b7 32 	 store local word-2
+12b8 8c 10 	 call_rel 12ca
+12ba 4e 	 load global word14
+12bb 65 	 load stack word5
+12bc 77 	 store stack word7
+12bd 20 	 dup
+12be 73 	 store stack word3
+12bf 65 	 load stack word5
+12c0 61 	 load stack word1
+12c1 72 	 store stack word2
+12c2 63 	 load stack word3
+12c3 68 	 load stack word8
+12c4 20 	 dup
+12c5 70 	 store stack word0
+12c6 61 	 load stack word1
+12c7 74 	 store stack word4
+12c8 68 	 load stack word8
+12c9 3a 	 store local word-10
+12ca 9f 	 load immediate 15
+12cb 10 	 load (ix)
+12cc af 04 	 sub 4
+12ce 60 	 load stack word0
+12cf 8d 47 	 load immediate 71
+12d1 f1 	 call proc1
+12d2 90 	 load immediate 0
+12d3 34 	 store local word-4
+12d4 42 	 load global word2
+12d5 22 	 load local word-2
+12d6 8d 13 	 load immediate 19
+12d8 f0 02 	 call TEXTS.proc2
+12da 22 	 load local word-2
+12db 90 	 load immediate 0
+12dc 0d 	 load indexed byte
+12dd cb 	 not_zero
+12de e3 30 	 jpfalse 1310
+12e0 22 	 load local word-2
+12e1 8c 01 	 call_rel 12e4
+12e3 00 	 Error16
+12e4 90 	 load immediate 0
+12e5 91 	 load immediate 1
+12e6 f5 	 call proc5
+12e7 94 	 load immediate 4
+12e8 33 	 store local word-3
+12e9 22 	 load local word-2
+12ea 23 	 load local word-3
+12eb 0d 	 load indexed byte
+12ec 35 	 store local word-5
+12ed 25 	 load local word-5
+12ee 8d 2e 	 load immediate 46
+12f0 a0 	 equal
+12f1 e3 02 	 jpfalse 12f5
+12f3 90 	 load immediate 0
+12f4 35 	 store local word-5
+12f5 8e da 03 	 load immediate 986
+12f8 24 	 load local word-4
+12f9 b0 03 	 shl 3
+12fb 23 	 load local word-3
+12fc af 04 	 sub 4
+12fe a6 	 add
+12ff 25 	 load local word-5
+1300 1d 	 store indexed byte
+1301 23 	 load local word-3
+1302 ac 	 inc
+1303 33 	 store local word-3
+1304 25 	 load local word-5
+1305 ab 	 eq0
+1306 df 03 	 orjp 130b
+1308 23 	 load local word-3
+1309 9c 	 load immediate 12
+130a a0 	 equal
+130b e5 24 	 jpfalse 12e9
+130d 24 	 load local word-4
+130e ac 	 inc
+130f 34 	 store local word-4
+1310 24 	 load local word-4
+1311 98 	 load immediate 8
+1312 a0 	 equal
+1313 df 04 	 orjp 1319
+1315 42 	 load global word2
+1316 ef 00 13 	 call TEXTS.proc19
+1319 e5 47 	 jpfalse 12d4
+131b 24 	 load local word-4
+131c 98 	 load immediate 8
+131d a2 	 uless_than
+131e e3 08 	 jpfalse 1328
+1320 8e da 03 	 load immediate 986
+1323 24 	 load local word-4
+1324 b0 03 	 shl 3
+1326 90 	 load immediate 0
+1327 1d 	 store indexed byte
+1328 10 	 load (ix)
+1329 af 04 	 sub 4
+132b 60 	 load stack word0
+132c 10 	 load (ix)
+132d ee 30 	 call_with_frame proc48
+132f 84 00 	 leave 0
+1331 ff 	 
+1332 d4 ff 	 enter -1
+1334 03 	 load param1
+1335 ac 	 inc
+1336 04 	 load param2
+1337 d3 	 string_reserve
+1338 14 	 store param2
+1339 8e 48 03 	 load immediate 840
+133c 8e 48 03 	 load immediate 840
+133f 60 	 load stack word0
+1340 04 	 load param2
+1341 05 	 load param3
+1342 0d 	 load indexed byte
+1343 af 4c 	 sub 76
+1345 ea 	 power2
+1346 e9 	 bitwise_xor
+1347 70 	 store stack word0
+1348 84 03 	 leave 3
+134a ff 	 
+
+; SHELL.proc51: Find runtime error
+
+134b d4 fb 	 enter -5
+134d 8d 11 	 load immediate 17
+134f d2 	 reserve
+1350 32 	 store local word-2
+1351 8c 0c 	 call_rel 135f              ; proc42("Module name:", ORD(2 IN Params[0]) + 4)
+                                        ; (* ie. execute = 4 if bytecode, and 5 for native Z80 *)
+"Module name:"
+135f 9b 	 load immediate 11
+1360 92 	 load immediate 2
+1361 8e 48 03 	 load immediate 840
+1364 60 	 load stack word0
+1365 e7 	 bitwise_in
+1366 ae 04 	 add 4
+1368 ed 2a 	 call proc42
+136a 22 	 load local word-2          ; local2 := ComLine.inName;
+136b 0c 33 	 load COMLINE.word3
+136d 8d 11 	 load immediate 17
+136f 8d 14 	 load immediate 20
+1371 31 	 copy string
+1372 45 	 load global word5          ; IF global5 THEN
+1373 e3 2a 	 jpfalse 139f
+1375 83 03 07 	 load address COMLINE.WORD7 ; IF NOT proc4(ComLine.codepos)
+1378 f4 	 call proc4
+1379 b6 	 not
+137a e3 23 	 jpfalse 139f               ;   THEN
+137c 8c 09 	 call_rel 1387              ;     proc1("Enter PC:", "")
+"Enter PC:"
+1387 98 	 load immediate 8
+1388 8c 01 	 call_rel 138b
+138a 00
+138b 90 	 load immediate 0
+138c f1 	 call proc1
+138d 42 	 load global word2          ;    Texts.ReadChar(global2, local3)
+138e 80 fd 	 load local address -3
+1390 f0 01 	 call TEXTS.proc1
+1392 42 	 load global word2          ;    Texts.ReadAgain(global2)
+1393 ef 00 10 	 call TEXTS.proc16
+1396 83 03 07 	 load address COMLINE.WORD7 ; IF NOT proc4(ComLine.codepos)
+1399 f4 	 call proc4
+139a b6 	 not
+139b e3 02 	 jpfalse 139f               ;     THEN
+139d 90 	 load immediate 0           ;       global5 := FALSE
+139e 55 	 store global word5         ;     END;
+                                        ;   END;
+                                        ; END
+139f 0c 33 	 load COMLINE.word3         ; ComLine.inName := local2
+13a1 22 	 load local word-2
+13a2 8d 14 	 load immediate 20
+13a4 8d 11 	 load immediate 17
+13a6 31 	 copy string
+13a7 84 00 	 leave 0
+13a9 ff 	 
+13aa d4 f9 	 enter -7
+13ac 80 fe 	 load local address -2
+13ae 8c 06 	 call_rel 13b6
+13b0 4d 	 load global word13
+13b1 32 	 store local word-2
+13b2 2e 43 	 load stack word 67
+13b4 4f 	 load global word15
+13b5 4d 	 load global word13
+13b6 95 	 load immediate 5
+13b7 f7 	 call proc7
+13b8 e3 2f 	 jpfalse 13e9
+13ba 22 	 load local word-2
+13bb 8e 48 03 	 load immediate 840
+13be 8e 00 ff 	 load immediate 65280
+13c1 a6 	 add
+13c2 90 	 load immediate 0
+13c3 21 	 swap
+13c4 ef 01 13 	 call FILES.proc19
+13c7 22 	 load local word-2
+13c8 8e 48 03 	 load immediate 840
+13cb 60 	 load stack word0
+13cc f0 1e 	 call FILES.proc14
+13ce 22 	 load local word-2
+13cf 8e da 03 	 load immediate 986
+13d2 8e 00 ff 	 load immediate 65280
+13d5 a6 	 add
+13d6 90 	 load immediate 0
+13d7 21 	 swap
+13d8 ef 01 13 	 call FILES.proc19
+13db 22 	 load local word-2
+13dc 8e da 03 	 load immediate 986
+13df 8d 1f 	 load immediate 31
+13e1 f0 1f 	 call FILES.proc15
+13e3 80 fe 	 load local address -2
+13e5 f0 13 	 call FILES.proc3
+13e7 e2 1b 	 jp 1404
+13e9 8c 12 	 call_rel 13fd
+13eb "ERROR: File M2.COM"
+13fd 8d 11 	 load immediate 17
+13ff f8 	 call proc8
+1400 80 fc 	 load local address -4
+1402 f0 21 	 call TERMINAL.ReadChar
+1404 84 00 	 leave 0
+
+; table of options
+
+1406 4c ; L(ist)
+1407 4e ; N(ative)
+1408 58 ; eX(tensions)
+1409 54 ; T(est)
+140a 4f ; O(verflow)
+140b 55 ; U(upper=lower)
+140c 50 ; P(ath to search)
+140d 46 ; F(ind run-time error)
+140e 53 ; S(ave current selection)
+140f 51 ; Q(uit)
+
+1410 ff 	 
+
+; SHELL.proc46 : Options menu
+
+1411 d4 f9 	 enter -7
+1413 8d 48 	 load immediate 72
+1415 d2 	 reserve
+1416 32 	 store local word-2
+1417 22 	 load local word-2
+1418 ec 30 	 nested_call proc48
+141a fc 	 call proc12
+
+141b 8c 11 	 call_rel 142e
+141d "compiler options :"
+142e 8d 10 	 load immediate 16
+1430 f0 27 	 call TERMINAL.WriteString
+1432 f0 26 	 call TERMINAL.WriteLn
+1434 f0 26 	 call TERMINAL.WriteLn
+
+1436 8c 04 	 call_rel 143c
+1438 "list"
+143c 93 	 load immediate 3
+143d fb 	 call proc11
+143e 90 	 load immediate 0
+143f ec 2f 	 nested_call proc47
+1441 8d 20 	 load immediate 32
+1443 f0 25 	 call TERMINAL.WriteChar
+1445 8c 08 	 call_rel 144f
+1447 "Native  "
+144f 97 	 load immediate 7
+1450 fb 	 call proc11
+1451 92 	 load immediate 2
+1452 ec 2f 	 nested_call proc47
+1454 8d 65 	 load immediate 101
+1456 f0 25 	 call TERMINAL.WriteChar
+1458 8c 0b 	 call_rel 1465
+145a "Xtensions  "
+1465 9a      load immediate 10
+1466 fb 	 call proc11
+1467 9c 	 load immediate 12
+1468 ec 2f 	 nested_call proc47
+146a f0 26 	 call TERMINAL.WriteLn
+146c 8c 04 	 call_rel 1472
+146e "Test"
+1472 93      load immediate 3
+1473 fb 	 call proc11
+1474 98 	 load immediate 8
+1475 ec 2f 	 nested_call proc47
+1477 8d 20 	 load immediate 32
+1479 f0 25 	 call TERMINAL.WriteChar
+147b 8c 08 	 call_rel 1485
+147d "Overflow"
+1485 97 	 load immediate 7
+1486 fb 	 call proc11
+1487 93 	 load immediate 3
+1488 ec 2f 	 nested_call proc47
+148a 8d 20 	 load immediate 32
+148c f0 25 	 call TERMINAL.WriteChar
+148e 8c 0b 	 call_rel 149b
+1490 "Upper=lower"
+149b 9a 	 load immediate 10
+149c fb 	 call proc11
+149d 99 	 load immediate 9
+149e ec 2f 	 nested_call proc47
+14a0 f0 26 	 call TERMINAL.WriteLn
+14a2 f0 26 	 call TERMINAL.WriteLn
+14a4 f0 26 	 call TERMINAL.WriteLn
+14a6 8c 10 	 call_rel 14b8
+14a8 "Path to search: "
+14b8 9f 	 load immediate 15
+14b9 fb 	 call proc11
+14ba 22 	 load local word-2
+14bb 8d 47 	 load immediate 71
+14bd f0 27 	 call TERMINAL.WriteString
+14bf f0 26 	 call TERMINAL.WriteLn
+14c1 f0 26 	 call TERMINAL.WriteLn
+14c3 8c 13 	 call_rel 14d8
+14c5 "Find run-time error"
+14d8 8d 12 	 load immediate 18
+14da fb 	 call proc11
+14db f0 26 	 call TERMINAL.WriteLn
+14dd f0 26 	 call TERMINAL.WriteLn
+14df 8c 16 	 call_rel 14f7
+14e1 "Save current selection"
+14f7 8d 15 	 load immediate 21
+14f9 fb 	 call proc11
+14fa 91 	 load immediate 1
+14fb 33 	 store local word-3
+14fc 8d 20 	 load immediate 32
+14fe f0 25 	 call TERMINAL.WriteChar
+1500 23 	 load local word-3
+1501 ac 	 inc
+1502 33 	 store local word-3
+1503 23 	 load local word-3
+1504 98 	 load immediate 8
+1505 a3 	 ugreater_than
+1506 e5 0c 	 jpfalse 14fc
+1508 8c 04 	 call_rel 150e
+150a "Quit"
+150e 93 	 load immediate 3
+150f fb 	 call proc11
+1510 f0 26 	 call TERMINAL.WriteLn
+1512 f0 26 	 call TERMINAL.WriteLn
+1514 8d 3e 	 load immediate 62          ; '>' is the prompt char
+1516 02 35 	 load proc_addr proc53      ; addr of options table 
+1518 99 	 load immediate 9           ; size of table
+1519 f2 	 call proc2                 ; get menu command
+151a 34 	 store local word-4         ; index of command in local4
+151b 24 	 load local word-4
+151c cb 	 not_zero
+151d e3 27 	 jpfalse 1546
+151f 24 	 load local word-4
+1520 96 	 load immediate 6
+1521 a4 	 uless_or_equal
+1522 e3 09 	 jpfalse 152d
+1524 24 	 load local word-4
+1525 ad 	 dec
+1526 02 35 	 load proc_addr proc53
+1528 99 	 load immediate 9
+1529 ec 32 	 nested_call proc50
+152b e2 19 	 jp 1546
+152d 24 	 load local word-4
+152e 97 	 load immediate 7
+152f a0 	 equal
+1530 e3 04 	 jpfalse 1536
+1532 ec 31 	 nested_call proc49
+1534 e2 10 	 jp 1546
+1536 24 	 load local word-4
+1537 98 	 load immediate 8
+1538 a0 	 equal
+1539 e3 04 	 jpfalse 153f
+153b ec 33 	 nested_call proc51
+153d e2 07 	 jp 1546
+153f 24 	 load local word-4
+1540 99 	 load immediate 9
+1541 a0 	 equal
+1542 e3 02 	 jpfalse 1546
+1544 ec 34 	 nested_call proc52
+1546 24 	 load local word-4
+1547 9a 	 load immediate 10
+1548 a0 	 equal
+1549 df 01 	 orjp 154c
+154b 45 	 load global word5
+154c e1 cc fe 	 jpfalse 141a
+154f 88 	 leave0
+1550 ac 	 inc
+1551 17 	 store param5
+1552 61 	 load stack word1
+1553 d2 	 reserve
+1554 00 	 Error16
+1555 00 	 Error16
+
+
+
+; SHELL.proc0 : module initialisation
+
+1556 d4 ff 	 enter -1
+1558 e0 97 fa 	 jp 0ff1            ; jump to internal module initialization
+155b f0 2a 	 call TERMINAL.proc10   ; InitScreen 
+155d 8e 22 03 	 load immediate 802 ;
+1560 60 	 load stack word0
+1561 3d 13 	 store global word 19   ; global19 := mem[0322]
+1563 8e 22 03 	 load immediate 802
+1566 90 	 load immediate 0
+1567 70 	 store stack word0      ; mem[0322] := false
+                                    ; REPEAT
+1568 2d 13 	 load global word 19    ; IF global19 THEN
+156a e3 db 	 jpfalse 1647       
+156c fc 	 call proc12            ; clear screen
+
+156d 8c 10 	 call_rel 157f          ; push the address of the following string:
+156f "Selected drive: "
+157f 9f 	 load immediate 15      ; 15 characters
+1580 fb 	 call proc11
+
+1581 43 	 load global word3      ; get the current drive number
+1582 ae 41 	 add 65
+1584 f0 25 	 call TERMINAL.WriteChar
+1586 f0 26 	 call TERMINAL.WriteLn
+1588 f0 26 	 call TERMINAL.WriteLn
+
+158a 8c 0b 	 call_rel 1597          ; push the address of the following string:
+158c "Work file: "
+1597 9a 	 load immediate 10
+1598 fb 	 call proc11
+
+1599 8e 5c 05 	 load immediate 1372    ; current filename stored at 055c
+159c 8d 10 	 load immediate 16
+159e f0 27 	 call TERMINAL.WriteString
+15a0 f0 26 	 call TERMINAL.WriteLn
+15a2 f0 26 	 call TERMINAL.WriteLn
+15a4 f0 26 	 call TERMINAL.WriteLn
+
+15a6 8c 06 	 call_rel 15ae          ; push the address of the following string:
+15a8 "Edit  "
+15ae 95 	 load immediate 5
+15af fb 	 call proc11
+
+15b0 8c 0a 	 call_rel 15bc          ; push the address of the following string:
+15b2 "Compile   "
+15bc 99 	 load immediate 9
+15bd fb 	 call proc11
+
+15be 8c 08 	 call_rel 15c8          ; push the address of the following string:
+15c0 "Run    e"
+15c8 97 	 load immediate 7
+15c9 fb 	 call proc11
+
+15ca 8c 06 	 call_rel 15d2          ; push the address of the following string:
+15cc "Xecute"
+15d2 95 	 load immediate 5
+15d3 fb 	 call proc11
+
+15d4 f0 26 	 call TERMINAL.WriteLn
+15d6 f0 26 	 call TERMINAL.WriteLn
+15d8 8c 06 	 call_rel 15e0          ; push the address of the following string:
+15da "Link  "
+15e0 95 	 load immediate 5
+15e1 fb 	 call proc11
+
+15e2 8c 0a 	 call_rel 15ee          ; push the address of the following string:
+15e4 "Options   "
+15ee 99 	 load immediate 9
+15ef fb 	 call proc11
+
+15f0 8c 08 	 call_rel 15fa          ; push the address of the following string:
+15f2 "Quit  li"
+15fa 97 	 load immediate 7
+15fb fb 	 call proc11
+
+15fc 8c 07 	 call_rel 1605          ; push the address of the following string:
+15fe "Brarian"
+1605 96 	 load immediate 6
+1606 fb 	 call proc11
+
+1607 f0 26 	 call TERMINAL.WriteLn
+1609 f0 26 	 call TERMINAL.WriteLn
+160b f0 26 	 call TERMINAL.WriteLn
+160d 8c 06 	 call_rel 1615          ; push the address of the following string:
+160f "Dir   "
+1615 95 	 load immediate 5
+1616 fb 	 call proc11
+
+1617 8c 0a 	 call_rel 1623          ; push the address of the following string:
+1619 "Filecopy  "
+1623 99 	 load immediate 9
+1624 fb 	 call proc11
+
+1625 8c 08 	 call_rel 162f          ; push the address of the following string:
+1627 "Kill  re"
+162f 97 	 load immediate 7
+1630 fb 	 call proc11
+
+1631 8c 06 	 call_rel 1639          ; push the address of the following string:
+1633 "Name  "
+1639 95 	 load immediate 5
+163a fb 	 call proc11
+
+163b 8c 04 	 call_rel 1641          ; push the address of the following string:
+163d "Type"
+1641 93 	 load immediate 3
+1642 fb 	 call proc11
+1643 f0 26 	 call TERMINAL.WriteLn
+1645 f0 26 	 call TERMINAL.WriteLn
+                                    ; END (* IF global19 *)
+1647 8d 3e 	 load immediate 62      ; prompt char is >
+1649 8c 0f 	 call_rel 165a          ; push addr of following char table
+
+164b 53 ; S(elected drive)
+164c 57 ; W(ork file)
+164d 45 ; E(dit)
+164e 43 ; C(ompile)
+164f 52 ; R(un)
+1650 58 ; eX(ecute)
+1651 4c ; L(ink)
+1652 4f ; O(ptions)
+1653 51 ; Q(uit)
+1654 42 ; liB(rarian)
+1655 44 ; D(ir)
+1656 46 ; F(ilecopy)
+1657 4b ; K(ill)
+1658 4e ; reN(ame)
+1659 54 ; T(ype)
+
+165a 9e 	 load immediate 14      ; size of table
+165b f2 	 call proc2             ; read command
+165c 3d 12 	 store global word 18   ; index of command in global18
+165e 2d 12 	 load global word 18
+1660 e2 62 	 jp 16c4                ; jump for a CASE
+                                    ; SELECT
+1662 ed 27 	 call proc39
+1664 ce 	 jump_stack
+                                    ; WORKFILE
+1665 ed 28 	 call proc40
+1667 ce 	 jump_stack
+                                    ; EDIT
+1668 8c 0a 	 call_rel 1674          ; proc42("Edit file:", 2);
+166a "Edit file:"
+1674 99 	 load immediate 9
+1675 92 	 load immediate 2
+1676 ed 2a 	 call proc42
+1678 ce 	 jump_stack
+                                    ; COMPILE
+1679 8c 0d 	 call_rel 1688          ; proc42("Compile file:",3)
+167b "Compile file:"
+1688 9c 	 load immediate 12
+1689 93 	 load immediate 3
+168a ed 2a 	 call proc42
+168c 8e ff ff 	 load immediate 65535 ; ComLine.codepos := -1
+168f 1c 37 	 store COMLINE.word7
+1691 ce 	 jump_stack
+                                    ; RUN
+1692 ed 2d 	 call proc45
+1694 ce 	 jump_stack
+                                    ; EXECUTE
+1695 ed 2c 	 call proc44
+1697 ce 	 jump_stack
+                                    ; LINK
+1698 ed 2b 	 call proc43
+169a ce 	 jump_stack
+                                    ; OPTIONS
+169b ed 2e 	 call proc46
+169d ce 	 jump_stack
+                                    ; QUIT
+169e f0 26 	 call TERMINAL.WriteLn
+16a0 91 	 load immediate 1
+16a1 55 	 store global word5
+16a2 8e ff ff 	 load immediate 65535
+16a5 1c 36 	 store COMLINE.word6
+16a7 ce 	 jump_stack
+                                    ; LIBRARIAN
+16a8 8c 07 	 call_rel 16b1
+16aa "LIBRARY"
+16b1 96 	 load immediate 6
+16b2 f0 46 	 call LOADER.proc6
+16b4 ce 	 jump_stack
+                                    ; DIR
+16b5 ed 1a 	 call proc26
+16b7 ce 	 jump_stack
+                                    ; FILECOPY
+16b8 ed 1e 	 call proc30
+16ba ce 	 jump_stack
+                                    ; KILL
+16bb ed 24 	 call proc36
+16bd ce 	 jump_stack
+                                    ; RENAME
+16be ed 23 	 call proc35
+16c0 ce 	 jump_stack
+                                    ; TYPE
+16c1 ed 26 	 call proc38
+16c3 ce 	 jump_stack
+16c4 cd 01 80 0e 00 1f 00 	 callswitch (return to 16e9)
+	case 91 => 1662
+	case 92 => 1665
+	case 93 => 1668
+	case 94 => 1679
+	case 95 => 1692
+	case 96 => 1695
+	case 97 => 1698
+	case 98 => 169b
+	case 99 => 169e
+	case 100 => 16a8
+	case 101 => 16b5
+	case 102 => 16b8
+	case 103 => 16bb
+	case 104 => 16be
+	case 105 => 16c1
+16e9 2d 12 	 load global word 18        ; global19 := global18 IN {0,1,2,8,10}
+16eb 8e 07 05 	 load immediate 1287    ; (* ie. SELECT,EDIT,QUIT,LIBRARIAN,DIR*)
+16ee e7 	 bitwise_in
+16ef 3d 13 	 store global word 19
+16f1 45 	 load global word5          ; UNTIL global5;
+16f2 e1 74 fe 	 jpfalse 1568
+16f5 81 02 	 load global address 2      ; TEXTS.CloseText(global2)
+16f7 ef 00 19 	 call TEXTS.proc25
+16fa f0 2b 	 call TERMINAL.proc11       ; CloseScreen
+16fc 50 	 end_program
+
+16fd 08 fd 	 load local dword-3
+16ff aa 	 umod
+1700 fc 	 call proc12
+1701 49 	 load global word9
+1702 fc 	 call proc12
+1703 2e fc 	 load stack word 252
+1705 ac 	 inc
+1706 fb 	 call proc11
+1707 65 	 load stack word5
+1708 fb 	 call proc11
+1709 36 	 store local word-6
+170a fb 	 call proc11
+170b 05 	 load param3
+170c fd
+170d b7 	 complement
+170e fa 	 call proc10
+170f 0b fa d7 	 load .dword215
+1712 f9 	 call proc9
+1713 88 	 leave0
+1714 f9 	 call proc9
+1715 47 	 load global word7
+1716 f9 	 call proc9
+1717 f2 	 call proc2
+1718 f8 	 call proc8
+1719 7a 	 store stack word10
+171a f8 	 call proc8
+171b b7 	 complement
+171c f7 	 call proc7
+171d 7b 	 store stack word11
+171e f6 	 call proc6
+171f 9e 	 load immediate 14
+1720 f6 	 call proc6
+1721 8f f5 3f f4 32 	 load immediate dword 854867957
+1726 f4 	 call proc4
+1727 0d 	 load indexed byte
+1728 f4 	 call proc4
+1729 66 	 load stack word6
+172a f3 	 call proc3
+172b 40 f4 	 
+172d 25 	 load local word-5
+172e f3 	 call proc3
+172f d8 	 real_mul
+1730 f0 42 	 call LOADER.proc2
+1732 f1
+1733 62 	 load stack word2
+1734 f1
+1735 c0 	 uadd_checked
+1736 f0 69 	 call .proc9
+1738 f0 bf 	 call .proc15
+173a ef 1e ef 	 call .proc239
+173d 8b 	 leave6
+173e ed d8 	 call proc216
+1740 ec f2 	 nested_call proc242
+1742 eb 	 extern_proc_call
+1743 27 	 load local word-7
+1744 eb 	 extern_proc_call
+1745 73 	 store stack word3
+1746 ea 	 power2
+1747 30 	 copy block
+1748 ea 	 power2
+1749 95 	 load immediate 5
+174a e9 	 bitwise_xor
+174b 67 	 load stack word7
+174c e9 	 bitwise_xor
+174d b3 	 igreater_than
+174e e8 	 bitwise_and
+174f 07 	 load param5
+1750 eb 	 extern_proc_call
+1751 e2 ea 	 jp 183d
+1753 65 	 load stack word5
+1754 ec 25 	 nested_call proc37
+1756 ec 03 	 nested_call proc3
+1758 ec c3 	 nested_call proc195
+175a ee a8 	 call_with_frame proc168
+175c ee f5 	 call_with_frame proc245
+175e ed 58 	 call proc88
+1760 eb 	 extern_proc_call
+1761 79 	 store stack word9
+1762 ec 70 	 nested_call proc112
+1764 ea 	 power2
+1765 e4 e9 	 jp 167e
+1767 ee fd 	 call_with_frame proc253
+1769 00 	 Error16
+176a 00 	 Error16
+176b 00 	 Error16
+176c 00 	 Error16
+176d 00 	 Error16
+176e 00 	 Error16
+176f 00 	 Error16
+1770 00 	 Error16
+1771 00 	 Error16
+1772 00 	 Error16
+1773 00 	 Error16
+
+
+

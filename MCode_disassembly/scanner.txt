@@ -1,0 +1,1901 @@
+module start at 0b62
+0b62 : Module SCANNER
+	depends on COMPILER 
+	depends on FILES 
+	depends on TEXTS 
+	depends on COMLINE 
+	depends on LOADER 
+	depends on DOUBLES 
+	depends on ERRORS 
+	depends on SYMTAB 
+	depends on CODEGEN 
+
+SCANNER.proc0: 0aeb
+SCANNER.proc1: 076c
+SCANNER.proc2: 0322
+SCANNER.proc3: 08ef
+SCANNER.proc4: 08e0
+SCANNER.proc5: 00f4
+SCANNER.proc6: 0100
+SCANNER.proc7: 00ad
+SCANNER.proc8: 091b
+SCANNER.proc9: 095e
+SCANNER.proc10: 096d
+SCANNER.proc11: 097f
+SCANNER.proc12: 0990
+SCANNER.proc13: 09cf
+SCANNER.proc14: 01a8
+SCANNER.proc15: 019b
+SCANNER.proc16: 0188
+SCANNER.proc17: 022b
+SCANNER.proc18: 01d7
+SCANNER.proc19: 0218
+SCANNER.proc20: 01f6
+SCANNER.proc21: 09ba
+SCANNER.proc22: 0110
+SCANNER.proc23: 0148
+SCANNER.F4FCT2: 016f
+SCANNER.proc25: 0017
+SCANNER.proc26: 0010
+SCANNER.proc27: 0055
+SCANNER.proc28: 02d0
+SCANNER.proc29: 02ec
+SCANNER.COMPIL: 0a0a
+SCANNER.AAAAAA: 0000
+SCANNER.proc32: 023c
+SCANNER.proc33: 0263
+SCANNER.proc34: 02b2
+SCANNER.NUMBER: 0449
+SCANNER.proc36: 0394
+SCANNER.proc37: 0410
+SCANNER.proc38: 066f
+SCANNER.proc39: 06dc
+SCANNER.proc40: 0a01
+
+
+0000 20 	 dup
+0001 65 	 load stack word5
+0002 78 	 store stack word8
+0003 70 	 store stack word0
+0004 65 	 load stack word5
+0005 63 	 load stack word3
+0006 74 	 store stack word4
+0007 65 	 load stack word5
+0008 64 	 load stack word4
+0009 2c 20 	 load local word +32
+000b 62 	 load stack word2
+000c 75 	 store stack word5
+000d 74 	 store stack word4
+000e 20 	 dup
+000f ff 	 
+0010 d4 ff 	 enter -1
+0012 03 	 load param1
+0013 f0 61 	 call ERRORS.proc1
+0015 89 	 leave2
+0016 ff 	 
+0017 d4 fd 	 enter -3
+0019 93 	 load immediate 3
+001a 04 	 load param2
+001b 40 12 	 reserve_string
+001d 14 	 store param2
+001e 90 	 load immediate 0
+001f 32 	 store local word-2
+0020 22 	 load local word-2
+0021 05 	 load param3
+0022 af 03 	 sub 3
+0024 a2 	 uless_than
+0025 de 04 	 andjp 002b
+0027 06 	 load param4
+0028 22 	 load local word-2
+0029 0d 	 load indexed byte
+002a cb 	 not_zero
+002b de 06 	 andjp 0033
+002d 06 	 load param4
+002e 22 	 load local word-2
+002f 0d 	 load indexed byte
+0030 8d 2e 	 load immediate 46
+0032 a1 	 not_equal
+0033 e3 05 	 jpfalse 003a
+0035 22 	 load local word-2
+0036 ac 	 inc
+0037 32 	 store local word-2
+0038 e4 1a 	 jp 0020
+003a 03 	 load param1
+003b df 06 	 orjp 0043
+003d 06 	 load param4
+003e 22 	 load local word-2
+003f 0d 	 load indexed byte
+0040 8d 2e 	 load immediate 46
+0042 a1 	 not_equal
+0043 e3 0d 	 jpfalse 0052
+0045 06 	 load param4
+0046 22 	 load local word-2
+0047 8d 2e 	 load immediate 46
+0049 1d 	 store indexed byte
+004a 04 	 load param2
+004b 06 	 load param4
+004c 22 	 load local word-2
+004d ac 	 inc
+004e a6 	 add
+004f 93 	 load immediate 3
+0050 40 0e 	 MOVE
+0052 84 84 	 leave 132
+0054 ff 	 
+0055 d4 fb 	 enter -5
+0057 04 	 load param2
+0058 ac 	 inc
+0059 05 	 load param3
+005a 40 12 	 reserve_string
+005c 15 	 store param3
+005d 90 	 load immediate 0
+005e 32 	 store local word-2
+005f 22 	 load local word-2
+0060 0c 73 	 load SYMTAB.word3
+0062 a2 	 uless_than
+0063 de 0c 	 andjp 0071
+0065 0c 76 	 load SYMTAB.word6
+0067 22 	 load local word-2
+0068 9a 	 load immediate 10
+0069 a8 	 umul
+006a a6 	 add
+006b 05 	 load param3
+006c 98 	 load immediate 8
+006d 04 	 load param2
+006e ac 	 inc
+006f c4 	 string_comp
+0070 a1 	 not_equal
+0071 e3 05 	 jpfalse 0078
+0073 22 	 load local word-2
+0074 ac 	 inc
+0075 32 	 store local word-2
+0076 e4 19 	 jp 005f
+0078 0c 76 	 load SYMTAB.word6
+007a 22 	 load local word-2
+007b 9a 	 load immediate 10
+007c a8 	 umul
+007d a6 	 add
+007e 33 	 store local word-3
+007f 22 	 load local word-2
+0080 0c 73 	 load SYMTAB.word3
+0082 a2 	 uless_than
+0083 e3 0d 	 jpfalse 0092
+0085 23 	 load local word-3
+0086 64 	 load stack word4
+0087 03 	 load param1
+0088 a1 	 not_equal
+0089 e3 05 	 jpfalse 0090
+008b 9c 	 load immediate 12
+008c 23 	 load local word-3
+008d 97 	 load immediate 7
+008e f0 62 	 call ERRORS.proc2
+0090 e2 17 	 jp 00a9
+0092 22 	 load local word-2
+0093 9f 	 load immediate 15
+0094 a3 	 ugreater_than
+0095 e3 04 	 jpfalse 009b
+0097 8d 54 	 load immediate 84
+0099 ed 1a 	 call proc26
+009b 23 	 load local word-3
+009c 05 	 load param3
+009d 98 	 load immediate 8
+009e 04 	 load param2
+009f ac 	 inc
+00a0 31 	 copy string
+00a1 23 	 load local word-3
+00a2 03 	 load param1
+00a3 74 	 store stack word4
+00a4 0c 73 	 load SYMTAB.word3
+00a6 ac 	 inc
+00a7 1c 73 	 store SYMTAB.word3
+00a9 22 	 load local word-2
+00aa 85 83 	 fct_leave 131
+00ac ff 	 
+00ad d4 ff 	 enter -1
+00af 04 	 load param2
+00b0 03 	 load param1
+00b1 40 05 	 ALLOCATE
+00b3 8a 	 leave4
+00b4 00 	 Error16
+00b5 00 	 Error16
+00b6 00 	 Error16
+00b7 00 	 Error16
+00b8 00 	 Error16
+00b9 00 	 Error16
+00ba 00 	 Error16
+00bb 00 	 Error16
+00bc 00 	 Error16
+00bd 00 	 Error16
+00be 00 	 Error16
+00bf 00 	 Error16
+00c0 00 	 Error16
+00c1 00 	 Error16
+00c2 00 	 Error16
+00c3 00 	 Error16
+00c4 00 	 Error16
+00c5 00 	 Error16
+00c6 00 	 Error16
+00c7 00 	 Error16
+00c8 00 	 Error16
+00c9 00 	 Error16
+00ca 00 	 Error16
+00cb 00 	 Error16
+00cc 00 	 Error16
+00cd 00 	 Error16
+00ce 00 	 Error16
+00cf 00 	 Error16
+00d0 00 	 Error16
+00d1 00 	 Error16
+00d2 00 	 Error16
+00d3 00 	 Error16
+00d4 00 	 Error16
+00d5 00 	 Error16
+00d6 00 	 Error16
+00d7 00 	 Error16
+00d8 00 	 Error16
+00d9 00 	 Error16
+00da 00 	 Error16
+00db 00 	 Error16
+00dc 00 	 Error16
+00dd 00 	 Error16
+00de 00 	 Error16
+00df 00 	 Error16
+00e0 00 	 Error16
+00e1 00 	 Error16
+00e2 00 	 Error16
+00e3 00 	 Error16
+00e4 00 	 Error16
+00e5 00 	 Error16
+00e6 00 	 Error16
+00e7 00 	 Error16
+00e8 00 	 Error16
+00e9 00 	 Error16
+00ea 00 	 Error16
+00eb 00 	 Error16
+00ec 00 	 Error16
+00ed 00 	 Error16
+00ee 00 	 Error16
+00ef 00 	 Error16
+00f0 00 	 Error16
+00f1 00 	 Error16
+00f2 00 	 Error16
+00f3 ff 	 
+00f4 d4 ff 	 enter -1
+00f6 03 	 load param1
+00f7 8e 16 03 	 load immediate 790
+00fa 60 	 load stack word0
+00fb af 3c 	 sub 60
+00fd 70 	 store stack word0
+00fe 89 	 leave2
+00ff ff 	 
+0100 d4 ff 	 enter -1
+0102 8e 16 03 	 load immediate 790
+0105 03 	 load param1
+0106 ae 3c 	 add 60
+0108 70 	 store stack word0
+0109 03 	 load param1
+010a 8e e3 3a 	 load immediate 15075
+010d 70 	 store stack word0
+010e 89 	 leave2
+010f ff 	 
+0110 d4 fd 	 enter -3
+0112 05 	 load param3
+0113 60 	 load stack word0
+0114 32 	 store local word-2
+0115 22 	 load local word-2
+0116 cb 	 not_zero
+0117 e3 10 	 jpfalse 0129
+0119 04 	 load param2
+011a 22 	 load local word-2
+011b 61 	 load stack word1
+011c 03 	 load param1
+011d ed 17 	 call proc23
+011f e3 03 	 jpfalse 0124
+0121 22 	 load local word-2
+0122 85 83 	 fct_leave 131
+0124 22 	 load local word-2
+0125 60 	 load stack word0
+0126 32 	 store local word-2
+0127 e4 14 	 jp 0115
+0129 90 	 load immediate 0
+012a 85 83 	 fct_leave 131
+012c 00 	 Error16
+012d 00 	 Error16
+012e 00 	 Error16
+012f 00 	 Error16
+0130 00 	 Error16
+0131 00 	 Error16
+0132 00 	 Error16
+0133 00 	 Error16
+0134 00 	 Error16
+0135 00 	 Error16
+0136 00 	 Error16
+0137 00 	 Error16
+0138 00 	 Error16
+0139 00 	 Error16
+013a 00 	 Error16
+013b 00 	 Error16
+013c 00 	 Error16
+013d 00 	 Error16
+013e 00 	 Error16
+013f 00 	 Error16
+0140 00 	 Error16
+0141 00 	 Error16
+0142 00 	 Error16
+0143 00 	 Error16
+0144 00 	 Error16
+0145 00 	 Error16
+0146 00 	 Error16
+0147 ff 	 
+0148 d4 ff 	 enter -1
+014a 05 	 load param3
+014b 03 	 load param1
+014c e3 19 	 jpfalse 0167
+014e 20 	 dup
+014f ac 	 inc
+0150 15 	 store param3
+0151 90 	 load immediate 0
+0152 0d 	 load indexed byte
+0153 20 	 dup
+0154 04 	 load param2
+0155 20 	 dup
+0156 ac 	 inc
+0157 14 	 store param2
+0158 90 	 load immediate 0
+0159 0d 	 load indexed byte
+015a e9 	 bitwise_xor
+015b 8d df 	 load immediate 223
+015d e8 	 bitwise_and
+015e ab 	 eq0
+015f de 04 	 andjp 0165
+0161 ab 	 eq0
+0162 e5 1a 	 jpfalse 014a
+0164 91 	 load immediate 1
+0165 85 83 	 fct_leave 131
+0167 04 	 load param2
+0168 90 	 load immediate 0
+0169 ad 	 dec
+016a 20 	 dup
+016b c4 	 string_comp
+016c a0 	 equal
+016d 85 83 	 fct_leave 131
+016f d4 ff 	 enter -1
+0171 90 	 load immediate 0
+0172 ad 	 dec
+0173 ac 	 inc
+0174 20 	 dup
+0175 03 	 load param1
+0176 a4 	 uless_or_equal
+0177 e3 07 	 jpfalse 0180
+0179 20 	 dup
+017a 04 	 load param2
+017b 21 	 swap
+017c 0d 	 load indexed byte
+017d ab 	 eq0
+017e e5 0d 	 jpfalse 0173
+0180 20 	 dup
+0181 ab 	 eq0
+0182 e3 01 	 jpfalse 0185
+0184 ac 	 inc
+0185 85 82 	 fct_leave 130
+0187 ff 	 
+0188 d4 fd 	 enter -3
+018a 04 	 load param2
+018b 03 	 load param1
+018c ed 18 	 call proc24
+018e 32 	 store local word-2
+018f 05 	 load param3
+0190 22 	 load local word-2
+0191 ac 	 inc
+0192 f7 	 call proc7
+0193 04 	 load param2
+0194 05 	 load param3
+0195 60 	 load stack word0
+0196 22 	 load local word-2
+0197 40 0e 	 MOVE
+0199 8b 	 leave6
+019a ff 	 
+019b d4 fd 	 enter -3
+019d 80 fe 	 load local address -2
+019f 9e 	 load immediate 14
+01a0 f7 	 call proc7
+01a1 22 	 load local word-2
+01a2 03 	 load param1
+01a3 74 	 store stack word4
+01a4 22 	 load local word-2
+01a5 85 81 	 fct_leave 129
+01a7 ff 	 
+01a8 d4 fd 	 enter -3
+01aa 03 	 load param1
+01ab 91 	 load immediate 1
+01ac a4 	 uless_or_equal
+01ad e3 06 	 jpfalse 01b5
+01af 80 fe 	 load local address -2
+01b1 9e 	 load immediate 14
+01b2 f7 	 call proc7
+01b3 e2 1b 	 jp 01d0
+01b5 03 	 load param1
+01b6 96 	 load immediate 6
+01b7 a4 	 uless_or_equal
+01b8 e3 06 	 jpfalse 01c0
+01ba 80 fe 	 load local address -2
+01bc 9a 	 load immediate 10
+01bd f7 	 call proc7
+01be e2 10 	 jp 01d0
+01c0 03 	 load param1
+01c1 9b 	 load immediate 11
+01c2 a4 	 uless_or_equal
+01c3 e3 06 	 jpfalse 01cb
+01c5 80 fe 	 load local address -2
+01c7 9c 	 load immediate 12
+01c8 f7 	 call proc7
+01c9 e2 05 	 jp 01d0
+01cb 80 fe 	 load local address -2
+01cd 8d 10 	 load immediate 16
+01cf f7 	 call proc7
+01d0 22 	 load local word-2
+01d1 03 	 load param1
+01d2 74 	 store stack word4
+01d3 22 	 load local word-2
+01d4 85 81 	 fct_leave 129
+01d6 ff 	 
+01d7 d4 fd 	 enter -3
+01d9 fc 	 call proc12
+01da 4d 	 load global word13
+01db 0c 79 	 load SYMTAB.word9
+01dd a0 	 equal
+01de e3 06 	 jpfalse 01e6
+01e0 91 	 load immediate 1
+01e1 4b 	 load global word11
+01e2 8d 80 	 load immediate 128
+01e4 f0 62 	 call ERRORS.proc2
+01e6 03 	 load param1
+01e7 ff 	 call proc15
+01e8 32 	 store local word-2
+01e9 22 	 load local word-2
+01ea 82 01 	 load stack address 1
+01ec 4b 	 load global word11
+01ed 8d 80 	 load immediate 128
+01ef ed 10 	 call proc16
+01f1 f1 	 call proc1
+01f2 22 	 load local word-2
+01f3 85 81 	 fct_leave 129
+01f5 ff 	 
+01f6 d4 ff 	 enter -1
+01f8 0c 79 	 load SYMTAB.word9
+01fa 82 01 	 load stack address 1
+01fc 03 	 load param1
+01fd 61 	 load stack word1
+01fe 99 	 load immediate 9
+01ff 42 	 load global word2
+0200 e7 	 bitwise_in
+0201 ed 16 	 call proc22
+0203 cb 	 not_zero
+0204 e3 07 	 jpfalse 020d
+0206 91 	 load immediate 1
+0207 03 	 load param1
+0208 61 	 load stack word1
+0209 8d 80 	 load immediate 128
+020b f0 62 	 call ERRORS.proc2
+020d 03 	 load param1
+020e 0c 79 	 load SYMTAB.word9
+0210 61 	 load stack word1
+0211 70 	 store stack word0
+0212 0c 79 	 load SYMTAB.word9
+0214 03 	 load param1
+0215 71 	 store stack word1
+0216 89 	 leave2
+0217 ff 	 
+0218 d4 fd 	 enter -3
+021a 03 	 load param1
+021b ed 12 	 call proc18
+021d 32 	 store local word-2
+021e 22 	 load local word-2
+021f 0c 79 	 load SYMTAB.word9
+0221 61 	 load stack word1
+0222 70 	 store stack word0
+0223 0c 79 	 load SYMTAB.word9
+0225 22 	 load local word-2
+0226 71 	 store stack word1
+0227 22 	 load local word-2
+0228 85 81 	 fct_leave 129
+022a ff 	 
+022b d4 ff 	 enter -1
+022d 83 07 09 	 load address SYMTAB.WORD9
+0230 9e 	 load immediate 14
+0231 f7 	 call proc7
+0232 0c 79 	 load SYMTAB.word9
+0234 04 	 load param2
+0235 70 	 store stack word0
+0236 0c 79 	 load SYMTAB.word9
+0238 03 	 load param1
+0239 71 	 store stack word1
+023a 8a 	 leave4
+023b ff 	 
+023c d4 ff 	 enter -1
+023e 92 	 load immediate 2
+023f f0 2e 	 call TEXTS.proc14
+0241 2d 17 	 load global word 23
+0243 e3 0b 	 jpfalse 0250
+0245 92 	 load immediate 2
+0246 0c 82 	 load CODEGEN.word2
+0248 2d 16 	 load global word 22
+024a a7 	 sub
+024b 94 	 load immediate 4
+024c f0 2b 	 call TEXTS.proc11
+024e e2 05 	 jp 0255
+0250 92 	 load immediate 2
+0251 94 	 load immediate 4
+0252 ef 02 15 	 call TEXTS.proc21
+0255 92 	 load immediate 2
+0256 8e 4e 03 	 load immediate 846
+0259 60 	 load stack word0
+025a f0 28 	 call TEXTS.proc8
+025c 92 	 load immediate 2
+025d 8d 20 	 load immediate 32
+025f f0 28 	 call TEXTS.proc8
+0261 88 	 leave0
+0262 ff 	 
+0263 d4 ff 	 enter -1
+0265 43 	 load global word3
+0266 ac 	 inc
+0267 8d ff 	 load immediate 255
+0269 e8 	 bitwise_and
+026a 8d 20 	 load immediate 32
+026c a3 	 ugreater_than
+026d e3 05 	 jpfalse 0274
+026f 92 	 load immediate 2
+0270 43 	 load global word3
+0271 f0 28 	 call TEXTS.proc8
+0273 88 	 leave0
+0274 43 	 load global word3
+0275 9a 	 load immediate 10
+0276 a0 	 equal
+0277 e3 07 	 jpfalse 0280
+0279 8d 70 	 load immediate 112
+027b 90 	 load immediate 0
+027c 70 	 store stack word0
+027d ed 20 	 call proc32
+027f 88 	 leave0
+0280 43 	 load global word3
+0281 99 	 load immediate 9
+0282 a0 	 equal
+0283 e3 15 	 jpfalse 029a
+0285 92 	 load immediate 2
+0286 8d 20 	 load immediate 32
+0288 f0 28 	 call TEXTS.proc8
+028a 8d 70 	 load immediate 112
+028c 20 	 dup
+028d 60 	 load stack word0
+028e ac 	 inc
+028f 70 	 store stack word0
+0290 8d 70 	 load immediate 112
+0292 60 	 load stack word0
+0293 97 	 load immediate 7
+0294 e8 	 bitwise_and
+0295 ab 	 eq0
+0296 e5 13 	 jpfalse 0285
+0298 e2 16 	 jp 02b0
+029a 43 	 load global word3
+029b 8d 20 	 load immediate 32
+029d a2 	 uless_than
+029e de 03 	 andjp 02a3
+02a0 43 	 load global word3
+02a1 9d 	 load immediate 13
+02a2 a1 	 not_equal
+02a3 e3 0b 	 jpfalse 02b0
+02a5 92 	 load immediate 2
+02a6 8d 5e 	 load immediate 94
+02a8 f0 28 	 call TEXTS.proc8
+02aa 92 	 load immediate 2
+02ab 43 	 load global word3
+02ac ae 40 	 add 64
+02ae f0 28 	 call TEXTS.proc8
+02b0 88 	 leave0
+02b1 ff 	 
+02b2 d4 fd 	 enter -3
+02b4 2d 10 	 load global word 16
+02b6 8d 80 	 load immediate 128
+02b8 8d 80 	 load immediate 128
+02ba f0 1c 	 call FILES.proc12
+02bc 32 	 store local word-2
+02bd 22 	 load local word-2
+02be 8d 80 	 load immediate 128
+02c0 a2 	 uless_than
+02c1 e3 06 	 jpfalse 02c9
+02c3 8d 80 	 load immediate 128
+02c5 22 	 load local word-2
+02c6 8d 1a 	 load immediate 26
+02c8 1d 	 store indexed byte
+02c9 8d 6c 	 load immediate 108
+02cb 90 	 load immediate 0
+02cc 70 	 store stack word0
+02cd f2 	 call proc2
+02ce 88 	 leave0
+02cf ff 	 
+02d0 d4 ff 	 enter -1
+02d2 8d 20 	 load immediate 32
+02d4 53 	 store global word3
+02d5 8d 70 	 load immediate 112
+02d7 90 	 load immediate 0
+02d8 70 	 store stack word0
+02d9 8d 6c 	 load immediate 108
+02db 8d 80 	 load immediate 128
+02dd 70 	 store stack word0
+02de 90 	 load immediate 0
+02df 42 	 load global word2
+02e0 e7 	 bitwise_in
+02e1 e3 02 	 jpfalse 02e5
+02e3 ed 20 	 call proc32
+02e5 2d 10 	 load global word 16
+02e7 ef 01 14 	 call FILES.proc20
+02ea 88 	 leave0
+02eb ff 	 
+02ec d4 fd 	 enter -3
+02ee 81 10 	 load global address 16 ; IF NOT Files.Open(global16,ComLine.inName)
+02f0 0c 33 	 load COMLINE.word3
+02f2 8d 13 	 load immediate 19
+02f4 f0 11 	 call FILES.proc1
+02f6 b6 	 not
+02f7 e3 01 	 jpfalse 02fa           ; THEN HALT END;
+02f9 50 	 end_program
+02fa ed 1c 	 call proc28
+02fc 2d 10 	 load global word 16
+02fe 2d 19 	 load global word 25
+0300 b1 07 	 shr 7
+0302 b0 07 	 shl 7
+0304 90 	 load immediate 0
+0305 21 	 swap
+0306 ef 01 13 	 call FILES.proc19
+0309 2d 10 	 load global word 16
+030b 8d 80 	 load immediate 128
+030d 8d 80 	 load immediate 128
+030f f0 1c 	 call FILES.proc12
+0311 32 	 store local word-2
+0312 8d 6c 	 load immediate 108
+0314 2d 19 	 load global word 25
+0316 8d 7f 	 load immediate 127
+0318 e8 	 bitwise_and
+0319 70 	 store stack word0
+031a 8d 6e 	 load immediate 110
+031c 2d 19 	 load global word 25
+031e 70 	 store stack word0
+031f f1 	 call proc1
+0320 88 	 leave0
+0321 ff 	 
+0322 d4 fd 	 enter -3
+0324 8d 6c 	 load immediate 108
+0326 60 	 load stack word0
+0327 8d 80 	 load immediate 128
+0329 a0 	 equal
+032a e3 04 	 jpfalse 0330
+032c ed 22 	 call proc34
+032e e2 3f 	 jp 036f
+0330 8d 80 	 load immediate 128
+0332 8d 6c 	 load immediate 108
+0334 60 	 load stack word0
+0335 0d 	 load indexed byte
+0336 32 	 store local word-2
+0337 8d 6c 	 load immediate 108
+0339 20 	 dup
+033a 60 	 load stack word0
+033b ac 	 inc
+033c 70 	 store stack word0
+033d 22 	 load local word-2
+033e 8d 1a 	 load immediate 26
+0340 a0 	 equal
+0341 e3 05 	 jpfalse 0348
+0343 8d ff 	 load immediate 255
+0345 53 	 store global word3
+0346 e2 02 	 jp 034a
+0348 22 	 load local word-2
+0349 53 	 store global word3
+034a 8d 6e 	 load immediate 110
+034c 20 	 dup
+034d 60 	 load stack word0
+034e ac 	 inc
+034f 70 	 store stack word0
+0350 90 	 load immediate 0
+0351 42 	 load global word2
+0352 e7 	 bitwise_in
+0353 e3 1a 	 jpfalse 036f
+0355 22 	 load local word-2
+0356 8d 20 	 load immediate 32
+0358 a5 	 ugreater_or_equal
+0359 e3 12 	 jpfalse 036d
+035b 8d 70 	 load immediate 112
+035d 20 	 dup
+035e 60 	 load stack word0
+035f ac 	 inc
+0360 70 	 store stack word0
+0361 8d 72 	 load immediate 114
+0363 60 	 load stack word0
+0364 cb 	 not_zero
+0365 e3 06 	 jpfalse 036d
+0367 92 	 load immediate 2
+0368 22 	 load local word-2
+0369 c3 	 system
+036a 88 	 leave0
+036b 00 	 Error16
+036c 00 	 Error16
+036d ed 21 	 call proc33
+036f 88 	 leave0
+0370 00 	 Error16
+0371 00 	 Error16
+0372 00 	 Error16
+0373 00 	 Error16
+0374 00 	 Error16
+0375 00 	 Error16
+0376 00 	 Error16
+0377 00 	 Error16
+0378 00 	 Error16
+0379 00 	 Error16
+037a 00 	 Error16
+037b 00 	 Error16
+037c 00 	 Error16
+037d 00 	 Error16
+037e 00 	 Error16
+037f 00 	 Error16
+0380 00 	 Error16
+0381 00 	 Error16
+0382 00 	 Error16
+0383 00 	 Error16
+0384 00 	 Error16
+0385 00 	 Error16
+0386 00 	 Error16
+0387 00 	 Error16
+0388 00 	 Error16
+0389 00 	 Error16
+038a 00 	 Error16
+038b 00 	 Error16
+038c 00 	 Error16
+038d 00 	 Error16
+038e 00 	 Error16
+038f 00 	 Error16
+0390 00 	 Error16
+0391 00 	 Error16
+0392 00 	 Error16
+0393 ff 	 
+0394 d4 f9 	 enter -7
+0396 90 	 load immediate 0
+0397 32 	 store local word-2
+0398 8f 00 00 80 3f 	 load immediate dword 1065353216
+039d 18 fc 	 store local dword -4
+039f 03 	 load param1
+03a0 91 	 load immediate 1
+03a1 e8 	 bitwise_and
+03a2 e3 5c 	 jpfalse 0400
+03a4 22 	 load local word-2
+03a5 e2 42 	 jp 03e9
+03a7 08 fc 	 load local dword-4
+03a9 8f 00 00 20 41 	 load immediate dword 1092616192
+03ae d8 	 real_mul
+03af 18 fc 	 store local dword -4
+03b1 ce 	 jump_stack
+03b2 08 fc 	 load local dword-4
+03b4 8f 00 00 c8 42 	 load immediate dword 1120403456
+03b9 d8 	 real_mul
+03ba 18 fc 	 store local dword -4
+03bc ce 	 jump_stack
+03bd 08 fc 	 load local dword-4
+03bf 8f 00 40 1c 46 	 load immediate dword 1176256512
+03c4 d8 	 real_mul
+03c5 18 fc 	 store local dword -4
+03c7 ce 	 jump_stack
+03c8 08 fc 	 load local dword-4
+03ca 8f 20 bc be 4c 	 load immediate dword 1287568416
+03cf d8 	 real_mul
+03d0 18 fc 	 store local dword -4
+03d2 ce 	 jump_stack
+03d3 08 fc 	 load local dword-4
+03d5 8f ca 1b 0e 5a 	 load immediate dword 1510874058
+03da d8 	 real_mul
+03db 18 fc 	 store local dword -4
+03dd ce 	 jump_stack
+03de 08 fc 	 load local dword-4
+03e0 8f ae c5 9d 74 	 load immediate dword 1956496814
+03e5 d8 	 real_mul
+03e6 18 fc 	 store local dword -4
+03e8 ce 	 jump_stack
+03e9 cd 00 80 05 00 11 00 	 callswitch (return to 0400)
+	case 90 => 03a7
+	case 91 => 03b2
+	case 92 => 03bd
+	case 93 => 03c8
+	case 94 => 03d3
+	case 95 => 03de
+03fc 9b 	 load immediate 11
+03fd 90 	 load immediate 0
+03fe 90 	 load immediate 0
+03ff 01 	 Raise
+0400 03 	 load param1
+0401 b1 01 	 shr 1
+0403 13 	 store param1
+0404 22 	 load local word-2
+0405 ac 	 inc
+0406 32 	 store local word-2
+0407 03 	 load param1
+0408 ab 	 eq0
+0409 e5 6c 	 jpfalse 039f
+040b 08 fc 	 load local dword-4
+040d 86 01 	 longfct_leave 1
+040f ff 	 
+0410 d4 fd 	 enter -3
+0412 2d 1e 	 load global word 30
+0414 8d 80 	 load immediate 128
+0416 a2 	 uless_than
+0417 e3 0a 	 jpfalse 0423
+0419 4b 	 load global word11
+041a 2d 1e 	 load global word 30
+041c 43 	 load global word3
+041d 1d 	 store indexed byte
+041e 2d 1e 	 load global word 30
+0420 ac 	 inc
+0421 3d 1e 	 store global word 30
+0423 f2 	 call proc2
+0424 43 	 load global word3
+0425 af 30 	 sub 48
+0427 32 	 store local word-2
+0428 22 	 load local word-2
+0429 99 	 load immediate 9
+042a a3 	 ugreater_than
+042b e3 0f 	 jpfalse 043c
+042d 22 	 load local word-2
+042e 8d 11 	 load immediate 17
+0430 a5 	 ugreater_or_equal
+0431 e3 06 	 jpfalse 0439
+0433 22 	 load local word-2
+0434 af 07 	 sub 7
+0436 32 	 store local word-2
+0437 e2 03 	 jp 043c
+0439 8d 10 	 load immediate 16
+043b 32 	 store local word-2
+043c 10 	 load (ix)
+043d af 08 	 sub 8
+043f 22 	 load local word-2
+0440 70 	 store stack word0
+0441 84 00 	 leave 0
+0443 b5 	 igreater_or_equal
+0444 46 	 load global word6
+0445 7d 	 store stack word13
+0446 60 	 load stack word0
+0447 1d 	 store indexed byte
+0448 02 d4 	 load proc_addr proc212
+044a dd 	 check_positive
+044b 90 	 load immediate 0
+044c 32 	 store local word-2
+044d 90 	 load immediate 0
+044e 90 	 load immediate 0
+044f 21 	 swap
+0450 18 f4 	 store local dword -12
+0452 90 	 load immediate 0
+0453 37 	 store local word-7
+0454 08 f4 	 load local dword-12
+0456 18 ee 	 store local dword -18
+0458 08 f4 	 load local dword-12
+045a 18 f0 	 store local dword -16
+045c 08 f4 	 load local dword-12
+045e 18 f2 	 store local dword -14
+0460 90 	 load immediate 0
+0461 3d 1e 	 store global word 30
+0463 43 	 load global word3
+0464 af 30 	 sub 48
+0466 34 	 store local word-4
+0467 24 	 load local word-4
+0468 35 	 store local word-5
+0469 91 	 load immediate 1
+046a 3a 	 store local word-10
+046b 91 	 load immediate 1
+046c 39 	 store local word-9
+046d 25 	 load local word-5
+046e 97 	 load immediate 7
+046f a3 	 ugreater_than
+0470 e3 09 	 jpfalse 047b
+0472 90 	 load immediate 0
+0473 3a 	 store local word-10
+0474 25 	 load local word-5
+0475 99 	 load immediate 9
+0476 a3 	 ugreater_than
+0477 e3 02 	 jpfalse 047b
+0479 90 	 load immediate 0
+047a 39 	 store local word-9
+047b 24 	 load local word-4
+047c 99 	 load immediate 9
+047d a4 	 uless_or_equal
+047e e3 31 	 jpfalse 04b1
+0480 08 f2 	 load local dword-14
+0482 9a 	 load immediate 10
+0483 90 	 load immediate 0
+0484 21 	 swap
+0485 c8 	 dmul
+0486 24 	 load local word-4
+0487 90 	 load immediate 0
+0488 21 	 swap
+0489 c6 	 dadd
+048a 18 f2 	 store local dword -14
+048c 08 f2 	 load local dword-14
+048e 8f 33 33 33 00 	 load immediate dword 3355443
+0493 c5 	 dcompare
+0494 a2 	 uless_than
+0495 e3 06 	 jpfalse 049d
+0497 08 f2 	 load local dword-14
+0499 18 f4 	 store local dword -12
+049b e2 03 	 jp 04a0
+049d 27 	 load local word-7
+049e ac 	 inc
+049f 37 	 store local word-7
+04a0 24 	 load local word-4
+04a1 97 	 load immediate 7
+04a2 a4 	 uless_or_equal
+04a3 e3 0c 	 jpfalse 04b1
+04a5 08 f0 	 load local dword-16
+04a7 98 	 load immediate 8
+04a8 90 	 load immediate 0
+04a9 21 	 swap
+04aa c8 	 dmul
+04ab 24 	 load local word-4
+04ac 90 	 load immediate 0
+04ad 21 	 swap
+04ae c6 	 dadd
+04af 18 f0 	 store local dword -16
+04b1 08 ee 	 load local dword-18
+04b3 8e ff ff 	 load immediate 65535
+04b6 90 	 load immediate 0
+04b7 21 	 swap
+04b8 c5 	 dcompare
+04b9 a4 	 uless_or_equal
+04ba e3 0d 	 jpfalse 04c9
+04bc 08 ee 	 load local dword-18
+04be 8d 10 	 load immediate 16
+04c0 90 	 load immediate 0
+04c1 21 	 swap
+04c2 c8 	 dmul
+04c3 24 	 load local word-4
+04c4 90 	 load immediate 0
+04c5 21 	 swap
+04c6 c6 	 dadd
+04c7 18 ee 	 store local dword -18
+04c9 24 	 load local word-4
+04ca 35 	 store local word-5
+04cb ec 25 	 nested_call proc37
+04cd 24 	 load local word-4
+04ce 9f 	 load immediate 15
+04cf a3 	 ugreater_than
+04d0 e5 65 	 jpfalse 046d
+04d2 0c 07 	 load COMPILER.word7
+04d4 5c 	 store global word12
+04d5 43 	 load global word3
+04d6 8d 2e 	 load immediate 46
+04d8 a0 	 equal
+04d9 e3 f9 	 jpfalse 05d4
+04db ec 25 	 nested_call proc37
+04dd 43 	 load global word3
+04de 8d 2e 	 load immediate 46
+04e0 a0 	 equal
+04e1 e3 0a 	 jpfalse 04ed
+04e3 8d 7f 	 load immediate 127
+04e5 53 	 store global word3
+04e6 2d 1e 	 load global word 30
+04e8 ad 	 dec
+04e9 3d 1e 	 store global word 30
+04eb e2 e7 	 jp 05d4
+04ed 43 	 load global word3
+04ee 8d 29 	 load immediate 41
+04f0 a0 	 equal
+04f1 e3 0a 	 jpfalse 04fd
+04f3 8d 5d 	 load immediate 93
+04f5 53 	 store global word3
+04f6 2d 1e 	 load global word 30
+04f8 ad 	 dec
+04f9 3d 1e 	 store global word 30
+04fb e2 d7 	 jp 05d4
+04fd 29 	 load local word-9
+04fe b6 	 not
+04ff e3 04 	 jpfalse 0505
+0501 8d 1e 	 load immediate 30
+0503 ed 1a 	 call proc26
+0505 0c 09 	 load COMPILER.word9
+0507 5c 	 store global word12
+0508 24 	 load local word-4
+0509 99 	 load immediate 9
+050a a4 	 uless_or_equal
+050b e3 1e 	 jpfalse 052b
+050d 08 f4 	 load local dword-12
+050f 8f 33 33 33 00 	 load immediate dword 3355443
+0514 c5 	 dcompare
+0515 a2 	 uless_than
+0516 e3 0f 	 jpfalse 0527
+0518 08 f4 	 load local dword-12
+051a 9a 	 load immediate 10
+051b 90 	 load immediate 0
+051c 21 	 swap
+051d c8 	 dmul
+051e 24 	 load local word-4
+051f 90 	 load immediate 0
+0520 21 	 swap
+0521 c6 	 dadd
+0522 18 f4 	 store local dword -12
+0524 27 	 load local word-7
+0525 ad 	 dec
+0526 37 	 store local word-7
+0527 ec 25 	 nested_call proc37
+0529 e4 23 	 jp 0508
+052b 24 	 load local word-4
+052c 8e 00 60 	 load immediate 24576
+052f e7 	 bitwise_in
+0530 e3 45 	 jpfalse 0577
+0532 24 	 load local word-4
+0533 9d 	 load immediate 13
+0534 a0 	 equal
+0535 e3 03 	 jpfalse 053a
+0537 0c 0b 	 load COMPILER.word11
+0539 5c 	 store global word12
+053a 90 	 load immediate 0
+053b 33 	 store local word-3
+053c ec 25 	 nested_call proc37
+053e 43 	 load global word3
+053f 8d 2d 	 load immediate 45
+0541 a0 	 equal
+0542 38 	 store local word-8
+0543 28 	 load local word-8
+0544 df 04 	 orjp 054a
+0546 43 	 load global word3
+0547 8d 2b 	 load immediate 43
+0549 a0 	 equal
+054a e3 02 	 jpfalse 054e
+054c ec 25 	 nested_call proc37
+054e 24 	 load local word-4
+054f 99 	 load immediate 9
+0550 a3 	 ugreater_than
+0551 e3 04 	 jpfalse 0557
+0553 8d 1e 	 load immediate 30
+0555 ed 1a 	 call proc26
+0557 23 	 load local word-3
+0558 8d ff 	 load immediate 255
+055a a2 	 uless_than
+055b e3 06 	 jpfalse 0563
+055d 23 	 load local word-3
+055e 9a 	 load immediate 10
+055f a8 	 umul
+0560 24 	 load local word-4
+0561 a6 	 add
+0562 33 	 store local word-3
+0563 ec 25 	 nested_call proc37
+0565 24 	 load local word-4
+0566 99 	 load immediate 9
+0567 a3 	 ugreater_than
+0568 e5 13 	 jpfalse 0557
+056a 28 	 load local word-8
+056b e3 06 	 jpfalse 0573
+056d 27 	 load local word-7
+056e 23 	 load local word-3
+056f a7 	 sub
+0570 37 	 store local word-7
+0571 e2 04 	 jp 0577
+0573 27 	 load local word-7
+0574 23 	 load local word-3
+0575 a6 	 add
+0576 37 	 store local word-7
+0577 4c 	 load global word12
+0578 0c 09 	 load COMPILER.word9
+057a a0 	 equal
+057b e3 44 	 jpfalse 05c1
+057d 08 f4 	 load local dword-12
+057f 8f 00 00 00 01 	 load immediate dword 16777216
+0584 c5 	 dcompare
+0585 a5 	 ugreater_or_equal
+0586 e3 15 	 jpfalse 059d
+0588 08 f4 	 load local dword-12
+058a 91 	 load immediate 1
+058b 90 	 load immediate 0
+058c 21 	 swap
+058d c6 	 dadd
+058e 92 	 load immediate 2
+058f 90 	 load immediate 0
+0590 21 	 swap
+0591 c9 	 ddiv
+0592 be 	 long_to_float
+0593 8f 00 00 00 40 	 load immediate dword 1073741824
+0598 d8 	 real_mul
+0599 19 0e 	 store global dword 14
+059b e2 05 	 jp 05a2
+059d 08 f4 	 load local dword-12
+059f be 	 long_to_float
+05a0 19 0e 	 store global dword 14
+05a2 27 	 load local word-7
+05a3 90 	 load immediate 0
+05a4 b2 	 iless_than
+05a5 e3 0c 	 jpfalse 05b3
+05a7 09 0e 	 load global dword14
+05a9 27 	 load local word-7
+05aa b7 	 complement
+05ab ac 	 inc
+05ac ec 24 	 nested_call proc36
+05ae d9 	 real_div
+05af 19 0e 	 store global dword 14
+05b1 e2 0c 	 jp 05bf
+05b3 27 	 load local word-7
+05b4 cb 	 not_zero
+05b5 e3 08 	 jpfalse 05bf
+05b7 09 0e 	 load global dword14
+05b9 27 	 load local word-7
+05ba ec 24 	 nested_call proc36
+05bc d8 	 real_mul
+05bd 19 0e 	 store global dword 14
+05bf e2 13 	 jp 05d4
+05c1 4b 	 load global word11
+05c2 2d 1e 	 load global word 30
+05c4 90 	 load immediate 0
+05c5 1d 	 store indexed byte
+05c6 4b 	 load global word11
+05c7 8d 80 	 load immediate 128
+05c9 81 11 	 load global address 17
+05cb f0 5a 	 call DOUBLES.proc10
+05cd b6 	 not
+05ce e3 04 	 jpfalse 05d4
+05d0 8d 4a 	 load immediate 74
+05d2 ed 1a 	 call proc26
+05d4 4c 	 load global word12
+05d5 64 	 load stack word4
+05d6 98 	 load immediate 8
+05d7 a1 	 not_equal
+05d8 e3 65 	 jpfalse 063f
+05da 43 	 load global word3
+05db 8d 4c 	 load immediate 76
+05dd a0 	 equal
+05de e3 0b 	 jpfalse 05eb
+05e0 ec 25 	 nested_call proc37
+05e2 08 f2 	 load local dword-14
+05e4 19 0e 	 store global dword 14
+05e6 0c 0a 	 load COMPILER.word10
+05e8 5c 	 store global word12
+05e9 e2 54 	 jp 063f
+05eb 8e ff ff 	 load immediate 65535
+05ee 36 	 store local word-6
+05ef 43 	 load global word3
+05f0 8d 48 	 load immediate 72
+05f2 a0 	 equal
+05f3 e3 08 	 jpfalse 05fd
+05f5 ec 25 	 nested_call proc37
+05f7 08 ee 	 load local dword-18
+05f9 18 f4 	 store local dword -12
+05fb e2 31 	 jp 062e
+05fd 25 	 load local word-5
+05fe 8e 00 18 	 load immediate 6144
+0601 e7 	 bitwise_in
+0602 e3 19 	 jpfalse 061d
+0604 2a 	 load local word-10
+0605 b6 	 not
+0606 e3 04 	 jpfalse 060c
+0608 8d 1e 	 load immediate 30
+060a ed 1a 	 call proc26
+060c 08 f0 	 load local dword-16
+060e 18 f4 	 store local dword -12
+0610 25 	 load local word-5
+0611 9c 	 load immediate 12
+0612 a0 	 equal
+0613 e3 06 	 jpfalse 061b
+0615 0c 0d 	 load COMPILER.word13
+0617 5c 	 store global word12
+0618 8d ff 	 load immediate 255
+061a 36 	 store local word-6
+061b e2 11 	 jp 062e
+061d 29 	 load local word-9
+061e b6 	 not
+061f df 03 	 orjp 0624
+0621 25 	 load local word-5
+0622 99 	 load immediate 9
+0623 a3 	 ugreater_than
+0624 e3 04 	 jpfalse 062a
+0626 8d 1e 	 load immediate 30
+0628 ed 1a 	 call proc26
+062a 08 f2 	 load local dword-14
+062c 18 f4 	 store local dword -12
+062e 08 f4 	 load local dword-12
+0630 26 	 load local word-6
+0631 90 	 load immediate 0
+0632 21 	 swap
+0633 c5 	 dcompare
+0634 a3 	 ugreater_than
+0635 e3 04 	 jpfalse 063b
+0637 8d 49 	 load immediate 73
+0639 ed 1a 	 call proc26
+063b 08 f4 	 load local dword-12
+063d ba 	 long_to_card
+063e 57 	 store global word7
+063f 2d 18 	 load global word 24
+0641 43 	 load global word3
+0642 0d 	 load indexed byte
+0643 9a 	 load immediate 10
+0644 a0 	 equal
+0645 e3 04 	 jpfalse 064b
+0647 8d 1e 	 load immediate 30
+0649 ed 1a 	 call proc26
+064b 84 00 	 leave 0
+064d 8d 49 	 load immediate 73
+064f ed 1a 	 call proc26
+0651 84 00 	 leave 0
+0653 27 	 load local word-7
+0654 90 	 load immediate 0
+0655 b5 	 igreater_or_equal
+0656 e3 04 	 jpfalse 065c
+0658 8d 4a 	 load immediate 74
+065a ed 1a 	 call proc26
+065c 8f 00 00 00 00 	 load immediate dword 0
+0661 19 0e 	 store global dword 14
+0663 84 00 	 leave 0
+0665 02 0b 	 load proc_addr proc11
+0667 00 	 Error16
+0668 ea 	 power2
+0669 ff 	 call proc15
+066a 0c 00 	 load COMPILER.word0
+066c e0 ff ff 	 jp 066d
+066f d4 fd 	 enter -3
+0671 43 	 load global word3
+0672 8d ff 	 load immediate 255
+0674 a0 	 equal
+0675 e3 04 	 jpfalse 067b
+0677 8d 1d 	 load immediate 29
+0679 ed 1a 	 call proc26
+067b f2 	 call proc2
+067c 43 	 load global word3
+067d 8d 28 	 load immediate 40
+067f a0 	 equal
+0680 e3 10 	 jpfalse 0692
+0682 f2 	 call proc2
+0683 43 	 load global word3
+0684 8d 28 	 load immediate 40
+0686 a1 	 not_equal
+0687 e5 07 	 jpfalse 0682
+0689 43 	 load global word3
+068a 8d 2a 	 load immediate 42
+068c a0 	 equal
+068d e3 03 	 jpfalse 0692
+068f 10 	 load (ix)
+0690 ee 26 	 call_with_frame proc38
+0692 43 	 load global word3
+0693 8d 24 	 load immediate 36
+0695 a0 	 equal
+0696 e3 2e 	 jpfalse 06c6
+0698 f2 	 call proc2
+0699 43 	 load global word3
+069a 8d 5f 	 load immediate 95
+069c e8 	 bitwise_and
+069d af 4c 	 sub 76
+069f 32 	 store local word-2
+06a0 22 	 load local word-2
+06a1 9f 	 load immediate 15
+06a2 a4 	 uless_or_equal
+06a3 e3 21 	 jpfalse 06c6
+06a5 f2 	 call proc2
+06a6 43 	 load global word3
+06a7 8d 2d 	 load immediate 45
+06a9 a0 	 equal
+06aa e3 08 	 jpfalse 06b4
+06ac 42 	 load global word2
+06ad 22 	 load local word-2
+06ae ea 	 power2
+06af b7 	 complement
+06b0 e8 	 bitwise_and
+06b1 52 	 store global word2
+06b2 e2 0b 	 jp 06bf
+06b4 43 	 load global word3
+06b5 8d 2b 	 load immediate 43
+06b7 a0 	 equal
+06b8 e3 05 	 jpfalse 06bf
+06ba 42 	 load global word2
+06bb 22 	 load local word-2
+06bc ea 	 power2
+06bd e6 	 bitwise_or
+06be 52 	 store global word2
+06bf 22 	 load local word-2
+06c0 ab 	 eq0
+06c1 e3 03 	 jpfalse 06c6
+06c3 92 	 load immediate 2
+06c4 f0 2e 	 call TEXTS.proc14
+06c6 43 	 load global word3
+06c7 8d 2a 	 load immediate 42
+06c9 a0 	 equal
+06ca e5 5b 	 jpfalse 0671
+06cc f2 	 call proc2
+06cd 43 	 load global word3
+06ce 8d 2a 	 load immediate 42
+06d0 a1 	 not_equal
+06d1 e5 07 	 jpfalse 06cc
+06d3 43 	 load global word3
+06d4 8d 29 	 load immediate 41
+06d6 a0 	 equal
+06d7 e5 68 	 jpfalse 0671
+06d9 84 00 	 leave 0
+06db ff 	 
+06dc d4 fb 	 enter -5
+06de 90 	 load immediate 0
+06df 56 	 store global word6
+06e0 97 	 load immediate 7
+06e1 59 	 store global word9
+06e2 43 	 load global word3
+06e3 8d 20 	 load immediate 32
+06e5 a4 	 uless_or_equal
+06e6 e3 03 	 jpfalse 06eb
+06e8 f2 	 call proc2
+06e9 e4 09 	 jp 06e2
+06eb 8d 6e 	 load immediate 110
+06ed 60 	 load stack word0
+06ee ad 	 dec
+06ef 3d 19 	 store global word 25
+06f1 8d 70 	 load immediate 112
+06f3 60 	 load stack word0
+06f4 3d 1a 	 store global word 26
+06f6 43 	 load global word3
+06f7 8d 80 	 load immediate 128
+06f9 a2 	 uless_than
+06fa e3 07 	 jpfalse 0703
+06fc 2d 18 	 load global word 24
+06fe 43 	 load global word3
+06ff 0d 	 load indexed byte
+0700 55 	 store global word5
+0701 e2 02 	 jp 0705
+0703 90 	 load immediate 0
+0704 55 	 store global word5
+0705 45 	 load global word5
+0706 9a 	 load immediate 10
+0707 a0 	 equal
+0708 e3 26 	 jpfalse 0730
+070a 90 	 load immediate 0
+070b 32 	 store local word-2
+070c 22 	 load local word-2
+070d 8d 80 	 load immediate 128
+070f a1 	 not_equal
+0710 e3 07 	 jpfalse 0719
+0712 4b 	 load global word11
+0713 22 	 load local word-2
+0714 43 	 load global word3
+0715 1d 	 store indexed byte
+0716 22 	 load local word-2
+0717 ac 	 inc
+0718 32 	 store local word-2
+0719 f2 	 call proc2
+071a 2d 18 	 load global word 24
+071c 43 	 load global word3
+071d 0d 	 load indexed byte
+071e 33 	 store local word-3
+071f 23 	 load local word-3
+0720 9a 	 load immediate 10
+0721 a1 	 not_equal
+0722 de 03 	 andjp 0727
+0724 23 	 load local word-3
+0725 9b 	 load immediate 11
+0726 a1 	 not_equal
+0727 e5 1d 	 jpfalse 070c
+0729 4b 	 load global word11
+072a 22 	 load local word-2
+072b 90 	 load immediate 0
+072c 1d 	 store indexed byte
+072d 91 	 load immediate 1
+072e 85 00 	 fct_leave 0
+0730 90 	 load immediate 0
+0731 85 00 	 fct_leave 0
+0733 00 	 Error16
+0734 00 	 Error16
+0735 00 	 Error16
+0736 00 	 Error16
+0737 00 	 Error16
+0738 00 	 Error16
+0739 00 	 Error16
+073a 00 	 Error16
+073b 00 	 Error16
+073c 00 	 Error16
+073d 00 	 Error16
+073e 00 	 Error16
+073f 00 	 Error16
+0740 00 	 Error16
+0741 00 	 Error16
+0742 00 	 Error16
+0743 00 	 Error16
+0744 00 	 Error16
+0745 00 	 Error16
+0746 00 	 Error16
+0747 00 	 Error16
+0748 00 	 Error16
+0749 00 	 Error16
+074a 00 	 Error16
+074b 00 	 Error16
+074c 00 	 Error16
+074d 00 	 Error16
+074e 00 	 Error16
+074f 00 	 Error16
+0750 00 	 Error16
+0751 00 	 Error16
+0752 00 	 Error16
+0753 00 	 Error16
+0754 00 	 Error16
+0755 00 	 Error16
+0756 00 	 Error16
+0757 00 	 Error16
+0758 00 	 Error16
+0759 00 	 Error16
+075a 00 	 Error16
+075b 00 	 Error16
+075c 00 	 Error16
+075d 00 	 Error16
+075e 00 	 Error16
+075f 00 	 Error16
+0760 00 	 Error16
+0761 00 	 Error16
+0762 00 	 Error16
+0763 00 	 Error16
+0764 00 	 Error16
+0765 00 	 Error16
+0766 00 	 Error16
+0767 00 	 Error16
+0768 00 	 Error16
+0769 00 	 Error16
+076a 00 	 Error16
+076b ff 	 
+076c d4 f7 	 enter -9
+076e ec 27 	 nested_call proc39
+0770 e3 48 	 jpfalse 07ba
+0772 99 	 load immediate 9
+0773 42 	 load global word2
+0774 e7 	 bitwise_in
+0775 34 	 store local word-4
+0776 4b 	 load global word11
+0777 24 	 load local word-4
+0778 09 1b 	 load global dword27
+077a eb 	 extern_proc_call
+077b 55 	 store global word5
+077c 45 	 load global word5
+077d cb 	 not_zero
+077e e3 17 	 jpfalse 0797
+0780 97 	 load immediate 7
+0781 59 	 store global word9
+0782 45 	 load global word5
+0783 9e 	 load immediate 14
+0784 a0 	 equal
+0785 df 04 	 orjp 078b
+0787 45 	 load global word5
+0788 8d 27 	 load immediate 39
+078a a0 	 equal
+078b de 04 	 andjp 0791
+078d 9c 	 load immediate 12
+078e 42 	 load global word2
+078f e7 	 bitwise_in
+0790 b6 	 not
+0791 e3 03 	 jpfalse 0796
+0793 92 	 load immediate 2
+0794 f0 63 	 call ERRORS.proc3
+0796 88 	 leave0
+0797 0c 79 	 load SYMTAB.word9
+0799 5d 	 store global word13
+079a 4d 	 load global word13
+079b 82 01 	 load stack address 1
+079d 4b 	 load global word11
+079e 24 	 load local word-4
+079f ed 16 	 call proc22
+07a1 58 	 store global word8
+07a2 48 	 load global word8
+07a3 cb 	 not_zero
+07a4 e3 0a 	 jpfalse 07b0
+07a6 48 	 load global word8
+07a7 62 	 load stack word2
+07a8 5c 	 store global word12
+07a9 48 	 load global word8
+07aa 64 	 load stack word4
+07ab 59 	 store global word9
+07ac 48 	 load global word8
+07ad 63 	 load stack word3
+07ae 5a 	 store global word10
+07af 88 	 leave0
+07b0 4d 	 load global word13
+07b1 60 	 load stack word0
+07b2 5d 	 store global word13
+07b3 4d 	 load global word13
+07b4 ab 	 eq0
+07b5 e5 1d 	 jpfalse 079a
+07b7 90 	 load immediate 0
+07b8 59 	 store global word9
+07b9 88 	 leave0
+07ba 91 	 load immediate 1
+07bb 32 	 store local word-2
+07bc 45 	 load global word5
+07bd e2 8f 	 jp 084e
+07bf 8d 1f 	 load immediate 31
+07c1 43 	 load global word3
+07c2 8d ff 	 load immediate 255
+07c4 a0 	 equal
+07c5 b0 01 	 shl 1
+07c7 a7 	 sub
+07c8 ed 1a 	 call proc26
+07ca ce 	 jump_stack
+07cb f2 	 call proc2
+07cc 43 	 load global word3
+07cd 8d 3d 	 load immediate 61
+07cf a0 	 equal
+07d0 e3 06 	 jpfalse 07d8
+07d2 8d 1b 	 load immediate 27
+07d4 55 	 store global word5
+07d5 f2 	 call proc2
+07d6 e2 09 	 jp 07e1
+07d8 43 	 load global word3
+07d9 8d 29 	 load immediate 41
+07db a0 	 equal
+07dc e3 03 	 jpfalse 07e1
+07de 97 	 load immediate 7
+07df 55 	 store global word5
+07e0 f2 	 call proc2
+07e1 ce 	 jump_stack
+07e2 f2 	 call proc2
+07e3 43 	 load global word3
+07e4 8d 2e 	 load immediate 46
+07e6 a0 	 equal
+07e7 e3 05 	 jpfalse 07ee
+07e9 94 	 load immediate 4
+07ea 55 	 store global word5
+07eb f2 	 call proc2
+07ec e2 09 	 jp 07f7
+07ee 43 	 load global word3
+07ef 8d 29 	 load immediate 41
+07f1 a0 	 equal
+07f2 e3 03 	 jpfalse 07f7
+07f4 96 	 load immediate 6
+07f5 55 	 store global word5
+07f6 f2 	 call proc2
+07f7 ce 	 jump_stack
+07f8 91 	 load immediate 1
+07f9 56 	 store global word6
+07fa 91 	 load immediate 1
+07fb 59 	 store global word9
+07fc 90 	 load immediate 0
+07fd 55 	 store global word5
+07fe ec 23 	 nested_call proc35
+0800 4b 	 load global word11
+0801 2d 1e 	 load global word 30
+0803 90 	 load immediate 0
+0804 1d 	 store indexed byte
+0805 ce 	 jump_stack
+0806 90 	 load immediate 0
+0807 33 	 store local word-3
+0808 91 	 load immediate 1
+0809 56 	 store global word6
+080a 91 	 load immediate 1
+080b 59 	 store global word9
+080c 90 	 load immediate 0
+080d 55 	 store global word5
+080e 43 	 load global word3
+080f 35 	 store local word-5
+0810 f2 	 call proc2
+0811 43 	 load global word3
+0812 25 	 load local word-5
+0813 a1 	 not_equal
+0814 e3 23 	 jpfalse 0839
+0816 43 	 load global word3
+0817 9a 	 load immediate 10
+0818 a0 	 equal
+0819 e3 04 	 jpfalse 081f
+081b 8d 1c 	 load immediate 28
+081d ed 1a 	 call proc26
+081f 43 	 load global word3
+0820 8d ff 	 load immediate 255
+0822 a0 	 equal
+0823 e3 04 	 jpfalse 0829
+0825 8d 1d 	 load immediate 29
+0827 ed 1a 	 call proc26
+0829 23 	 load local word-3
+082a 8d 80 	 load immediate 128
+082c a2 	 uless_than
+082d e3 07 	 jpfalse 0836
+082f 4b 	 load global word11
+0830 23 	 load local word-3
+0831 43 	 load global word3
+0832 1d 	 store indexed byte
+0833 23 	 load local word-3
+0834 ac 	 inc
+0835 33 	 store local word-3
+0836 f2 	 call proc2
+0837 e4 28 	 jp 0811
+0839 4b 	 load global word11
+083a 23 	 load local word-3
+083b 90 	 load immediate 0
+083c 1d 	 store indexed byte
+083d f2 	 call proc2
+083e 0c 0c 	 load COMPILER.word12
+0840 5c 	 store global word12
+0841 23 	 load local word-3
+0842 91 	 load immediate 1
+0843 a0 	 equal
+0844 e3 07 	 jpfalse 084d
+0846 0c 0d 	 load COMPILER.word13
+0848 5c 	 store global word12
+0849 4b 	 load global word11
+084a 90 	 load immediate 0
+084b 0d 	 load indexed byte
+084c 57 	 store global word7
+084d ce 	 jump_stack
+084e cd 00 80 0c 00 86 00 	 callswitch (return to 08da)
+	case 90 => 07bf
+	case 91 => 086f
+	case 92 => 07cb
+	case 93 => 07e2
+	case 94 => 086f
+	case 95 => 086f
+	case 96 => 086f
+	case 97 => 086f
+	case 98 => 086f
+	case 99 => 086f
+	case 100 => 086f
+	case 101 => 07f8
+	case 102 => 0806
+086f f2 	 call proc2
+0870 45 	 load global word5
+0871 e2 46 	 jp 08b9
+0873 43 	 load global word3
+0874 8d 2a 	 load immediate 42
+0876 a0 	 equal
+0877 e3 07 	 jpfalse 0880
+0879 ec 26 	 nested_call proc38
+087b f2 	 call proc2
+087c 90 	 load immediate 0
+087d 32 	 store local word-2
+087e e2 16 	 jp 0896
+0880 43 	 load global word3
+0881 8d 2e 	 load immediate 46
+0883 a0 	 equal
+0884 e3 06 	 jpfalse 088c
+0886 8d 2c 	 load immediate 44
+0888 55 	 store global word5
+0889 f2 	 call proc2
+088a e2 0a 	 jp 0896
+088c 43 	 load global word3
+088d 8d 3a 	 load immediate 58
+088f a0 	 equal
+0890 e3 04 	 jpfalse 0896
+0892 8d 2d 	 load immediate 45
+0894 55 	 store global word5
+0895 f2 	 call proc2
+0896 ce 	 jump_stack
+0897 43 	 load global word3
+0898 8d 3d 	 load immediate 61
+089a a0 	 equal
+089b e3 06 	 jpfalse 08a3
+089d 8d 38 	 load immediate 56
+089f 55 	 store global word5
+08a0 f2 	 call proc2
+08a1 e2 0a 	 jp 08ad
+08a3 43 	 load global word3
+08a4 8d 3e 	 load immediate 62
+08a6 a0 	 equal
+08a7 e3 04 	 jpfalse 08ad
+08a9 8d 35 	 load immediate 53
+08ab 55 	 store global word5
+08ac f2 	 call proc2
+08ad ce 	 jump_stack
+08ae 43 	 load global word3
+08af 8d 3d 	 load immediate 61
+08b1 a0 	 equal
+08b2 e3 04 	 jpfalse 08b8
+08b4 8d 39 	 load immediate 57
+08b6 55 	 store global word5
+08b7 f2 	 call proc2
+08b8 ce 	 jump_stack
+08b9 cd 2b 80 0c 00 1b 00 	 callswitch (return to 08da)
+	case 133 => 0873
+	case 134 => 08da
+	case 135 => 08da
+	case 136 => 08da
+	case 137 => 08da
+	case 138 => 08da
+	case 139 => 08da
+	case 140 => 08da
+	case 141 => 08da
+	case 142 => 08da
+	case 143 => 08da
+	case 144 => 0897
+	case 145 => 08ae
+08da 22 	 load local word-2
+08db e1 91 fe 	 jpfalse 076e
+08de 88 	 leave0
+08df ff 	 
+08e0 d4 ff 	 enter -1
+08e2 45 	 load global word5
+08e3 03 	 load param1
+08e4 a0 	 equal
+08e5 e3 04 	 jpfalse 08eb
+08e7 f1 	 call proc1
+08e8 91 	 load immediate 1
+08e9 85 81 	 fct_leave 129
+08eb 90 	 load immediate 0
+08ec 85 81 	 fct_leave 129
+08ee ff 	 
+08ef d4 ff 	 enter -1
+08f1 49 	 load global word9
+08f2 96 	 load immediate 6
+08f3 a0 	 equal
+08f4 e3 23 	 jpfalse 0919
+08f6 2d 1d 	 load global word 29
+08f8 48 	 load global word8
+08f9 66 	 load stack word6
+08fa 71 	 store stack word1
+08fb 2d 1d 	 load global word 29
+08fd 0c 79 	 load SYMTAB.word9
+08ff 70 	 store stack word0
+0900 2d 1d 	 load global word 29
+0902 1c 79 	 store SYMTAB.word9
+0904 f1 	 call proc1
+0905 93 	 load immediate 3
+0906 f8 	 call proc8
+0907 fc 	 call proc12
+0908 4d 	 load global word13
+0909 2d 1d 	 load global word 29
+090b a1 	 not_equal
+090c e3 06 	 jpfalse 0914
+090e 93 	 load immediate 3
+090f 4b 	 load global word11
+0910 8d 80 	 load immediate 128
+0912 f0 62 	 call ERRORS.proc2
+0914 0c 79 	 load SYMTAB.word9
+0916 60 	 load stack word0
+0917 1c 79 	 store SYMTAB.word9
+0919 88 	 leave0
+091a ff 	 
+091b d4 fb 	 enter -5
+091d 45 	 load global word5
+091e 03 	 load param1
+091f a0 	 equal
+0920 e3 02 	 jpfalse 0924
+0922 f1 	 call proc1
+0923 89 	 leave2
+0924 90 	 load immediate 0
+0925 33 	 store local word-3
+0926 90 	 load immediate 0
+0927 32 	 store local word-2
+0928 03 	 load param1
+0929 8d 33 	 load immediate 51
+092b a5 	 ugreater_or_equal
+092c e3 05 	 jpfalse 0933
+092e 8d 33 	 load immediate 51
+0930 33 	 store local word-3
+0931 e2 1d 	 jp 0950
+0933 03 	 load param1
+0934 8d 28 	 load immediate 40
+0936 a5 	 ugreater_or_equal
+0937 e3 05 	 jpfalse 093e
+0939 8d 28 	 load immediate 40
+093b 33 	 store local word-3
+093c e2 12 	 jp 0950
+093e 03 	 load param1
+093f 8d 1b 	 load immediate 27
+0941 a5 	 ugreater_or_equal
+0942 e3 05 	 jpfalse 0949
+0944 8d 1b 	 load immediate 27
+0946 33 	 store local word-3
+0947 e2 07 	 jp 0950
+0949 03 	 load param1
+094a 9d 	 load immediate 13
+094b a5 	 ugreater_or_equal
+094c e3 02 	 jpfalse 0950
+094e 9d 	 load immediate 13
+094f 33 	 store local word-3
+0950 22 	 load local word-2
+0951 03 	 load param1
+0952 23 	 load local word-3
+0953 a7 	 sub
+0954 ea 	 power2
+0955 e6 	 bitwise_or
+0956 32 	 store local word-2
+0957 22 	 load local word-2
+0958 23 	 load local word-3
+0959 ef 06 10 	 call ERRORS.proc16
+095c 89 	 leave2
+095d ff 	 
+095e d4 ff 	 enter -1
+0960 45 	 load global word5
+0961 03 	 load param1
+0962 e7 	 bitwise_in
+0963 b6 	 not
+0964 e3 05 	 jpfalse 096b
+0966 03 	 load param1
+0967 90 	 load immediate 0
+0968 ef 06 10 	 call ERRORS.proc16
+096b 89 	 leave2
+096c ff 	 
+096d d4 ff 	 enter -1
+096f 45 	 load global word5
+0970 af 28 	 sub 40
+0972 03 	 load param1
+0973 e7 	 bitwise_in
+0974 b6 	 not
+0975 e3 06 	 jpfalse 097d
+0977 03 	 load param1
+0978 8d 28 	 load immediate 40
+097a ef 06 10 	 call ERRORS.proc16
+097d 89 	 leave2
+097e ff 	 
+097f d4 ff 	 enter -1
+0981 45 	 load global word5
+0982 af 0d 	 sub 13
+0984 03 	 load param1
+0985 e7 	 bitwise_in
+0986 b6 	 not
+0987 e3 05 	 jpfalse 098e
+0989 03 	 load param1
+098a 9d 	 load immediate 13
+098b ef 06 10 	 call ERRORS.proc16
+098e 89 	 leave2
+098f ff 	 
+0990 d4 ff 	 enter -1
+0992 49 	 load global word9
+0993 97 	 load immediate 7
+0994 a0 	 equal
+0995 df 01 	 orjp 0998
+0997 46 	 load global word6
+0998 e3 1e 	 jpfalse 09b8
+099a 8d 41 	 load immediate 65
+099c f0 68 	 call ERRORS.proc8
+099e 93 	 load immediate 3
+099f 8c 0a 	 call_rel 09ab
+09a1 "Identifier"
+09ab 99 	 load immediate 9
+09ac f0 29 	 call TEXTS.proc9
+09ae 93 	 load immediate 3
+09af 02 1f 	 load proc_addr proc31
+09b1 9e 	 load immediate 14
+09b2 f0 29 	 call TEXTS.proc9
+09b4 f0 67 	 call ERRORS.proc7
+09b6 f0 69 	 call ERRORS.proc9
+09b8 88 	 leave0
+09b9 ff 	 
+09ba d4 ff 	 enter -1
+09bc fc 	 call proc12
+09bd 4b 	 load global word11
+09be 04 	 load param2
+09bf 99 	 load immediate 9
+09c0 42 	 load global word2
+09c1 e7 	 bitwise_in
+09c2 ed 17 	 call proc23
+09c4 e3 02 	 jpfalse 09c8
+09c6 f1 	 call proc1
+09c7 8a 	 leave4
+09c8 99 	 load immediate 9
+09c9 04 	 load param2
+09ca 03 	 load param1
+09cb f0 62 	 call ERRORS.proc2
+09cd 8a 	 leave4
+09ce ff 	 
+09cf d4 ff 	 enter -1
+09d1 49 	 load global word9
+09d2 03 	 load param1
+09d3 a1 	 not_equal
+09d4 e3 29 	 jpfalse 09ff
+09d6 fc 	 call proc12
+09d7 49 	 load global word9
+09d8 ab 	 eq0
+09d9 e3 06 	 jpfalse 09e1
+09db 90 	 load immediate 0
+09dc 4b 	 load global word11
+09dd 8d 80 	 load immediate 128
+09df f0 62 	 call ERRORS.proc2
+09e1 8d 42 	 load immediate 66
+09e3 f0 68 	 call ERRORS.proc8
+09e5 03 	 load param1
+09e6 f0 66 	 call ERRORS.proc6
+09e8 93 	 load immediate 3
+09e9 02 1f 	 load proc_addr proc31
+09eb 9e 	 load immediate 14
+09ec f0 29 	 call TEXTS.proc9
+09ee 49 	 load global word9
+09ef f0 66 	 call ERRORS.proc6
+09f1 93 	 load immediate 3
+09f2 8c 06 	 call_rel 09fa
+09f4 " found"
+09fa 95 	 load immediate 5
+09fb f0 29 	 call TEXTS.proc9
+09fd f0 69 	 call ERRORS.proc9
+09ff 89 	 leave2
+0a00 ff 	 
+0a01 87 00 	 asmcode 0
+0ae9 ff 	 call proc15
+0aea ff 	 
+0aeb d4 ff 	 enter -1
+0aed 50 	 end_program
+
+
+

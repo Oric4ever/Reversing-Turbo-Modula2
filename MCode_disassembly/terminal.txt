@@ -1,0 +1,475 @@
+35FD : Module TERMINAL
+
+TERMINAL.proc0: 3589    ; module's INIT
+TERMINAL.proc1: 338d    ; ReadChar
+TERMINAL.proc2: 3398    ; BusyRead
+TERMINAL.proc3: 33bc    ; ReadAgain
+TERMINAL.proc4: 33c2    ; ReadLine
+TERMINAL.proc5: 3443    ; WriteChar
+TERMINAL.proc6: 344c    ; WriteLn
+TERMINAL.proc7: 3454    ; WriteString
+TERMINAL.proc8: 349c    ; ClearScreen
+TERMINAL.proc9: 34b6    ; GotoXY
+TERMINAL.proc10: 356f   ; InitScreen
+TERMINAL.proc11: 357c   ; ExitScreen
+TERMINAL.proc12: 351a   ; ClearToEOL
+TERMINAL.proc13: 352b   ; InsertLine
+TERMINAL.proc14: 353c   ; DeleteLine
+TERMINAL.proc15: 354d   ; Highlight
+TERMINAL.proc16: 355e   ; Normal
+TERMINAL.proc17: 3474   ; write a sequence and do a delay
+
+; proc #1 : TERMINAL.ReadChar(VAR ch: CHAR);
+
+338d d4 ff 	 enter -1           ; REPEAT
+338f 03 	 load param1        ;   BusyRead(ch);
+3390 f2 	 call proc2
+3391 03 	 load param1        ; UNTIL ch <> 0C;
+3392 60 	 load stack word0
+3393 cb 	 not_zero
+3394 e5 07 	 jpfalse 338f
+3396 89 	 leave2
+3397 ff 	 
+
+; proc #2 : TERMINAL.BusyRead(VAR ch: CHAR)
+
+3398 d4 fd 	 enter -3
+339a 45 	 load global word5      ; local2 := global5
+339b 32 	 store local word-2
+339c 46 	 load global word6      ; if global6 = 0
+339d ab 	 eq0
+339e e3 09 	 jpfalse 33a9           ; THEN
+33a0 96 	 load immediate 6       ;   BDOS(6,255)
+33a1 8d ff 	 load immediate 255
+33a3 c3 	 system
+33a4 8e 00 03 	 load immediate 768 ;   local2 := IORESULT
+33a7 60 	 load stack word0
+33a8 32 	 store local word-2     ; END
+33a9 90 	 load immediate 0       ; global6 := 0
+33aa 56 	 store global word6
+33ab 22 	 load local word-2      ; IF local2 <> 0
+33ac cb 	 not_zero
+33ad e3 02 	 jpfalse 33b1           ; THEN
+33af 22 	 load local word-2      ;   global5 := local2
+33b0 55 	 store global word5     ; END
+33b1 03 	 load param1            ; result := local2 
+33b2 22 	 load local word-2
+33b3 70 	 store stack word0
+33b4 89 	 leave2
+33b5 00 	 Error16
+33b6 00 	 Error16
+33b7 00 	 Error16
+33b8 00 	 Error16
+33b9 00 	 Error16
+33ba 00 	 Error16
+33bb ff 	 
+33bc d4 ff 	 enter -1
+33be 91 	 load immediate 1
+33bf 56 	 store global word6
+33c0 88 	 leave0
+33c1 ff 	 
+33c2 d4 fb 	 enter -5
+33c4 90 	 load immediate 0
+33c5 33 	 store local word-3
+33c6 80 fe 	 load local address -2
+33c8 f1 	 call proc1
+33c9 22 	 load local word-2
+33ca 99 	 load immediate 9
+33cb a0 	 equal
+33cc e3 03 	 jpfalse 33d1
+33ce 8d 20 	 load immediate 32
+33d0 32 	 store local word-2
+33d1 22 	 load local word-2
+33d2 98 	 load immediate 8
+33d3 a0 	 equal
+33d4 df 04 	 orjp 33da
+33d6 22 	 load local word-2
+33d7 8d 1f 	 load immediate 31
+33d9 a0 	 equal
+33da df 04 	 orjp 33e0
+33dc 22 	 load local word-2
+33dd 8d 7f 	 load immediate 127
+33df a0 	 equal
+33e0 e3 10 	 jpfalse 33f2
+33e2 23 	 load local word-3
+33e3 cb 	 not_zero
+33e4 e3 0a 	 jpfalse 33f0
+33e6 98 	 load immediate 8
+33e7 f5 	 call proc5
+33e8 8d 20 	 load immediate 32
+33ea f5 	 call proc5
+33eb 98 	 load immediate 8
+33ec f5 	 call proc5
+33ed 23 	 load local word-3
+33ee ad 	 dec
+33ef 33 	 store local word-3
+33f0 e2 3b 	 jp 342d
+33f2 22 	 load local word-2
+33f3 8d 18 	 load immediate 24
+33f5 a0 	 equal
+33f6 e3 12 	 jpfalse 340a
+33f8 23 	 load local word-3
+33f9 cb 	 not_zero
+33fa e3 0c 	 jpfalse 3408
+33fc 98 	 load immediate 8
+33fd f5 	 call proc5
+33fe 8d 20 	 load immediate 32
+3400 f5 	 call proc5
+3401 98 	 load immediate 8
+3402 f5 	 call proc5
+3403 23 	 load local word-3
+3404 ad 	 dec
+3405 33 	 store local word-3
+3406 e4 10 	 jp 33f8
+3408 e2 23 	 jp 342d
+340a 22 	 load local word-2
+340b 8d 7f 	 load immediate 127
+340d a2 	 uless_than
+340e de 03 	 andjp 3413
+3410 22 	 load local word-2
+3411 9d 	 load immediate 13
+3412 a1 	 not_equal
+3413 e3 18 	 jpfalse 342d
+3415 04 	 load param2
+3416 23 	 load local word-3
+3417 22 	 load local word-2
+3418 1d 	 store indexed byte
+3419 22 	 load local word-2
+341a 8d 20 	 load immediate 32
+341c a2 	 uless_than
+341d e3 09 	 jpfalse 3428
+341f ff 	 call proc15
+3420 22 	 load local word-2
+3421 ae 40 	 add 64
+3423 f5 	 call proc5
+3424 ed 10 	 call proc16
+3426 e2 02 	 jp 342a
+3428 22 	 load local word-2
+3429 f5 	 call proc5
+342a 23 	 load local word-3
+342b ac 	 inc
+342c 33 	 store local word-3
+342d 22 	 load local word-2
+342e 9d 	 load immediate 13
+342f a0 	 equal
+3430 df 03 	 orjp 3435
+3432 23 	 load local word-3
+3433 03 	 load param1
+3434 a3 	 ugreater_than
+3435 e5 71 	 jpfalse 33c6
+3437 23 	 load local word-3
+3438 03 	 load param1
+3439 a4 	 uless_or_equal
+343a e3 04 	 jpfalse 3440
+343c 04 	 load param2
+343d 23 	 load local word-3
+343e 90 	 load immediate 0
+343f 1d 	 store indexed byte
+3440 f6 	 call proc6
+3441 8a 	 leave4
+3442 ff 	 
+3443 d4 ff 	 enter -1
+3445 96 	 load immediate 6
+3446 03 	 load param1
+3447 c3 	 system
+3448 89 	 leave2
+3449 00 	 Error16
+344a 00 	 Error16
+344b ff 	 
+344c d4 ff 	 enter -1
+344e 9d 	 load immediate 13
+344f f5 	 call proc5
+3450 9a 	 load immediate 10
+3451 f5 	 call proc5
+3452 88 	 leave0
+3453 ff 	 
+3454 d4 fd 	 enter -3
+3456 03 	 load param1
+3457 ac 	 inc
+3458 04 	 load param2
+3459 40 12 	 reserve_string
+345b 14 	 store param2
+345c 90 	 load immediate 0
+345d 32 	 store local word-2
+345e 22 	 load local word-2
+345f 03 	 load param1
+3460 a4 	 uless_or_equal
+3461 de 04 	 andjp 3467
+3463 04 	 load param2
+3464 22 	 load local word-2
+3465 0d 	 load indexed byte
+3466 cb 	 not_zero
+3467 e3 09 	 jpfalse 3472
+3469 04 	 load param2
+346a 22 	 load local word-2
+346b 0d 	 load indexed byte
+346c f5 	 call proc5
+346d 22 	 load local word-2
+346e ac 	 inc
+346f 32 	 store local word-2
+3470 e4 14 	 jp 345e
+3472 8a 	 leave4
+3473 ff 	 
+
+; procedure 17 : write an escape sequence
+; param3: addr of escape sequence, param2 unused (param3's high)
+; param1: tempo
+
+3474 d4 fb 	 enter -5
+3476 91 	 load immediate 1   ; local2 := 1
+3477 32 	 store local word-2
+3478 05 	 load param3        ; local3 := param3[0] (* size of string *)
+3479 90 	 load immediate 0
+347a 0d 	 load indexed byte
+347b 33 	 store local word-3
+
+347c 22 	 load local word-2  ; WHILE local2 <= local3 DO
+347d 23 	 load local word-3
+347e a4 	 uless_or_equal
+347f e3 09 	 jpfalse 348a
+3481 05 	 load param3        ;   WriteChar(param3[local2])
+3482 22 	 load local word-2
+3483 0d 	 load indexed byte
+3484 f5 	 call proc5
+3485 22 	 load local word-2  ;   INC(local2)
+3486 ac 	 inc
+3487 32 	 store local word-2
+3488 e4 0e 	 jp 347c            ; END
+
+348a 91 	 load immediate 1   ; local2 := 1
+348b 32 	 store local word-2
+348c 03 	 load param1        ; local3 :=  param1 * 4
+348d b0 02 	 shl 2
+348f 33 	 store local word-3
+
+3490 22 	 load local word-2  ; WHILE local2 <= local3 DO
+3491 23 	 load local word-3
+3492 a4 	 uless_or_equal
+3493 e3 05 	 jpfalse 349a
+3495 22 	 load local word-2  ;  INC(local2)
+3496 ac 	 inc
+3497 32 	 store local word-2
+3498 e4 0a 	 jp 3490            ; END
+349a 8b 	 leave6             ; RETURN
+349b ff 	 
+
+; TERMINAL.ClearScreen
+
+349c d4 ff 	 enter -1
+349e 8e 48 03 	 load immediate 840 ; proc17(sequences+
+34a1 82 2d 	 load stack address 45  ; clear screen sequence
+34a3 95 	 load immediate 5       ; size of sequence
+34a4 90 	 load immediate 0
+34a5 ed 11 	 call proc17
+34a7 8e 48 03 	 load immediate 840
+34aa 82 30 	 load stack address 48  ; home sequence
+34ac 95 	 load immediate 5
+34ad 8e 48 03 	 load immediate 840 ; 
+34b0 2e 3b 	 load stack word 59     ; tempo
+34b2 ed 11 	 call proc17
+34b4 88 	 leave0
+34b5 ff 	 
+
+; TERMINAL.GotoXY
+
+
+34b6 d4 f5 	 enter -11
+34b8 04 	 load param2
+34b9 43 	 load global word3
+34ba a2 	 uless_than
+34bb de 03 	 andjp 34c0
+34bd 03 	 load param1
+34be 42 	 load global word2
+34bf a2 	 uless_than
+34c0 e3 56 	 jpfalse 3518
+34c2 90 	 load immediate 0
+34c3 32 	 store local word-2
+34c4 04 	 load param2
+34c5 8e 9c 03 	 load immediate 924
+34c8 22 	 load local word-2
+34c9 0d 	 load indexed byte
+34ca a6 	 add
+34cb 33 	 store local word-3
+34cc 8e 9e 03 	 load immediate 926
+34cf 22 	 load local word-2
+34d0 0d 	 load indexed byte
+34d1 36 	 store local word-6
+34d2 8e 8a 03 	 load immediate 906
+34d5 26 	 load local word-6
+34d6 23 	 load local word-3
+34d7 8e 48 03 	 load immediate 840
+34da 2e 29 	 load stack word 41
+34dc e3 03 	 jpfalse 34e1
+34de 1d 	 store indexed byte
+34df e2 1d 	 jp 34fe
+34e1 9a 	 load immediate 10
+34e2 aa 	 umod
+34e3 8d 30 	 load immediate 48
+34e5 a6 	 add
+34e6 1d 	 store indexed byte
+34e7 23 	 load local word-3
+34e8 9a 	 load immediate 10
+34e9 a9 	 udiv
+34ea 33 	 store local word-3
+34eb 26 	 load local word-6
+34ec ad 	 dec
+34ed 36 	 store local word-6
+34ee 8e 8a 03 	 load immediate 906
+34f1 26 	 load local word-6
+34f2 0d 	 load indexed byte
+34f3 20 	 dup
+34f4 8d 30 	 load immediate 48
+34f6 a2 	 uless_than
+34f7 21 	 swap
+34f8 8d 39 	 load immediate 57
+34fa a3 	 ugreater_than
+34fb e6 	 bitwise_or
+34fc e5 2c 	 jpfalse 34d2
+34fe 22 	 load local word-2
+34ff ac 	 inc
+3500 32 	 store local word-2
+3501 03 	 load param1
+3502 22 	 load local word-2
+3503 91 	 load immediate 1
+3504 a3 	 ugreater_than
+3505 e5 42 	 jpfalse 34c5
+3507 33 	 store local word-3
+3508 e2 01 	 jp 350b
+350a 00 	 Error16
+350b 8e 48 03 	 load immediate 840
+350e 82 21 	 load stack address 33
+3510 9f 	 load immediate 15
+3511 8e 48 03 	 load immediate 840
+3514 2e 2c 	 load stack word 44
+3516 ed 11 	 call proc17
+3518 8a 	 leave4
+3519 ff 	 
+;
+; TERMINAL.ClearToEOL
+
+351a d4 ff 	 enter -1
+351c 8e 48 03 	 load immediate 840
+351f 82 3c 	 load stack address 60
+3521 95 	 load immediate 5
+3522 8e 48 03 	 load immediate 840
+3525 2e 47 	 load stack word 71
+3527 ed 11 	 call proc17
+3529 88 	 leave0
+352a ff 	 
+
+; TERMINAL.InsertLine
+
+352b d4 ff 	 enter -1
+352d 8e 48 03 	 load immediate 840
+3530 82 33 	 load stack address 51
+3532 99 	 load immediate 9
+3533 8e 48 03 	 load immediate 840
+3536 2e 3b 	 load stack word 59
+3538 ed 11 	 call proc17
+353a 88 	 leave0
+353b ff 	 
+
+; TERMINAL.DeleteLine
+
+353c d4 ff 	 enter -1
+353e 8e 48 03 	 load immediate 840
+3541 82 38 	 load stack address 56
+3543 95 	 load immediate 5
+3544 8e 48 03 	 load immediate 840
+3547 2e 3b 	 load stack word 59
+3549 ed 11 	 call proc17
+354b 88 	 leave0
+354c ff 	 
+
+; TERMINAL.Highlight
+
+354d d4 ff 	 enter -1
+354f 8e 48 03 	 load immediate 840
+3552 82 43 	 load stack address 67
+3554 97 	 load immediate 7
+3555 8e 48 03 	 load immediate 840
+3558 2e 47 	 load stack word 71
+355a ed 11 	 call proc17
+355c 88 	 leave0
+355d ff 	 
+
+; TERMINAL.Normal
+
+355e d4 ff 	 enter -1
+3560 8e 48 03 	 load immediate 840
+3563 82 3f 	 load stack address 63
+3565 97 	 load immediate 7
+3566 8e 48 03 	 load immediate 840
+3569 2e 47 	 load stack word 71
+356b ed 11 	 call proc17
+356d 88 	 leave0
+356e ff 	 
+
+; TERMINAL.InitScreen
+356f d4 ff 	 enter -1
+3571 8e 48 03 	 load immediate 840
+3574 82 11 	 load stack address 17
+3576 9f 	 load immediate 15
+3577 90 	 load immediate 0
+3578 ed 11 	 call proc17
+357a 88 	 leave0
+357b ff 	 
+
+; TERMINAL.ExitScreen
+
+357c d4 ff 	 enter -1
+357e 8e 48 03 	 load immediate 840
+3581 82 19 	 load stack address 25
+3583 9f 	 load immediate 15
+3584 90 	 load immediate 0
+3585 ed 11 	 call proc17
+3587 88 	 leave0
+3588 ff 	 
+
+; TERMINAL's INIT
+
+3589 d4 ff 	 enter -1
+358b 8e 48 03 	 load immediate 840     ; global3 := data.rows
+358e 82 10 	 load stack address 16
+3590 90 	 load immediate 0
+3591 0d 	 load indexed byte
+3592 53 	 store global word3
+3593 8e 48 03 	 load immediate 840     ; global2 := data.columns
+3596 82 10 	 load stack address 16
+3598 91 	 load immediate 1
+3599 0d 	 load indexed byte
+359a 52 	 store global word2
+359b 8e 48 03 	 load immediate 840     ; IF data.eraseSequence[0] <> 0C THEN
+359e 82 3c 	 load stack address 60
+35a0 90 	 load immediate 0
+35a1 0d 	 load indexed byte
+35a2 cb 	 not_zero
+35a3 e3 05 	 jpfalse 35aa
+35a5 44 	 load global word4          ;   INCL(global4, 0)
+35a6 90 	 load immediate 0
+35a7 ea 	 power2
+35a8 e6 	 bitwise_or
+35a9 54 	 store global word4         ; END
+35aa 8e 48 03 	 load immediate 840     ; IF data.insertLineSequence[0] <> 0C THEN
+35ad 82 33 	 load stack address 51
+35af 90 	 load immediate 0
+35b0 0d 	 load indexed byte
+35b1 cb 	 not_zero
+35b2 e3 05 	 jpfalse 35b9
+35b4 44 	 load global word4          ;   INCL(global4, 1)
+35b5 91 	 load immediate 1
+35b6 ea 	 power2
+35b7 e6 	 bitwise_or
+35b8 54 	 store global word4         ; END;
+35b9 8e 48 03 	 load immediate 840     ; IF data.highlightSequence[0] <> 0C THEN
+35bc 82 43 	 load stack address 67
+35be 90 	 load immediate 0
+35bf 0d 	 load indexed byte
+35c0 cb 	 not_zero
+35c1 e3 05 	 jpfalse 35c8
+35c3 44 	 load global word4          ;   INCL(global4, 2)
+35c4 92 	 load immediate 2
+35c5 ea 	 power2
+35c6 e6 	 bitwise_or
+35c7 54 	 store global word4         ; END
+35c8 50 	 end_program

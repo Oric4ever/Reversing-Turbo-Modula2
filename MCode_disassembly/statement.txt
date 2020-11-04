@@ -1,0 +1,1793 @@
+module start at 0a72
+0a72 : Module STATEMEN
+	depends on COMPILER 
+	depends on LOADER 
+	depends on FILES 
+	depends on TEXTS 
+	depends on SYMTAB 
+	depends on EXPRESS 
+	depends on CODEGEN 
+	depends on SCANNER 
+	depends on ERRORS 
+
+STATEMEN.proc0: 0a25
+STATEMEN.BODY  : 08a4
+STATEMEN.proc2: 0001
+STATEMEN.proc3: 003b
+STATEMEN.STATSE: 0634
+STATEMEN.proc5: 0078
+STATEMEN.proc6: 018b
+STATEMEN.proc7: 0341
+STATEMEN.proc8: 037c
+STATEMEN.proc9: 039c
+STATEMEN.proc10: 042b
+STATEMEN.proc11: 045d
+STATEMEN.proc12: 047b
+STATEMEN.proc13: 04c3
+STATEMEN.proc14: 0509
+STATEMEN.STMT  : 0566
+STATEMEN.proc16: 0683
+STATEMEN.proc17: 0738
+STATEMEN.proc18: 0808
+STATEMEN.proc19: 0863
+
+
+0001 d4 f9 	 enter -7
+0003 46 	 load global word6
+0004 66 	 load stack word6
+0005 32 	 store local word-2
+0006 22 	 load local word-2
+0007 ab 	 eq0
+0008 e3 03 	 jpfalse 000d
+000a 90 	 load immediate 0
+000b 85 80 	 fct_leave 128
+000d 22 	 load local word-2
+000e 60 	 load stack word0
+000f cb 	 not_zero
+0010 e3 05 	 jpfalse 0017
+0012 22 	 load local word-2
+0013 60 	 load stack word0
+0014 32 	 store local word-2
+0015 e4 0a 	 jp 000d
+0017 22 	 load local word-2
+0018 62 	 load stack word2
+0019 33 	 store local word-3
+001a 23 	 load local word-3
+001b 64 	 load stack word4
+001c 99 	 load immediate 9
+001d a3 	 ugreater_than
+001e df 04 	 orjp 0024
+0020 94 	 load immediate 4
+0021 22 	 load local word-2
+0022 63 	 load stack word3
+0023 e7 	 bitwise_in
+0024 e3 04 	 jpfalse 002a
+0026 91 	 load immediate 1
+0027 34 	 store local word-4
+0028 e2 06 	 jp 0030
+002a 23 	 load local word-3
+002b 63 	 load stack word3
+002c ac 	 inc
+002d b1 01 	 shr 1
+002f 34 	 store local word-4
+0030 22 	 load local word-2
+0031 65 	 load stack word5
+0032 b1 01 	 shr 1
+0034 24 	 load local word-4
+0035 a6 	 add
+0036 af 03 	 sub 3
+0038 85 80 	 fct_leave 128
+003a ff 	 
+003b d4 ff 	 enter -1
+003d 0c 54 	 load EXPRESS.word4
+003f cb 	 not_zero
+0040 e3 30 	 jpfalse 0072
+0042 43 	 load global word3
+0043 e3 07 	 jpfalse 004c
+0045 48 	 load global word8
+0046 f0 52 	 call EXPRESS.proc2
+0048 8d 19 	 load immediate 25
+004a f0 6a 	 call CODEGEN.proc10
+004c 46 	 load global word6
+004d 62 	 load stack word2
+004e ab 	 eq0
+004f e3 0d 	 jpfalse 005e
+0051 90 	 load immediate 0
+0052 f2 	 call proc2
+0053 0c 54 	 load EXPRESS.word4
+0055 91 	 load immediate 1
+0056 a0 	 equal
+0057 b0 07 	 shl 7
+0059 a6 	 add
+005a f0 6b 	 call CODEGEN.proc11
+005c e2 12 	 jp 0070
+005e 98 	 load immediate 8
+005f 0c 72 	 load SCANNER.word2
+0061 e7 	 bitwise_in
+0062 e3 0c 	 jpfalse 0070
+0064 99 	 load immediate 9
+0065 f0 68 	 call CODEGEN.proc8
+0067 90 	 load immediate 0
+0068 f0 68 	 call CODEGEN.proc8
+006a 90 	 load immediate 0
+006b f0 68 	 call CODEGEN.proc8
+006d 9e 	 load immediate 14
+006e f0 6a 	 call CODEGEN.proc10
+0070 e2 04 	 jp 0076
+0072 95 	 load immediate 5
+0073 92 	 load immediate 2
+0074 f0 6b 	 call CODEGEN.proc11
+0076 88 	 leave0
+0077 ff 	 
+0078 d4 e9 	 enter -23
+007a 44 	 load global word4
+007b ac 	 inc
+007c 54 	 store global word4
+007d f0 5c 	 call EXPRESS.proc12
+007f 97 	 load immediate 7
+0080 8d 28 	 load immediate 40
+0082 f0 59 	 call EXPRESS.proc9
+0084 0c 52 	 load EXPRESS.word2
+0086 60 	 load stack word0
+0087 37 	 store local word-7
+0088 8d 29 	 load immediate 41
+008a f0 78 	 call SCANNER.proc8
+008c 8d 15 	 load immediate 21
+008e ef 06 11 	 call CODEGEN.proc17
+0091 9f 	 load immediate 15
+0092 f0 6a 	 call CODEGEN.proc10
+0094 80 f5 	 load local address -11
+0096 91 	 load immediate 1
+0097 f0 6c 	 call CODEGEN.proc12
+0099 90 	 load immediate 0
+009a 32 	 store local word-2
+009b 90 	 load immediate 0
+009c 35 	 store local word-5
+009d 0c 75 	 load SCANNER.word5
+009f 8e 00 25 	 load immediate 9472
+00a2 e7 	 bitwise_in
+00a3 b6 	 not
+00a4 e3 6b 	 jpfalse 0111
+00a6 9e 	 load immediate 14
+00a7 ef 06 10 	 call CODEGEN.proc16
+00aa 3c f4 	 store local word -12
+00ac 27 	 load local word-7
+00ad 80 f8 	 load local address -8
+00af 80 f7 	 load local address -9
+00b1 f0 5e 	 call EXPRESS.proc14
+00b3 90 	 load immediate 0
+00b4 36 	 store local word-6
+00b5 22 	 load local word-2
+00b6 33 	 store local word-3
+00b7 23 	 load local word-3
+00b8 cb 	 not_zero
+00b9 de 04 	 andjp 00bf
+00bb 23 	 load local word-3
+00bc 61 	 load stack word1
+00bd 28 	 load local word-8
+00be b2 	 iless_than
+00bf e3 07 	 jpfalse 00c8
+00c1 23 	 load local word-3
+00c2 36 	 store local word-6
+00c3 23 	 load local word-3
+00c4 60 	 load stack word0
+00c5 33 	 store local word-3
+00c6 e4 11 	 jp 00b7
+00c8 80 fc 	 load local address -4
+00ca 96 	 load immediate 6
+00cb f0 77 	 call SCANNER.proc7
+00cd 24 	 load local word-4
+00ce 23 	 load local word-3
+00cf 70 	 store stack word0
+00d0 24 	 load local word-4
+00d1 29 	 load local word-9
+00d2 71 	 store stack word1
+00d3 24 	 load local word-4
+00d4 2c f4 	 load local word -12
+00d6 72 	 store stack word2
+00d7 23 	 load local word-3
+00d8 ab 	 eq0
+00d9 e3 04 	 jpfalse 00df
+00db 24 	 load local word-4
+00dc 35 	 store local word-5
+00dd e2 08 	 jp 00e7
+00df 23 	 load local word-3
+00e0 61 	 load stack word1
+00e1 29 	 load local word-9
+00e2 b3 	 igreater_than
+00e3 8d 2f 	 load immediate 47
+00e5 f0 51 	 call EXPRESS.proc1
+00e7 24 	 load local word-4
+00e8 33 	 store local word-3
+00e9 29 	 load local word-9
+00ea ad 	 dec
+00eb 39 	 store local word-9
+00ec 29 	 load local word-9
+00ed 28 	 load local word-8
+00ee b2 	 iless_than
+00ef e5 29 	 jpfalse 00c8
+00f1 26 	 load local word-6
+00f2 cb 	 not_zero
+00f3 e3 05 	 jpfalse 00fa
+00f5 26 	 load local word-6
+00f6 24 	 load local word-4
+00f7 70 	 store stack word0
+00f8 e2 02 	 jp 00fc
+00fa 24 	 load local word-4
+00fb 32 	 store local word-2
+00fc 96 	 load immediate 6
+00fd f0 79 	 call SCANNER.proc9
+00ff 91 	 load immediate 1
+0100 f0 74 	 call SCANNER.proc4
+0102 b6 	 not
+0103 e5 59 	 jpfalse 00ac
+0105 f0 71 	 call SCANNER.proc1
+0107 8e 00 25 	 load immediate 9472
+010a f4 	 call proc4
+010b e5 06 	 jpfalse 0107
+010d 8d 14 	 load immediate 20
+010f f0 6a 	 call CODEGEN.proc10
+0111 98 	 load immediate 8
+0112 f0 74 	 call SCANNER.proc4
+0114 b6 	 not
+0115 e5 7a 	 jpfalse 009d
+0117 44 	 load global word4
+0118 ad 	 dec
+0119 54 	 store global word4
+011a 2b 	 load local word-11
+011b 91 	 load immediate 1
+011c f0 6e 	 call CODEGEN.proc14
+011e 3a 	 store local word-10
+011f 22 	 load local word-2
+0120 cb 	 not_zero
+0121 e3 3c 	 jpfalse 015f
+0123 22 	 load local word-2
+0124 61 	 load stack word1
+0125 38 	 store local word-8
+0126 8d 13 	 load immediate 19
+0128 f0 6a 	 call CODEGEN.proc10
+012a 28 	 load local word-8
+012b 8e 00 80 	 load immediate 32768
+012e a6 	 add
+012f f0 63 	 call CODEGEN.proc3
+0131 25 	 load local word-5
+0132 61 	 load stack word1
+0133 28 	 load local word-8
+0134 a7 	 sub
+0135 f0 63 	 call CODEGEN.proc3
+0137 80 f5 	 load local address -11
+0139 90 	 load immediate 0
+013a f0 6c 	 call CODEGEN.proc12
+013c 28 	 load local word-8
+013d 22 	 load local word-2
+013e 61 	 load stack word1
+013f a0 	 equal
+0140 e3 0d 	 jpfalse 014f
+0142 22 	 load local word-2
+0143 62 	 load stack word2
+0144 2a 	 load local word-10
+0145 b6 	 not
+0146 a6 	 add
+0147 90 	 load immediate 0
+0148 f0 6d 	 call CODEGEN.proc13
+014a 22 	 load local word-2
+014b 60 	 load stack word0
+014c 32 	 store local word-2
+014d e2 09 	 jp 0158
+014f 25 	 load local word-5
+0150 61 	 load stack word1
+0151 28 	 load local word-8
+0152 a7 	 sub
+0153 b0 01 	 shl 1
+0155 ac 	 inc
+0156 f0 63 	 call CODEGEN.proc3
+0158 28 	 load local word-8
+0159 ac 	 inc
+015a 38 	 store local word-8
+015b 22 	 load local word-2
+015c ab 	 eq0
+015d e5 23 	 jpfalse 013c
+015f 9a 	 load immediate 10
+0160 f0 74 	 call SCANNER.proc4
+0162 e3 08 	 jpfalse 016c
+0164 8e 00 20 	 load immediate 8192
+0167 f4 	 call proc4
+0168 e5 06 	 jpfalse 0164
+016a e2 12 	 jp 017e
+016c 98 	 load immediate 8
+016d 0c 72 	 load SCANNER.word2
+016f e7 	 bitwise_in
+0170 e3 0c 	 jpfalse 017e
+0172 9d 	 load immediate 13
+0173 f0 68 	 call CODEGEN.proc8
+0175 90 	 load immediate 0
+0176 f0 68 	 call CODEGEN.proc8
+0178 90 	 load immediate 0
+0179 f0 68 	 call CODEGEN.proc8
+017b 9e 	 load immediate 14
+017c f0 6a 	 call CODEGEN.proc10
+017e 25 	 load local word-5
+017f cb 	 not_zero
+0180 e3 05 	 jpfalse 0187
+0182 2b 	 load local word-11
+0183 90 	 load immediate 0
+0184 f0 6e 	 call CODEGEN.proc14
+0186 3a 	 store local word-10
+0187 f0 71 	 call SCANNER.proc1
+0189 88 	 leave0
+018a ff 	 
+018b d4 e7 	 enter -25
+018d 9a 	 load immediate 10
+018e d2 	 reserve
+018f 32 	 store local word-2
+0190 9a 	 load immediate 10
+0191 d2 	 reserve
+0192 33 	 store local word-3
+0193 9a 	 load immediate 10
+0194 d2 	 reserve
+0195 34 	 store local word-4
+0196 9a 	 load immediate 10
+0197 d2 	 reserve
+0198 35 	 store local word-5
+0199 ef 05 10 	 call EXPRESS.proc16
+019c 97 	 load immediate 7
+019d 8d 1c 	 load immediate 28
+019f f0 59 	 call EXPRESS.proc9
+01a1 0c 52 	 load EXPRESS.word2
+01a3 60 	 load stack word0
+01a4 2f 00 13 	 load COMPILER.word19
+01a7 a0 	 equal
+01a8 e3 05 	 jpfalse 01af
+01aa 95 	 load immediate 5
+01ab 8d 1c 	 load immediate 28
+01ad f0 59 	 call EXPRESS.proc9
+01af 0c 52 	 load EXPRESS.word2
+01b1 64 	 load stack word4
+01b2 9c 	 load immediate 12
+01b3 e7 	 bitwise_in
+01b4 b6 	 not
+01b5 8d 18 	 load immediate 24
+01b7 f0 51 	 call EXPRESS.proc1
+01b9 22 	 load local word-2
+01ba 0c 52 	 load EXPRESS.word2
+01bc 9a 	 load immediate 10
+01bd 30 	 copy block
+01be 0c 52 	 load EXPRESS.word2
+01c0 64 	 load stack word4
+01c1 94 	 load immediate 4
+01c2 a0 	 equal
+01c3 3a 	 store local word-10
+01c4 2a 	 load local word-10
+01c5 e3 09 	 jpfalse 01d0
+01c7 25 	 load local word-5
+01c8 22 	 load local word-2
+01c9 9a 	 load immediate 10
+01ca 30 	 copy block
+01cb 22 	 load local word-2
+01cc 25 	 load local word-5
+01cd 60 	 load stack word0
+01ce f0 54 	 call EXPRESS.proc4
+01d0 f0 56 	 call EXPRESS.proc6
+01d2 0c 52 	 load EXPRESS.word2
+01d4 60 	 load stack word0
+01d5 0c 06 	 load COMPILER.word6
+01d7 a0 	 equal
+01d8 38 	 store local word-8
+01d9 8d 1b 	 load immediate 27
+01db f0 78 	 call SCANNER.proc8
+01dd f0 5c 	 call EXPRESS.proc12
+01df 22 	 load local word-2
+01e0 60 	 load stack word0
+01e1 8d 1b 	 load immediate 27
+01e3 f0 57 	 call EXPRESS.proc7
+01e5 23 	 load local word-3
+01e6 0c 52 	 load EXPRESS.word2
+01e8 9a 	 load immediate 10
+01e9 30 	 copy block
+01ea 22 	 load local word-2
+01eb f0 53 	 call EXPRESS.proc3
+01ed 8d 2a 	 load immediate 42
+01ef f0 78 	 call SCANNER.proc8
+01f1 f0 5c 	 call EXPRESS.proc12
+01f3 22 	 load local word-2
+01f4 60 	 load stack word0
+01f5 8d 2a 	 load immediate 42
+01f7 f0 57 	 call EXPRESS.proc7
+01f9 24 	 load local word-4
+01fa 0c 52 	 load EXPRESS.word2
+01fc 9a 	 load immediate 10
+01fd 30 	 copy block
+01fe 91 	 load immediate 1
+01ff 36 	 store local word-6
+0200 8d 1d 	 load immediate 29
+0202 f0 74 	 call SCANNER.proc4
+0204 e3 0c 	 jpfalse 0212
+0206 f0 5d 	 call EXPRESS.proc13
+0208 0c 06 	 load COMPILER.word6
+020a 8d 1d 	 load immediate 29
+020c f0 57 	 call EXPRESS.proc7
+020e 0c 52 	 load EXPRESS.word2
+0210 62 	 load stack word2
+0211 36 	 store local word-6
+0212 26 	 load local word-6
+0213 90 	 load immediate 0
+0214 b2 	 iless_than
+0215 de 02 	 andjp 0219
+0217 28 	 load local word-8
+0218 b6 	 not
+0219 37 	 store local word-7
+021a 8d 1e 	 load immediate 30
+021c f0 78 	 call SCANNER.proc8
+021e 90 	 load immediate 0
+021f 39 	 store local word-9
+0220 27 	 load local word-7
+0221 b6 	 not
+0222 de 03 	 andjp 0227
+0224 23 	 load local word-3
+0225 61 	 load stack word1
+0226 ab 	 eq0
+0227 de 03 	 andjp 022c
+0229 24 	 load local word-4
+022a 61 	 load stack word1
+022b ab 	 eq0
+022c e3 1e 	 jpfalse 024c
+022e 28 	 load local word-8
+022f e3 15 	 jpfalse 0246
+0231 26 	 load local word-6
+0232 90 	 load immediate 0
+0233 b5 	 igreater_or_equal
+0234 e3 08 	 jpfalse 023e
+0236 23 	 load local word-3
+0237 62 	 load stack word2
+0238 24 	 load local word-4
+0239 62 	 load stack word2
+023a b4 	 iless_or_equal
+023b 39 	 store local word-9
+023c e2 06 	 jp 0244
+023e 23 	 load local word-3
+023f 62 	 load stack word2
+0240 24 	 load local word-4
+0241 62 	 load stack word2
+0242 b5 	 igreater_or_equal
+0243 39 	 store local word-9
+0244 e2 06 	 jp 024c
+0246 23 	 load local word-3
+0247 62 	 load stack word2
+0248 24 	 load local word-4
+0249 62 	 load stack word2
+024a a4 	 uless_or_equal
+024b 39 	 store local word-9
+024c 29 	 load local word-9
+024d e3 1b 	 jpfalse 026a
+024f f0 64 	 call CODEGEN.proc4
+0251 0c 52 	 load EXPRESS.word2
+0253 23 	 load local word-3
+0254 9a 	 load immediate 10
+0255 30 	 copy block
+0256 22 	 load local word-2
+0257 60 	 load stack word0
+0258 f0 55 	 call EXPRESS.proc5
+025a 0c 52 	 load EXPRESS.word2
+025c 24 	 load local word-4
+025d 9a 	 load immediate 10
+025e 30 	 copy block
+025f 22 	 load local word-2
+0260 60 	 load stack word0
+0261 f0 55 	 call EXPRESS.proc5
+0263 9a 	 load immediate 10
+0264 ef 06 10 	 call CODEGEN.proc16
+0267 3b 	 store local word-11
+0268 e2 7a 	 jp 02e4
+026a 24 	 load local word-4
+026b 0c 07 	 load COMPILER.word7
+026d f0 54 	 call EXPRESS.proc4
+026f 24 	 load local word-4
+0270 f0 53 	 call EXPRESS.proc3
+0272 27 	 load local word-7
+0273 e3 0d 	 jpfalse 0282
+0275 22 	 load local word-2
+0276 f0 52 	 call EXPRESS.proc2
+0278 26 	 load local word-6
+0279 f0 68 	 call CODEGEN.proc8
+027b 97 	 load immediate 7
+027c 90 	 load immediate 0
+027d f0 66 	 call CODEGEN.proc6
+027f 22 	 load local word-2
+0280 f0 53 	 call EXPRESS.proc3
+0282 9a 	 load immediate 10
+0283 ef 06 10 	 call CODEGEN.proc16
+0286 3b 	 store local word-11
+0287 22 	 load local word-2
+0288 f0 52 	 call EXPRESS.proc2
+028a 24 	 load local word-4
+028b f0 52 	 call EXPRESS.proc2
+028d 27 	 load local word-7
+028e e3 07 	 jpfalse 0297
+0290 26 	 load local word-6
+0291 f0 68 	 call CODEGEN.proc8
+0293 97 	 load immediate 7
+0294 90 	 load immediate 0
+0295 f0 66 	 call CODEGEN.proc6
+0297 94 	 load immediate 4
+0298 26 	 load local word-6
+0299 90 	 load immediate 0
+029a b2 	 iless_than
+029b a6 	 add
+029c 28 	 load local word-8
+029d f0 66 	 call CODEGEN.proc6
+029f 8d 10 	 load immediate 16
+02a1 f0 6a 	 call CODEGEN.proc10
+02a3 80 f4 	 load local address -12
+02a5 91 	 load immediate 1
+02a6 f0 6c 	 call CODEGEN.proc12
+02a8 27 	 load local word-7
+02a9 e3 0d 	 jpfalse 02b8
+02ab 22 	 load local word-2
+02ac f0 52 	 call EXPRESS.proc2
+02ae 26 	 load local word-6
+02af f0 68 	 call CODEGEN.proc8
+02b1 96 	 load immediate 6
+02b2 90 	 load immediate 0
+02b3 f0 66 	 call CODEGEN.proc6
+02b5 22 	 load local word-2
+02b6 f0 53 	 call EXPRESS.proc3
+02b8 22 	 load local word-2
+02b9 60 	 load stack word0
+02ba 64 	 load stack word4
+02bb 91 	 load immediate 1
+02bc a0 	 equal
+02bd de 04 	 andjp 02c3
+02bf 98 	 load immediate 8
+02c0 0c 72 	 load SCANNER.word2
+02c2 e7 	 bitwise_in
+02c3 de 0c 	 andjp 02d1
+02c5 23 	 load local word-3
+02c6 60 	 load stack word0
+02c7 22 	 load local word-2
+02c8 60 	 load stack word0
+02c9 a1 	 not_equal
+02ca df 05 	 orjp 02d1
+02cc 24 	 load local word-4
+02cd 60 	 load stack word0
+02ce 22 	 load local word-2
+02cf 60 	 load stack word0
+02d0 a1 	 not_equal
+02d1 e3 11 	 jpfalse 02e4
+02d3 22 	 load local word-2
+02d4 f0 52 	 call EXPRESS.proc2
+02d6 0c 52 	 load EXPRESS.word2
+02d8 22 	 load local word-2
+02d9 9a 	 load immediate 10
+02da 30 	 copy block
+02db f0 56 	 call EXPRESS.proc6
+02dd 22 	 load local word-2
+02de 60 	 load stack word0
+02df f0 55 	 call EXPRESS.proc5
+02e1 22 	 load local word-2
+02e2 f0 53 	 call EXPRESS.proc3
+02e4 2a 	 load local word-10
+02e5 e3 0c 	 jpfalse 02f3
+02e7 25 	 load local word-5
+02e8 f0 5a 	 call EXPRESS.proc10
+02ea 22 	 load local word-2
+02eb f0 52 	 call EXPRESS.proc2
+02ed 95 	 load immediate 5
+02ee 92 	 load immediate 2
+02ef 90 	 load immediate 0
+02f0 90 	 load immediate 0
+02f1 f0 65 	 call CODEGEN.proc5
+02f3 8e 00 20 	 load immediate 8192
+02f6 f4 	 call proc4
+02f7 e5 06 	 jpfalse 02f3
+02f9 f0 71 	 call SCANNER.proc1
+02fb 27 	 load local word-7
+02fc b6 	 not
+02fd e3 0d 	 jpfalse 030c
+02ff 22 	 load local word-2
+0300 f0 52 	 call EXPRESS.proc2
+0302 26 	 load local word-6
+0303 f0 68 	 call CODEGEN.proc8
+0305 96 	 load immediate 6
+0306 90 	 load immediate 0
+0307 f0 66 	 call CODEGEN.proc6
+0309 22 	 load local word-2
+030a f0 53 	 call EXPRESS.proc3
+030c 29 	 load local word-9
+030d e3 18 	 jpfalse 0327
+030f 22 	 load local word-2
+0310 f0 52 	 call EXPRESS.proc2
+0312 24 	 load local word-4
+0313 f0 52 	 call EXPRESS.proc2
+0315 92 	 load immediate 2
+0316 26 	 load local word-6
+0317 90 	 load immediate 0
+0318 b5 	 igreater_or_equal
+0319 a6 	 add
+031a 28 	 load local word-8
+031b f0 66 	 call CODEGEN.proc6
+031d 8d 10 	 load immediate 16
+031f f0 6a 	 call CODEGEN.proc10
+0321 2b 	 load local word-11
+0322 91 	 load immediate 1
+0323 f0 6d 	 call CODEGEN.proc13
+0325 e2 18 	 jp 033f
+0327 9f 	 load immediate 15
+0328 f0 6a 	 call CODEGEN.proc10
+032a 0c 62 	 load CODEGEN.word2
+032c 3c f3 	 store local word -13
+032e 2b 	 load local word-11
+032f 91 	 load immediate 1
+0330 f0 6d 	 call CODEGEN.proc13
+0332 2c f4 	 load local word -12
+0334 91 	 load immediate 1
+0335 f0 6e 	 call CODEGEN.proc14
+0337 b6 	 not
+0338 e3 05 	 jpfalse 033f
+033a 2c f3 	 load local word -13
+033c ac 	 inc
+033d f0 6f 	 call CODEGEN.proc15
+033f 88 	 leave0
+0340 ff 	 
+0341 d4 f9 	 enter -7
+0343 9d 	 load immediate 13
+0344 ef 06 10 	 call CODEGEN.proc16
+0347 32 	 store local word-2
+0348 f0 5c 	 call EXPRESS.proc12
+034a 0c 0e 	 load COMPILER.word14
+034c 8d 25 	 load immediate 37
+034e f0 57 	 call EXPRESS.proc7
+0350 8d 1e 	 load immediate 30
+0352 f0 78 	 call SCANNER.proc8
+0354 8d 10 	 load immediate 16
+0356 f0 6a 	 call CODEGEN.proc10
+0358 80 fd 	 load local address -3
+035a 91 	 load immediate 1
+035b f0 6c 	 call CODEGEN.proc12
+035d 8e 00 20 	 load immediate 8192
+0360 f4 	 call proc4
+0361 e5 06 	 jpfalse 035d
+0363 f0 71 	 call SCANNER.proc1
+0365 9f 	 load immediate 15
+0366 f0 6a 	 call CODEGEN.proc10
+0368 0c 62 	 load CODEGEN.word2
+036a 34 	 store local word-4
+036b 22 	 load local word-2
+036c 91 	 load immediate 1
+036d f0 6d 	 call CODEGEN.proc13
+036f 23 	 load local word-3
+0370 91 	 load immediate 1
+0371 f0 6e 	 call CODEGEN.proc14
+0373 b6 	 not
+0374 e3 04 	 jpfalse 037a
+0376 24 	 load local word-4
+0377 ac 	 inc
+0378 f0 6f 	 call CODEGEN.proc15
+037a 88 	 leave0
+037b ff 	 
+037c d4 fd 	 enter -3
+037e 9c 	 load immediate 12
+037f ef 06 10 	 call CODEGEN.proc16
+0382 32 	 store local word-2
+0383 8e 00 10 	 load immediate 4096
+0386 f4 	 call proc4
+0387 e5 06 	 jpfalse 0383
+0389 f0 71 	 call SCANNER.proc1
+038b f0 5c 	 call EXPRESS.proc12
+038d 0c 0e 	 load COMPILER.word14
+038f 9c 	 load immediate 12
+0390 f0 57 	 call EXPRESS.proc7
+0392 8d 10 	 load immediate 16
+0394 f0 6a 	 call CODEGEN.proc10
+0396 22 	 load local word-2
+0397 91 	 load immediate 1
+0398 f0 6d 	 call CODEGEN.proc13
+039a 88 	 leave0
+039b ff 	 
+039c d4 f3 	 enter -13
+039e f0 5c 	 call EXPRESS.proc12
+03a0 0c 0e 	 load COMPILER.word14
+03a2 8d 22 	 load immediate 34
+03a4 f0 57 	 call EXPRESS.proc7
+03a6 0c 65 	 load CODEGEN.word5
+03a8 34 	 store local word-4
+03a9 90 	 load immediate 0
+03aa 37 	 store local word-7
+03ab 0c 52 	 load EXPRESS.word2
+03ad 61 	 load stack word1
+03ae ab 	 eq0
+03af 35 	 store local word-5
+03b0 25 	 load local word-5
+03b1 e3 0f 	 jpfalse 03c2
+03b3 f0 64 	 call CODEGEN.proc4
+03b5 92 	 load immediate 2
+03b6 37 	 store local word-7
+03b7 0c 52 	 load EXPRESS.word2
+03b9 62 	 load stack word2
+03ba b6 	 not
+03bb e3 05 	 jpfalse 03c2
+03bd 91 	 load immediate 1
+03be 37 	 store local word-7
+03bf 90 	 load immediate 0
+03c0 1c 65 	 store CODEGEN.word5
+03c2 8d 23 	 load immediate 35
+03c4 f0 78 	 call SCANNER.proc8
+03c6 25 	 load local word-5
+03c7 b6 	 not
+03c8 e3 09 	 jpfalse 03d3
+03ca 8d 10 	 load immediate 16
+03cc f0 6a 	 call CODEGEN.proc10
+03ce 80 fe 	 load local address -2
+03d0 91 	 load immediate 1
+03d1 f0 6c 	 call CODEGEN.proc12
+03d3 8e 00 2c 	 load immediate 11264
+03d6 f4 	 call proc4
+03d7 e5 06 	 jpfalse 03d3
+03d9 9d 	 load immediate 13
+03da f0 74 	 call SCANNER.proc4
+03dc e3 0b 	 jpfalse 03e9
+03de 25 	 load local word-5
+03df b6 	 not
+03e0 e3 05 	 jpfalse 03e7
+03e2 22 	 load local word-2
+03e3 91 	 load immediate 1
+03e4 f0 6e 	 call CODEGEN.proc14
+03e6 36 	 store local word-6
+03e7 e2 3d 	 jp 0426
+03e9 25 	 load local word-5
+03ea b6 	 not
+03eb e3 12 	 jpfalse 03ff
+03ed 9f 	 load immediate 15
+03ee f0 6a 	 call CODEGEN.proc10
+03f0 80 fd 	 load local address -3
+03f2 91 	 load immediate 1
+03f3 f0 6c 	 call CODEGEN.proc12
+03f5 22 	 load local word-2
+03f6 91 	 load immediate 1
+03f7 f0 6e 	 call CODEGEN.proc14
+03f9 b6 	 not
+03fa e3 03 	 jpfalse 03ff
+03fc 23 	 load local word-3
+03fd ac 	 inc
+03fe 33 	 store local word-3
+03ff 24 	 load local word-4
+0400 de 03 	 andjp 0405
+0402 27 	 load local word-7
+0403 92 	 load immediate 2
+0404 a1 	 not_equal
+0405 1c 65 	 store CODEGEN.word5
+0407 9b 	 load immediate 11
+0408 f0 74 	 call SCANNER.proc4
+040a e3 03 	 jpfalse 040f
+040c f9 	 call proc9
+040d e2 0a 	 jp 0419
+040f f0 71 	 call SCANNER.proc1
+0411 8e 00 20 	 load immediate 8192
+0414 f4 	 call proc4
+0415 e5 06 	 jpfalse 0411
+0417 f0 71 	 call SCANNER.proc1
+0419 25 	 load local word-5
+041a df 04 	 orjp 0420
+041c 23 	 load local word-3
+041d 91 	 load immediate 1
+041e f0 6e 	 call CODEGEN.proc14
+0420 b6 	 not
+0421 e3 03 	 jpfalse 0426
+0423 22 	 load local word-2
+0424 f0 6f 	 call CODEGEN.proc15
+0426 24 	 load local word-4
+0427 1c 65 	 store CODEGEN.word5
+0429 88 	 leave0
+042a ff 	 
+042b d4 f7 	 enter -9
+042d 45 	 load global word5
+042e 32 	 store local word-2
+042f 44 	 load global word4
+0430 ac 	 inc
+0431 54 	 store global word4
+0432 44 	 load global word4
+0433 55 	 store global word5
+0434 8d 15 	 load immediate 21
+0436 f0 6a 	 call CODEGEN.proc10
+0438 80 fd 	 load local address -3
+043a 90 	 load immediate 0
+043b f0 6c 	 call CODEGEN.proc12
+043d 9b 	 load immediate 11
+043e ef 06 10 	 call CODEGEN.proc16
+0441 34 	 store local word-4
+0442 8e 00 20 	 load immediate 8192
+0445 f4 	 call proc4
+0446 e5 06 	 jpfalse 0442
+0448 f0 71 	 call SCANNER.proc1
+044a 9f 	 load immediate 15
+044b f0 6a 	 call CODEGEN.proc10
+044d 24 	 load local word-4
+044e 91 	 load immediate 1
+044f f0 6d 	 call CODEGEN.proc13
+0451 23 	 load local word-3
+0452 90 	 load immediate 0
+0453 f0 6e 	 call CODEGEN.proc14
+0455 35 	 store local word-5
+0456 44 	 load global word4
+0457 ad 	 dec
+0458 54 	 store global word4
+0459 22 	 load local word-2
+045a 55 	 store global word5
+045b 88 	 leave0
+045c ff 	 
+045d d4 fd 	 enter -3
+045f 45 	 load global word5
+0460 cb 	 not_zero
+0461 8d 1a 	 load immediate 26
+0463 f0 51 	 call EXPRESS.proc1
+0465 44 	 load global word4
+0466 32 	 store local word-2
+0467 22 	 load local word-2
+0468 45 	 load global word5
+0469 a3 	 ugreater_than
+046a e3 09 	 jpfalse 0475
+046c 8d 17 	 load immediate 23
+046e f0 6a 	 call CODEGEN.proc10
+0470 22 	 load local word-2
+0471 ad 	 dec
+0472 32 	 store local word-2
+0473 e4 0e 	 jp 0467
+0475 8d 14 	 load immediate 20
+0477 f0 6a 	 call CODEGEN.proc10
+0479 88 	 leave0
+047a ff 	 
+047b d4 fb 	 enter -5
+047d 46 	 load global word6
+047e 64 	 load stack word4
+047f 95 	 load immediate 5
+0480 a0 	 equal
+0481 de 03 	 andjp 0486
+0483 0c 54 	 load EXPRESS.word4
+0485 cb 	 not_zero
+0486 8d 1b 	 load immediate 27
+0488 f0 51 	 call EXPRESS.proc1
+048a 46 	 load global word6
+048b 62 	 load stack word2
+048c 33 	 store local word-3
+048d 23 	 load local word-3
+048e cb 	 not_zero
+048f e3 0f 	 jpfalse 04a0
+0491 80 fd 	 load local address -3
+0493 ef 05 16 	 call EXPRESS.proc22
+0496 f0 5c 	 call EXPRESS.proc12
+0498 23 	 load local word-3
+0499 8d 21 	 load immediate 33
+049b f0 58 	 call EXPRESS.proc8
+049d 23 	 load local word-3
+049e f0 55 	 call EXPRESS.proc5
+04a0 43 	 load global word3
+04a1 e3 07 	 jpfalse 04aa
+04a3 48 	 load global word8
+04a4 f0 52 	 call EXPRESS.proc2
+04a6 8d 19 	 load immediate 25
+04a8 f0 6a 	 call CODEGEN.proc10
+04aa 90 	 load immediate 0
+04ab 32 	 store local word-2
+04ac 23 	 load local word-3
+04ad cb 	 not_zero
+04ae e3 06 	 jpfalse 04b6
+04b0 23 	 load local word-3
+04b1 63 	 load stack word3
+04b2 ac 	 inc
+04b3 b1 01 	 shr 1
+04b5 32 	 store local word-2
+04b6 22 	 load local word-2
+04b7 f2 	 call proc2
+04b8 0c 54 	 load EXPRESS.word4
+04ba 91 	 load immediate 1
+04bb a0 	 equal
+04bc b0 07 	 shl 7
+04be a6 	 add
+04bf f0 6b 	 call CODEGEN.proc11
+04c1 88 	 leave0
+04c2 ff 	 
+04c3 d4 fd 	 enter -3
+04c5 f0 5f 	 call EXPRESS.proc15
+04c7 0c 52 	 load EXPRESS.word2
+04c9 32 	 store local word-2
+04ca 8e 00 04 	 load immediate 1024
+04cd 8d 26 	 load immediate 38
+04cf f0 59 	 call EXPRESS.proc9
+04d1 0c 49 	 load SYMTAB.word9
+04d3 22 	 load local word-2
+04d4 60 	 load stack word0
+04d5 65 	 load stack word5
+04d6 ef 07 11 	 call SCANNER.proc17
+04d9 22 	 load local word-2
+04da 64 	 load stack word4
+04db 8d 2c 	 load immediate 44
+04dd e7 	 bitwise_in
+04de e3 0e 	 jpfalse 04ee
+04e0 0c 52 	 load EXPRESS.word2
+04e2 f0 52 	 call EXPRESS.proc2
+04e4 0c 52 	 load EXPRESS.word2
+04e6 0c 08 	 load COMPILER.word8
+04e8 f0 54 	 call EXPRESS.proc4
+04ea 0c 52 	 load EXPRESS.word2
+04ec f0 53 	 call EXPRESS.proc3
+04ee 0c 49 	 load SYMTAB.word9
+04f0 82 02 	 load stack address 2
+04f2 0c 52 	 load EXPRESS.word2
+04f4 9a 	 load immediate 10
+04f5 30 	 copy block
+04f6 8d 1e 	 load immediate 30
+04f8 f0 78 	 call SCANNER.proc8
+04fa 8e 00 20 	 load immediate 8192
+04fd f4 	 call proc4
+04fe e5 06 	 jpfalse 04fa
+0500 0c 49 	 load SYMTAB.word9
+0502 60 	 load stack word0
+0503 1c 49 	 store SYMTAB.word9
+0505 f0 71 	 call SCANNER.proc1
+0507 88 	 leave0
+0508 ff 	 
+0509 d4 fd 	 enter -3
+050b f0 73 	 call SCANNER.proc3
+050d 47 	 load global word7
+050e b6 	 not
+050f e3 03 	 jpfalse 0514
+0511 92 	 load immediate 2
+0512 f0 7d 	 call SCANNER.proc13
+0514 0c 79 	 load SCANNER.word9
+0516 92 	 load immediate 2
+0517 a0 	 equal
+0518 e3 39 	 jpfalse 0553
+051a 91 	 load immediate 1
+051b 0c 7a 	 load SCANNER.word10
+051d e7 	 bitwise_in
+051e e3 08 	 jpfalse 0528
+0520 0c 78 	 load SCANNER.word8
+0522 66 	 load stack word6
+0523 ae 02 	 add 2
+0525 32 	 store local word-2
+0526 e2 07 	 jp 052f
+0528 91 	 load immediate 1
+0529 96 	 load immediate 6
+052a 0c 7a 	 load SCANNER.word10
+052c e7 	 bitwise_in
+052d a7 	 sub
+052e 32 	 store local word-2
+052f 0c 78 	 load SCANNER.word8
+0531 65 	 load stack word5
+0532 22 	 load local word-2
+0533 b0 08 	 shl 8
+0535 a6 	 add
+0536 f0 68 	 call CODEGEN.proc8
+0538 f0 71 	 call SCANNER.proc1
+053a 91 	 load immediate 1
+053b f0 74 	 call SCANNER.proc4
+053d e3 0c 	 jpfalse 054b
+053f f0 5c 	 call EXPRESS.proc12
+0541 0c 0c 	 load COMPILER.word12
+0543 90 	 load immediate 0
+0544 8d 27 	 load immediate 39
+0546 ef 05 14 	 call EXPRESS.proc20
+0549 e2 06 	 jp 0551
+054b 90 	 load immediate 0
+054c f0 68 	 call CODEGEN.proc8
+054e 90 	 load immediate 0
+054f f0 68 	 call CODEGEN.proc8
+0551 e2 09 	 jp 055c
+0553 90 	 load immediate 0
+0554 f0 68 	 call CODEGEN.proc8
+0556 90 	 load immediate 0
+0557 f0 68 	 call CODEGEN.proc8
+0559 90 	 load immediate 0
+055a f0 68 	 call CODEGEN.proc8
+055c 9e 	 load immediate 14
+055d f0 6a 	 call CODEGEN.proc10
+055f 88 	 leave0
+0560 94 	 load immediate 4
+0561 46 	 load global word6
+0562 45 	 load global word5
+0563 d6 	 real_add
+0564 c4 	 string_comp
+0565 00 	 Error16
+0566 d4 f5 	 enter -11
+0568 0c 53 	 load EXPRESS.word3
+056a 33 	 store local word-3
+056b 44 	 load global word4
+056c 34 	 store local word-4
+056d 45 	 load global word5
+056e 35 	 store local word-5
+056f 0c 49 	 load SYMTAB.word9
+0571 36 	 store local word-6
+0572 0c 75 	 load SCANNER.word5
+0574 cb 	 not_zero
+0575 e3 4d 	 jpfalse 05c4
+0577 0c 75 	 load SCANNER.word5
+0579 8e 00 7f 	 load immediate 32512
+057c e7 	 bitwise_in
+057d b6 	 not
+057e e3 42 	 jpfalse 05c2
+0580 0c 75 	 load SCANNER.word5
+0582 af 1b 	 sub 27
+0584 8e f2 3e 	 load immediate 16114
+0587 e7 	 bitwise_in
+0588 8d 14 	 load immediate 20
+058a f0 51 	 call EXPRESS.proc1
+058c 0c 75 	 load SCANNER.word5
+058e 32 	 store local word-2
+058f f0 71 	 call SCANNER.proc1
+0591 22 	 load local word-2
+0592 e2 12 	 jp 05a6
+0594 fa 	 call proc10
+0595 ce 	 jump_stack
+0596 fb 	 call proc11
+0597 ce 	 jump_stack
+0598 fc 	 call proc12
+0599 ce 	 jump_stack
+059a f9 	 call proc9
+059b ce 	 jump_stack
+059c f8 	 call proc8
+059d ce 	 jump_stack
+059e f7 	 call proc7
+059f ce 	 jump_stack
+05a0 fd 	 call proc13
+05a1 ce 	 jump_stack
+05a2 fe 	 call proc14
+05a3 ce 	 jump_stack
+05a4 f5 	 call proc5
+05a5 ce 	 jump_stack
+05a6 cd 1f 80 09 00 16 00 	 callswitch (return to 05c2)
+	case 121 => 0594
+	case 122 => 0596
+	case 123 => 0598
+	case 124 => 059a
+	case 125 => 05c1
+	case 126 => 059c
+	case 127 => 059e
+	case 128 => 05a0
+	case 129 => 05a2
+	case 130 => 05a4
+05c1 f6 	 call proc6
+05c2 e2 52 	 jp 0616
+05c4 f0 73 	 call SCANNER.proc3
+05c6 0c 79 	 load SCANNER.word9
+05c8 94 	 load immediate 4
+05c9 a0 	 equal
+05ca e3 26 	 jpfalse 05f2
+05cc f0 5f 	 call EXPRESS.proc15
+05ce 8d 2b 	 load immediate 43
+05d0 f0 74 	 call SCANNER.proc4
+05d2 e3 15 	 jpfalse 05e9
+05d4 8e 00 02 	 load immediate 512
+05d7 8d 2b 	 load immediate 43
+05d9 f0 59 	 call EXPRESS.proc9
+05db 0c 52 	 load EXPRESS.word2
+05dd 60 	 load stack word0
+05de 62 	 load stack word2
+05df ab 	 eq0
+05e0 8d 3d 	 load immediate 61
+05e2 f0 51 	 call EXPRESS.proc1
+05e4 ef 05 13 	 call EXPRESS.proc19
+05e7 e2 07 	 jp 05f0
+05e9 8d 1b 	 load immediate 27
+05eb f0 78 	 call SCANNER.proc8
+05ed ef 05 11 	 call EXPRESS.proc17
+05f0 e2 24 	 jp 0616
+05f2 0c 79 	 load SCANNER.word9
+05f4 95 	 load immediate 5
+05f5 a0 	 equal
+05f6 e3 0c 	 jpfalse 0604
+05f8 0c 7c 	 load SCANNER.word12
+05fa ab 	 eq0
+05fb 8d 3d 	 load immediate 61
+05fd f0 51 	 call EXPRESS.proc1
+05ff ef 05 12 	 call EXPRESS.proc18
+0602 e2 12 	 jp 0616
+0604 0c 79 	 load SCANNER.word9
+0606 ab 	 eq0
+0607 e3 09 	 jpfalse 0612
+0609 90 	 load immediate 0
+060a 0c 7b 	 load SCANNER.word11
+060c 8d 80 	 load immediate 128
+060e f0 82 	 call ERRORS.proc2
+0610 e2 04 	 jp 0616
+0612 8d 15 	 load immediate 21
+0614 f0 81 	 call ERRORS.proc1
+0616 23 	 load local word-3
+0617 1c 53 	 store EXPRESS.word3
+0619 88 	 leave0
+061a 23 	 load local word-3
+061b 1c 53 	 store EXPRESS.word3
+061d 24 	 load local word-4
+061e 54 	 store global word4
+061f 25 	 load local word-5
+0620 55 	 store global word5
+0621 26 	 load local word-6
+0622 1c 49 	 store SYMTAB.word9
+0624 90 	 load immediate 0
+0625 90 	 load immediate 0
+0626 90 	 load immediate 0
+0627 01 	 Raise
+0628 88 	 leave0
+0629 01 	 Raise
+062a 12 0a 	 fctleave_longreal 237
+062d ff 	 call proc15
+062e e4 02 	 jp 062e
+0630 4f 	 load global word15
+0631 19 4a 	 store global dword 74
+0633 00 	 Error16
+0634 d4 f5 	 enter -11
+0636 0c 72 	 load SCANNER.word2
+0638 32 	 store local word-2
+0639 2f 07 19 	 load SCANNER.word25
+063c 33 	 store local word-3
+063d 80 fc 	 load local address -4
+063f f0 75 	 call SCANNER.proc5
+0641 0c 62 	 load CODEGEN.word2
+0643 35 	 store local word-5
+0644 0c 45 	 load SYMTAB.word5
+0646 36 	 store local word-6
+0647 ff 	 call proc15
+0648 03 	 load param1
+0649 8e 00 02 	 load immediate 512
+064c e6 	 bitwise_or
+064d f0 79 	 call SCANNER.proc9
+064f 99 	 load immediate 9
+0650 f0 74 	 call SCANNER.proc4
+0652 e3 04 	 jpfalse 0658
+0654 03 	 load param1
+0655 f4 	 call proc4
+0656 e5 04 	 jpfalse 0654
+0658 91 	 load immediate 1
+0659 85 81 	 fct_leave 129
+065b 26 	 load local word-6
+065c 1c 45 	 store SYMTAB.word5
+065e 0c 82 	 load ERRORS.word2
+0660 23 	 load local word-3
+0661 a3 	 ugreater_than
+0662 e3 15 	 jpfalse 0679
+0664 22 	 load local word-2
+0665 1c 72 	 store SCANNER.word2
+0667 23 	 load local word-3
+0668 3f 07 19 	 store SCANNER.word25
+066b 24 	 load local word-4
+066c f0 76 	 call SCANNER.proc6
+066e 25 	 load local word-5
+066f 1c 62 	 store CODEGEN.word2
+0671 f0 8b 	 call ERRORS.proc11
+0673 ef 06 16 	 call CODEGEN.proc22
+0676 90 	 load immediate 0
+0677 85 81 	 fct_leave 129
+0679 90 	 load immediate 0
+067a 90 	 load immediate 0
+067b 90 	 load immediate 0
+067c 01 	 Raise
+067d 01 	 Raise
+067e 12 0a 	 fctleave_longreal 218
+0681 ff 	 call proc15
+0682 ff 	 
+0683 d4 f1 	 enter -15
+0685 91 	 load immediate 1
+0686 57 	 store global word7
+0687 90 	 load immediate 0
+0688 34 	 store local word-4
+0689 90 	 load immediate 0
+068a 32 	 store local word-2
+068b 0c 75 	 load SCANNER.word5
+068d 8e 00 25 	 load immediate 9472
+0690 e7 	 bitwise_in
+0691 b6 	 not
+0692 e3 5e 	 jpfalse 06f2
+0694 9f 	 load immediate 15
+0695 ef 06 10 	 call CODEGEN.proc16
+0698 36 	 store local word-6
+0699 f0 73 	 call SCANNER.proc3
+069b 92 	 load immediate 2
+069c f0 7d 	 call SCANNER.proc13
+069e 22 	 load local word-2
+069f 33 	 store local word-3
+06a0 80 fe 	 load local address -2
+06a2 96 	 load immediate 6
+06a3 f0 77 	 call SCANNER.proc7
+06a5 22 	 load local word-2
+06a6 23 	 load local word-3
+06a7 70 	 store stack word0
+06a8 91 	 load immediate 1
+06a9 0c 7a 	 load SCANNER.word10
+06ab e7 	 bitwise_in
+06ac e3 08 	 jpfalse 06b6
+06ae 0c 78 	 load SCANNER.word8
+06b0 66 	 load stack word6
+06b1 ae 02 	 add 2
+06b3 35 	 store local word-5
+06b4 e2 07 	 jp 06bd
+06b6 91 	 load immediate 1
+06b7 96 	 load immediate 6
+06b8 0c 7a 	 load SCANNER.word10
+06ba e7 	 bitwise_in
+06bb a7 	 sub
+06bc 35 	 store local word-5
+06bd 22 	 load local word-2
+06be 0c 78 	 load SCANNER.word8
+06c0 65 	 load stack word5
+06c1 25 	 load local word-5
+06c2 b0 08 	 shl 8
+06c4 a6 	 add
+06c5 71 	 store stack word1
+06c6 22 	 load local word-2
+06c7 26 	 load local word-6
+06c8 72 	 store stack word2
+06c9 23 	 load local word-3
+06ca cb 	 not_zero
+06cb e3 0e 	 jpfalse 06db
+06cd 23 	 load local word-3
+06ce 61 	 load stack word1
+06cf 22 	 load local word-2
+06d0 61 	 load stack word1
+06d1 a1 	 not_equal
+06d2 8d 2f 	 load immediate 47
+06d4 f0 51 	 call EXPRESS.proc1
+06d6 23 	 load local word-3
+06d7 60 	 load stack word0
+06d8 33 	 store local word-3
+06d9 e4 12 	 jp 06c9
+06db 24 	 load local word-4
+06dc ac 	 inc
+06dd 34 	 store local word-4
+06de f0 71 	 call SCANNER.proc1
+06e0 96 	 load immediate 6
+06e1 f0 79 	 call SCANNER.proc9
+06e3 91 	 load immediate 1
+06e4 f0 74 	 call SCANNER.proc4
+06e6 b6 	 not
+06e7 e5 50 	 jpfalse 0699
+06e9 f0 71 	 call SCANNER.proc1
+06eb 8e 00 25 	 load immediate 9472
+06ee f4 	 call proc4
+06ef e5 06 	 jpfalse 06eb
+06f1 f3 	 call proc3
+06f2 98 	 load immediate 8
+06f3 f0 74 	 call SCANNER.proc4
+06f5 b6 	 not
+06f6 e5 6d 	 jpfalse 068b
+06f8 9a 	 load immediate 10
+06f9 f0 74 	 call SCANNER.proc4
+06fb 37 	 store local word-7
+06fc 27 	 load local word-7
+06fd e3 0f 	 jpfalse 070e
+06ff 24 	 load local word-4
+0700 ac 	 inc
+0701 34 	 store local word-4
+0702 9f 	 load immediate 15
+0703 ef 06 10 	 call CODEGEN.proc16
+0706 36 	 store local word-6
+0707 8e 00 20 	 load immediate 8192
+070a f4 	 call proc4
+070b e5 06 	 jpfalse 0707
+070d f3 	 call proc3
+070e 2f 07 16 	 load SCANNER.word22
+0711 af 02 	 sub 2
+0713 90 	 load immediate 0
+0714 f0 6e 	 call CODEGEN.proc14
+0716 38 	 store local word-8
+0717 24 	 load local word-4
+0718 f0 61 	 call CODEGEN.proc1
+071a 22 	 load local word-2
+071b cb 	 not_zero
+071c e3 0e 	 jpfalse 072c
+071e 22 	 load local word-2
+071f 61 	 load stack word1
+0720 f0 63 	 call CODEGEN.proc3
+0722 22 	 load local word-2
+0723 62 	 load stack word2
+0724 90 	 load immediate 0
+0725 f0 6d 	 call CODEGEN.proc13
+0727 22 	 load local word-2
+0728 60 	 load stack word0
+0729 32 	 store local word-2
+072a e4 12 	 jp 071a
+072c 27 	 load local word-7
+072d e3 07 	 jpfalse 0736
+072f 90 	 load immediate 0
+0730 f0 63 	 call CODEGEN.proc3
+0732 26 	 load local word-6
+0733 90 	 load immediate 0
+0734 f0 6d 	 call CODEGEN.proc13
+0736 88 	 leave0
+0737 ff 	 
+0738 d4 fb 	 enter -5
+073a 03 	 load param1
+073b cb 	 not_zero
+073c e3 be 	 jpfalse 07fc
+073e 90 	 load immediate 0
+073f 03 	 load param1
+0740 63 	 load stack word3
+0741 e7 	 bitwise_in
+0742 b6 	 not
+0743 e3 b2 	 jpfalse 07f7
+0745 95 	 load immediate 5
+0746 03 	 load param1
+0747 63 	 load stack word3
+0748 e7 	 bitwise_in
+0749 e3 1a 	 jpfalse 0765
+074b 0c 49 	 load SYMTAB.word9
+074d 82 01 	 load stack address 1
+074f 03 	 load param1
+0750 61 	 load stack word1
+0751 99 	 load immediate 9
+0752 0c 72 	 load SCANNER.word2
+0754 e7 	 bitwise_in
+0755 ef 07 16 	 call SCANNER.proc22
+0758 03 	 load param1
+0759 a0 	 equal
+075a e3 07 	 jpfalse 0763
+075c 95 	 load immediate 5
+075d 03 	 load param1
+075e 61 	 load stack word1
+075f 8d 80 	 load immediate 128
+0761 f0 82 	 call ERRORS.proc2
+0763 e2 92 	 jp 07f7
+0765 03 	 load param1
+0766 64 	 load stack word4
+0767 94 	 load immediate 4
+0768 a0 	 equal
+0769 e3 5c 	 jpfalse 07c7
+076b 03 	 load param1
+076c 63 	 load stack word3
+076d 98 	 load immediate 8
+076e b7 	 complement
+076f e8 	 bitwise_and
+0770 90 	 load immediate 0
+0771 a0 	 equal
+0772 e3 51 	 jpfalse 07c5
+0774 03 	 load param1
+0775 62 	 load stack word2
+0776 64 	 load stack word4
+0777 99 	 load immediate 9
+0778 a3 	 ugreater_than
+0779 e3 4a 	 jpfalse 07c5
+077b 03 	 load param1
+077c 60 	 load stack word0
+077d 10 	 load (ix)
+077e ee 11 	 call_with_frame proc17
+0780 0c 54 	 load EXPRESS.word4
+0782 cb 	 not_zero
+0783 e3 3e 	 jpfalse 07c3
+0785 91 	 load immediate 1
+0786 52 	 store global word2
+0787 0c 52 	 load EXPRESS.word2
+0789 33 	 store local word-3
+078a 23 	 load local word-3
+078b 03 	 load param1
+078c 62 	 load stack word2
+078d 70 	 store stack word0
+078e 23 	 load local word-3
+078f 91 	 load immediate 1
+0790 71 	 store stack word1
+0791 23 	 load local word-3
+0792 90 	 load immediate 0
+0793 74 	 store stack word4
+0794 23 	 load local word-3
+0795 03 	 load param1
+0796 65 	 load stack word5
+0797 73 	 store stack word3
+0798 0c 52 	 load EXPRESS.word2
+079a f0 5b 	 call EXPRESS.proc11
+079c 93 	 load immediate 3
+079d 03 	 load param1
+079e 63 	 load stack word3
+079f e7 	 bitwise_in
+07a0 e3 16 	 jpfalse 07b8
+07a2 0c 52 	 load EXPRESS.word2
+07a4 f0 5a 	 call EXPRESS.proc10
+07a6 0c 54 	 load EXPRESS.word4
+07a8 91 	 load immediate 1
+07a9 a0 	 equal
+07aa e3 07 	 jpfalse 07b3
+07ac 95 	 load immediate 5
+07ad 8d 17 	 load immediate 23
+07af f0 6b 	 call CODEGEN.proc11
+07b1 e2 03 	 jp 07b6
+07b3 9a 	 load immediate 10
+07b4 f0 6a 	 call CODEGEN.proc10
+07b6 e2 03 	 jp 07bb
+07b8 99 	 load immediate 9
+07b9 f0 6a 	 call CODEGEN.proc10
+07bb 23 	 load local word-3
+07bc 0c 08 	 load COMPILER.word8
+07be 70 	 store stack word0
+07bf 0c 52 	 load EXPRESS.word2
+07c1 f0 53 	 call EXPRESS.proc3
+07c3 84 01 	 leave 1
+07c5 e2 30 	 jp 07f7
+07c7 03 	 load param1
+07c8 64 	 load stack word4
+07c9 96 	 load immediate 6
+07ca a0 	 equal
+07cb e3 2a 	 jpfalse 07f7
+07cd 49 	 load global word9
+07ce b6 	 not
+07cf 32 	 store local word-2
+07d0 91 	 load immediate 1
+07d1 59 	 store global word9
+07d2 03 	 load param1
+07d3 60 	 load stack word0
+07d4 10 	 load (ix)
+07d5 ee 11 	 call_with_frame proc17
+07d7 03 	 load param1
+07d8 65 	 load stack word5
+07d9 cb 	 not_zero
+07da e3 11 	 jpfalse 07ed
+07dc 91 	 load immediate 1
+07dd 52 	 store global word2
+07de 9f 	 load immediate 15
+07df f0 6a 	 call CODEGEN.proc10
+07e1 03 	 load param1
+07e2 62 	 load stack word2
+07e3 90 	 load immediate 0
+07e4 f0 6d 	 call CODEGEN.proc13
+07e6 03 	 load param1
+07e7 65 	 load stack word5
+07e8 90 	 load immediate 0
+07e9 f0 6e 	 call CODEGEN.proc14
+07eb e3 00 	 jpfalse 07ed
+07ed 22 	 load local word-2
+07ee e3 05 	 jpfalse 07f5
+07f0 8d 18 	 load immediate 24
+07f2 ef 06 11 	 call CODEGEN.proc17
+07f5 84 01 	 leave 1
+07f7 03 	 load param1
+07f8 60 	 load stack word0
+07f9 13 	 store param1
+07fa e4 c2 	 jp 073a
+07fc 49 	 load global word9
+07fd b6 	 not
+07fe e3 05 	 jpfalse 0805
+0800 8d 18 	 load immediate 24
+0802 ef 06 11 	 call CODEGEN.proc17
+0805 84 01 	 leave 1
+0807 ff 	 
+0808 d4 f3 	 enter -13
+080a 90 	 load immediate 0
+080b 36 	 store local word-6
+080c 90 	 load immediate 0
+080d 34 	 store local word-4
+080e 90 	 load immediate 0
+080f 32 	 store local word-2
+0810 91 	 load immediate 1
+0811 33 	 store local word-3
+0812 90 	 load immediate 0
+0813 35 	 store local word-5
+0814 26 	 load local word-6
+0815 8d 25 	 load immediate 37
+0817 a1 	 not_equal
+0818 e3 27 	 jpfalse 0841
+081a 04 	 load param2
+081b 24 	 load local word-4
+081c 25 	 load local word-5
+081d a6 	 add
+081e 0d 	 load indexed byte
+081f 37 	 store local word-7
+0820 27 	 load local word-7
+0821 ab 	 eq0
+0822 e3 05 	 jpfalse 0829
+0824 8d 25 	 load immediate 37
+0826 36 	 store local word-6
+0827 e2 18 	 jp 0841
+0829 27 	 load local word-7
+082a 8d 39 	 load immediate 57
+082c a4 	 uless_or_equal
+082d e3 06 	 jpfalse 0835
+082f 27 	 load local word-7
+0830 af 16 	 sub 22
+0832 36 	 store local word-6
+0833 e2 0c 	 jp 0841
+0835 27 	 load local word-7
+0836 20 	 dup
+0837 8d 40 	 load immediate 64
+0839 e8 	 bitwise_and
+083a b1 01 	 shr 1
+083c b7 	 complement
+083d e8 	 bitwise_and
+083e af 41 	 sub 65
+0840 36 	 store local word-6
+0841 22 	 load local word-2
+0842 26 	 load local word-6
+0843 23 	 load local word-3
+0844 a8 	 umul
+0845 a6 	 add
+0846 32 	 store local word-2
+0847 23 	 load local word-3
+0848 8d 26 	 load immediate 38
+084a a8 	 umul
+084b 33 	 store local word-3
+084c 25 	 load local word-5
+084d ac 	 inc
+084e 35 	 store local word-5
+084f 25 	 load local word-5
+0850 92 	 load immediate 2
+0851 a3 	 ugreater_than
+0852 e5 40 	 jpfalse 0814
+0854 22 	 load local word-2
+0855 f0 63 	 call CODEGEN.proc3
+0857 24 	 load local word-4
+0858 ae 03 	 add 3
+085a 34 	 store local word-4
+085b 24 	 load local word-4
+085c 93 	 load immediate 3
+085d a3 	 ugreater_than
+085e e5 52 	 jpfalse 080e
+0860 84 02 	 leave 2
+0862 ff 	 
+0863 d4 f5 	 enter -11
+0865 80 fa 	 load local address -6
+0867 40 07 	 MARK
+0869 93 	 load immediate 3
+086a 0c 54 	 load EXPRESS.word4
+086c 91 	 load immediate 1
+086d a0 	 equal
+086e f0 6b 	 call CODEGEN.proc11
+0870 80 fe 	 load local address -2
+0872 0c 7b 	 load SCANNER.word11
+0874 8d 80 	 load immediate 128
+0876 8c 03 	 call_rel 087b
+0878 "COM"
+087b f0 85 	 call ERRORS.proc5
+087d 22 	 load local word-2
+087e ef 02 14 	 call FILES.proc20
+0881 22 	 load local word-2
+0882 80 fd 	 load local address -3
+0884 f0 2a 	 call FILES.proc10
+0886 90 	 load immediate 0
+0887 34 	 store local word-4
+0888 22 	 load local word-2
+0889 80 fb 	 load local address -5
+088b f0 29 	 call FILES.proc9
+088d 25 	 load local word-5
+088e f0 61 	 call CODEGEN.proc1
+0890 24 	 load local word-4
+0891 ac 	 inc
+0892 34 	 store local word-4
+0893 24 	 load local word-4
+0894 23 	 load local word-3
+0895 a0 	 equal
+0896 e5 10 	 jpfalse 0888
+0898 80 fa 	 load local address -6
+089a 40 08 	 RELEASE
+089c 84 00 	 leave 0
+089e 01 	 Raise
+089f 13 	 store param1
+08a0 4a 	 load global word10
+08a1 d6 	 real_add
+08a2 7c 	 store stack word12
+08a3 01 	 Raise
+08a4 d4 f7 	 enter -9
+08a6 03 	 load param1
+08a7 56 	 store global word6
+08a8 0c 45 	 load SYMTAB.word5
+08aa 1c 53 	 store EXPRESS.word3
+08ac 90 	 load immediate 0
+08ad 54 	 store global word4
+08ae 90 	 load immediate 0
+08af 55 	 store global word5
+08b0 91 	 load immediate 1
+08b1 3f 07 17 	 store SCANNER.word23
+08b4 90 	 load immediate 0
+08b5 57 	 store global word7
+08b6 90 	 load immediate 0
+08b7 59 	 store global word9
+08b8 0c 62 	 load CODEGEN.word2
+08ba 3f 07 16 	 store SCANNER.word22
+08bd 0c 79 	 load SCANNER.word9
+08bf 95 	 load immediate 5
+08c0 a0 	 equal
+08c1 33 	 store local word-3
+08c2 0c 75 	 load SCANNER.word5
+08c4 8d 17 	 load immediate 23
+08c6 a0 	 equal
+08c7 32 	 store local word-2
+08c8 22 	 load local word-2
+08c9 e3 0d 	 jpfalse 08d8
+08cb f0 71 	 call SCANNER.proc1
+08cd 99 	 load immediate 9
+08ce f0 74 	 call SCANNER.proc4
+08d0 b6 	 not
+08d1 e5 06 	 jpfalse 08cd
+08d3 0c 75 	 load SCANNER.word5
+08d5 9d 	 load immediate 13
+08d6 a1 	 not_equal
+08d7 32 	 store local word-2
+08d8 22 	 load local word-2
+08d9 52 	 store global word2
+08da 46 	 load global word6
+08db 64 	 load stack word4
+08dc 95 	 load immediate 5
+08dd a0 	 equal
+08de e3 94 	 jpfalse 0974
+08e0 93 	 load immediate 3
+08e1 46 	 load global word6
+08e2 82 05 	 load stack address 5
+08e4 90 	 load immediate 0
+08e5 0d 	 load indexed byte
+08e6 f2 	 call proc2
+08e7 ef 06 12 	 call CODEGEN.proc18
+08ea 0c 02 	 load COMPILER.word2
+08ec e3 05 	 jpfalse 08f3
+08ee 80 fb 	 load local address -5
+08f0 90 	 load immediate 0
+08f1 f0 6c 	 call CODEGEN.proc12
+08f3 9f 	 load immediate 15
+08f4 0c 72 	 load SCANNER.word2
+08f6 e7 	 bitwise_in
+08f7 e3 06 	 jpfalse 08ff
+08f9 8d ff 	 load immediate 255
+08fb f0 61 	 call CODEGEN.proc1
+08fd e2 09 	 jp 0908
+08ff 46 	 load global word6
+0900 61 	 load stack word1
+0901 8d 80 	 load immediate 128
+0903 ec 12 	 nested_call proc18
+0905 90 	 load immediate 0
+0906 f0 63 	 call CODEGEN.proc3
+0908 0c 62 	 load CODEGEN.word2
+090a 3f 07 16 	 store SCANNER.word22
+090d 23 	 load local word-3
+090e e3 20 	 jpfalse 0930
+0910 f0 71 	 call SCANNER.proc1
+0912 8d 2b 	 load immediate 43
+0914 f0 78 	 call SCANNER.proc8
+0916 0c 76 	 load SCANNER.word6
+0918 de 05 	 andjp 091f
+091a 0c 7c 	 load SCANNER.word12
+091c 0c 0c 	 load COMPILER.word12
+091e a0 	 equal
+091f 8d 21 	 load immediate 33
+0921 f0 51 	 call EXPRESS.proc1
+0923 ec 13 	 nested_call proc19
+0925 f0 71 	 call SCANNER.proc1
+0927 95 	 load immediate 5
+0928 f0 78 	 call SCANNER.proc8
+092a 99 	 load immediate 9
+092b f0 74 	 call SCANNER.proc4
+092d 34 	 store local word-4
+092e e2 42 	 jp 0972
+0930 8d 16 	 load immediate 22
+0932 f0 6a 	 call CODEGEN.proc10
+0934 8d ff 	 load immediate 255
+0936 f0 61 	 call CODEGEN.proc1
+0938 0c 54 	 load EXPRESS.word4
+093a cb 	 not_zero
+093b de 01 	 andjp 093e
+093d 43 	 load global word3
+093e e3 0c 	 jpfalse 094c
+0940 48 	 load global word8
+0941 0c 0e 	 load COMPILER.word14
+0943 f0 54 	 call EXPRESS.proc4
+0945 8d 18 	 load immediate 24
+0947 f0 6a 	 call CODEGEN.proc10
+0949 48 	 load global word8
+094a f0 53 	 call EXPRESS.proc3
+094c 0c 49 	 load SYMTAB.word9
+094e 61 	 load stack word1
+094f ec 11 	 nested_call proc17
+0951 22 	 load local word-2
+0952 e3 06 	 jpfalse 095a
+0954 8e 00 60 	 load immediate 24576
+0957 f4 	 call proc4
+0958 e5 06 	 jpfalse 0954
+095a f3 	 call proc3
+095b 9e 	 load immediate 14
+095c f0 74 	 call SCANNER.proc4
+095e e3 02 	 jpfalse 0962
+0960 ed 10 	 call proc16
+0962 0c 54 	 load EXPRESS.word4
+0964 cb 	 not_zero
+0965 e3 0b 	 jpfalse 0972
+0967 0c 45 	 load SYMTAB.word5
+0969 af ff 	 sub 255
+096b 2f 07 16 	 load SCANNER.word22
+096e ac 	 inc
+096f ef 06 14 	 call CODEGEN.proc20
+0972 e2 37 	 jp 09ab
+0974 94 	 load immediate 4
+0975 ef 06 11 	 call CODEGEN.proc17
+0978 0c 02 	 load COMPILER.word2
+097a e3 05 	 jpfalse 0981
+097c 80 fb 	 load local address -5
+097e 90 	 load immediate 0
+097f f0 6c 	 call CODEGEN.proc12
+0981 0c 62 	 load CODEGEN.word2
+0983 3f 07 16 	 store SCANNER.word22
+0986 0c 49 	 load SYMTAB.word9
+0988 61 	 load stack word1
+0989 ec 11 	 nested_call proc17
+098b 22 	 load local word-2
+098c e3 06 	 jpfalse 0994
+098e 8e 00 20 	 load immediate 8192
+0991 f4 	 call proc4
+0992 e5 06 	 jpfalse 098e
+0994 42 	 load global word2
+0995 e3 11 	 jpfalse 09a8
+0997 9f 	 load immediate 15
+0998 f0 6a 	 call CODEGEN.proc10
+099a 46 	 load global word6
+099b 0c 62 	 load CODEGEN.word2
+099d 75 	 store stack word5
+099e 90 	 load immediate 0
+099f f0 63 	 call CODEGEN.proc3
+09a1 46 	 load global word6
+09a2 2f 07 16 	 load SCANNER.word22
+09a5 72 	 store stack word2
+09a6 e2 03 	 jp 09ab
+09a8 46 	 load global word6
+09a9 90 	 load immediate 0
+09aa 75 	 store stack word5
+09ab 0c 02 	 load COMPILER.word2
+09ad e3 05 	 jpfalse 09b4
+09af 25 	 load local word-5
+09b0 90 	 load immediate 0
+09b1 f0 6e 	 call CODEGEN.proc14
+09b3 34 	 store local word-4
+09b4 90 	 load immediate 0
+09b5 3f 07 17 	 store SCANNER.word23
+09b8 9d 	 load immediate 13
+09b9 f0 78 	 call SCANNER.proc8
+09bb 46 	 load global word6
+09bc 61 	 load stack word1
+09bd 8d 80 	 load immediate 128
+09bf ef 07 15 	 call SCANNER.proc21
+09c2 46 	 load global word6
+09c3 64 	 load stack word4
+09c4 95 	 load immediate 5
+09c5 a0 	 equal
+09c6 de 03 	 andjp 09cb
+09c8 0c 54 	 load EXPRESS.word4
+09ca ab 	 eq0
+09cb e3 05 	 jpfalse 09d2
+09cd 98 	 load immediate 8
+09ce f0 79 	 call SCANNER.proc9
+09d0 e2 05 	 jp 09d7
+09d2 8e 00 02 	 load immediate 512
+09d5 f0 79 	 call SCANNER.proc9
+09d7 0c 02 	 load COMPILER.word2
+09d9 b6 	 not
+09da de 04 	 andjp 09e0
+09dc 90 	 load immediate 0
+09dd 0c 72 	 load SCANNER.word2
+09df e7 	 bitwise_in
+09e0 e3 20 	 jpfalse 0a02
+09e2 92 	 load immediate 2
+09e3 f0 3e 	 call TEXTS.proc14
+09e5 92 	 load immediate 2
+09e6 8c 0d 	 call_rel 09f5
+09e8 "----- Size = "
+09f5 9c 	 load immediate 12
+09f6 f0 39 	 call TEXTS.proc9
+09f8 92 	 load immediate 2
+09f9 0c 62 	 load CODEGEN.word2
+09fb 2f 07 16 	 load SCANNER.word22
+09fe a7 	 sub
+09ff 90 	 load immediate 0
+0a00 f0 3b 	 call TEXTS.proc11
+0a02 94 	 load immediate 4
+0a03 0c 72 	 load SCANNER.word2
+0a05 e7 	 bitwise_in
+0a06 e3 0d 	 jpfalse 0a15
+0a08 8c 08 	 call_rel 0a12
+0a0a "PRINTCOD"
+0a12 97 	 load immediate 7
+0a13 f0 16 	 call LOADER.proc6
+0a15 89 	 leave2
+0a16 90 	 load immediate 0
+0a17 3f 07 17 	 store SCANNER.word23
+0a1a 90 	 load immediate 0
+0a1b 90 	 load immediate 0
+0a1c 90 	 load immediate 0
+0a1d 01 	 Raise
+0a1e 89 	 leave2
+0a1f 01 	 Raise
+0a20 12 0a 	 fctleave_longreal 243
+0a23 ff 	 call proc15
+0a24 ff 	 
+0a25 d4 ff 	 enter -1
+0a27 50 	 end_program
+
+
+

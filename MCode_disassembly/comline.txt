@@ -1,0 +1,192 @@
+module start at 0127
+0127 : Module COMLINE
+	depends on TEXTS 
+	depends on TERMINAL 
+
+COMLINE.COMLIN: 00b0
+COMLINE.REDIRE: 0049
+COMLINE.REDIRE: 0064
+COMLINE.PROMPT: 0076
+COMLINE.AAAAAA: 0000
+COMLINE.VYUIZS: 000c
+COMLINE.GETCOM: 0016
+
+
+0000 Exception NoInputFile
+
+000c CONST "CON:"
+
+; COMLINE.proc6 : GETCOM(VAR char: CHAR)
+
+0016 d4 ff 	 enter -1           
+0018 8d 81 	 load immediate 129     ; IF buffer[index]-ORD('<') IN {0,2}
+001a 48 	 load global word8
+001b 0d 	 load indexed byte
+001c af 3c 	 sub 60
+001e 95 	 load immediate 5
+001f e7 	 bitwise_in
+0020 e3 0c 	 jpfalse 002e           ; THEN
+                                        REPEAT
+0022 48 	 load global word8            INC(index)
+0023 ac 	 inc
+0024 58 	 store global word8
+0025 8d 81 	 load immediate 129     ;   UNTIL buffer[index] <= ' '
+0027 48 	 load global word8
+0028 0d 	 load indexed byte
+0029 8d 20 	 load immediate 32
+002b a4 	 uless_or_equal
+002c e5 0c 	 jpfalse 0022           ; END
+002e 03 	 load param1            ; char := buffer[index]
+002f 8d 81 	 load immediate 129
+0031 48 	 load global word8
+0032 0d 	 load indexed byte
+0033 70 	 store stack word0
+0034 03 	 load param1            ; IF char = 0C
+0035 60 	 load stack word0
+0036 ab 	 eq0
+0037 e3 06 	 jpfalse 003f           ; THEN
+0039 03 	 load param1            ;   char := EOT
+003a 8d 1a 	 load immediate 26
+003c 70 	 store stack word0
+003d e2 03 	 jp 0042                ; ELSE
+003f 48 	 load global word8          INC(index)
+0040 ac 	 inc
+0041 58 	 store global word8     ; END
+0042 8a 	 leave4
+
+; COMLINE.RedirectInput
+
+0049 d4 ff 	 enter -1
+004b 83 00 02 	 load address TEXTS.WORD2
+004e 43 	 load global word3
+004f 8d 13 	 load immediate 19
+0051 ef 00 17 	 call TEXTS.proc23
+0054 b6 	 not
+0055 e3 06 	 jpfalse 005d
+0057 8e 04 01 	 load immediate 260
+005a 90 	 load immediate 0
+005b 90 	 load immediate 0
+005c 01 	 Raise
+005d 88 	 leave0
+
+; COMLINE.RedirectOutput
+
+0064 d4 ff 	 enter -1
+0066 83 00 03 	 load address TEXTS.WORD3
+0069 44 	 load global word4
+006a 8d 13 	 load immediate 19
+006c ef 00 18 	 call TEXTS.proc24
+006f 88 	 leave0
+
+; COMLINE.PromptFor
+
+0076 d4 fd 	 enter -3
+0078 05 	 load param3
+0079 ac 	 inc
+007a 06 	 load param4
+007b d3 	 string_reserve
+007c 16 	 store param4
+007d 42 	 load global word2
+007e 04 	 load param2
+007f 03 	 load param1
+0080 f0 02 	 call TEXTS.proc2
+0082 04 	 load param2
+0083 90 	 load immediate 0
+0084 0d 	 load indexed byte
+0085 ab 	 eq0
+0086 e3 20 	 jpfalse 00a8
+0088 06 	 load param4
+0089 05 	 load param3
+008a f0 17 	 call TERMINAL.proc7
+008c 04 	 load param2
+008d 03 	 load param1
+008e f0 14 	 call TERMINAL.proc4
+0090 90 	 load immediate 0
+0091 32 	 store local word-2
+0092 04 	 load param2
+0093 22 	 load local word-2
+0094 04 	 load param2
+0095 22 	 load local word-2
+0096 0d 	 load indexed byte
+0097 20 	 dup
+0098 8d 40 	 load immediate 64
+009a e8 	 bitwise_and
+009b b1 01 	 shr 1
+009d b7 	 complement
+009e e8 	 bitwise_and
+009f 1d 	 store indexed byte
+00a0 22 	 load local word-2
+00a1 ac 	 inc
+00a2 32 	 store local word-2
+00a3 22 	 load local word-2
+00a4 03 	 load param1
+00a5 a0 	 equal
+00a6 e5 16 	 jpfalse 0092
+00a8 84 84 	 leave 132
+
+; COMLINE.INIT
+
+00b0 d4 ff 	 enter -1
+00b2 8d 81 	 load immediate 129     ; buffer[126] := 0C
+00b4 8d 7e 	 load immediate 126
+00b6 90 	 load immediate 0
+00b7 1d 	 store indexed byte
+00b8 81 02 	 load global address 2  ; TEXTS.ConnectDriver(global2, proc6)
+00ba 96 	 load immediate 6
+00bb 81 00 	 load global address 0
+00bd ef 00 1a 	 call TEXTS.proc26
+00c0 43 	 load global word3      ; inName := "CON:"
+00c1 02 05 	 load proc_addr proc5
+00c3 8d 14 	 load immediate 20
+00c5 94 	 load immediate 4
+00c6 31 	 copy string
+00c7 44 	 load global word4      ; outName := inName
+00c8 43 	 load global word3
+00c9 8d 14 	 load immediate 20
+00cb 30 	 copy block
+                                    ; REPEAT
+00cc 8d 81 	 load immediate 129     ;   global9 := buffer[global8]
+00ce 48 	 load global word8
+00cf 0d 	 load indexed byte
+00d0 59 	 store global word9
+00d1 48 	 load global word8      ;   INC(global8)
+00d2 ac 	 inc
+00d3 58 	 store global word8
+00d4 49 	 load global word9      ;   IF global9-ORD('<') IN {0,2}
+00d5 af 3c 	 sub 60
+00d7 95 	 load immediate 5
+00d8 e7 	 bitwise_in
+00d9 de 07 	 andjp 00e2             ;   AND buffer[global8] > ' '
+00db 8d 81 	 load immediate 129
+00dd 48 	 load global word8
+00de 0d 	 load indexed byte
+00df 8d 20 	 load immediate 32
+00e1 a3 	 ugreater_than
+00e2 e3 17 	 jpfalse 00fb           ;   THEN
+00e4 49 	 load global word9      ;     IF global9 = '<'
+00e5 8d 3c 	 load immediate 60
+00e7 a0 	 equal
+00e8 e3 08 	 jpfalse 00f2           ;     THEN
+00ea 42 	 load global word2      ;       TEXTS.ReadString(commandLine, inName)
+00eb 43 	 load global word3
+00ec 8d 13 	 load immediate 19
+00ee f0 02 	 call TEXTS.proc2
+00f0 e2 06 	 jp 00f8                ;     ELSE
+00f2 42 	 load global word2      ;       TEXTS.ReadString(commandLine, outName)
+00f3 44 	 load global word4
+00f4 8d 13 	 load immediate 19
+00f6 f0 02 	 call TEXTS.proc2       ;     END
+00f8 48 	 load global word8      ;     DEC(global8)
+00f9 ad 	 dec
+00fa 58 	 store global word8     ;   END
+00fb 8d 81 	 load immediate 129     ; UNTIL buffer[global8] = 0C;
+00fd 48 	 load global word8
+00fe 0d 	 load indexed byte
+00ff ab 	 eq0
+0100 e5 36 	 jpfalse 00cc
+0102 90 	 load immediate 0       ; global8 := 0
+0103 58 	 store global word8
+0104 50 	 end_program
+
+
+

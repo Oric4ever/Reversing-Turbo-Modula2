@@ -1,0 +1,74 @@
+0ea3 d4 fb 	 enter -5
+0ea5 9a 	 load immediate 10
+0ea6 32 	 store local word-2
+0ea7 8c 00 	 call_rel 0ea9
+0ea9 8e 67 00 	 load immediate 103
+0eac a6 	 add
+0ead 03 	 load param1
+0eae 92 	 load immediate 2
+0eaf a2 	 uless_than
+0eb0 e3 1f 	 jpfalse 0ed1
+0eb2 20 	 dup
+0eb3 04 	 load param2
+0eb4 03 	 load param1
+0eb5 ef 01 18 	 call .proc24
+0eb8 e3 03 	 jpfalse 0ebd
+0eba 22 	 load local word-2
+0ebb 85 82 	 fct_leave 130
+0ebd ac 	 inc
+0ebe 20 	 dup
+0ebf ad 	 dec
+0ec0 90 	 load immediate 0
+0ec1 0d 	 load indexed byte
+0ec2 ab 	 eq0
+0ec3 e5 08 	 jpfalse 0ebd
+0ec5 22 	 load local word-2
+0ec6 ac 	 inc
+0ec7 32 	 store local word-2
+0ec8 22 	 load local word-2
+0ec9 8d 43 	 load immediate 67
+0ecb a3 	 ugreater_than
+0ecc e5 1c 	 jpfalse 0eb2
+0ece 90 	 load immediate 0
+0ecf 85 82 	 fct_leave 130
+0ed1 22 	 load local word-2
+0ed2 03 	 load param1
+0ed3 a0 	 equal
+0ed4 e3 13 	 jpfalse 0ee9
+0ed6 20 	 dup
+0ed7 90 	 load immediate 0
+0ed8 0d 	 load indexed byte
+0ed9 33 	 store local word-3
+0eda ac 	 inc
+0edb 04 	 load param2
+0edc 90 	 load immediate 0
+0edd 23 	 load local word-3
+0ede 1d 	 store indexed byte
+0edf 04 	 load param2
+0ee0 ac 	 inc
+0ee1 14 	 store param2
+0ee2 23 	 load local word-3
+0ee3 ab 	 eq0
+0ee4 e5 10 	 jpfalse 0ed6
+0ee6 91 	 load immediate 1
+0ee7 85 82 	 fct_leave 130
+0ee9 ac 	 inc
+0eea 20 	 dup
+0eeb ad 	 dec
+0eec 90 	 load immediate 0
+0eed 0d 	 load indexed byte
+0eee ab 	 eq0
+0eef e5 08 	 jpfalse 0ee9
+0ef1 22 	 load local word-2
+0ef2 ac 	 inc
+0ef3 32 	 store local word-2
+0ef4 22 	 load local word-2
+0ef5 8d 43 	 load immediate 67
+0ef7 a3 	 ugreater_than
+0ef8 e5 29 	 jpfalse 0ed1
+0efa 90 	 load immediate 0
+0efb 85 82 	 fct_leave 130
+0efd 00 	 Error16
+0efe 00 	 Error16
+0eff 00 	 Error16
+0f00 00 	 Error16
