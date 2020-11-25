@@ -1,6 +1,6 @@
 # Reversing-Turbo-Modula2
 
-This is the initial reverse-engineering work that made possible the re-engineering of Turbo Modula-2.
+This is the initial reverse-engineering work that made possible the re-engineering of Turbo Modula-2 (see the companion repository: Turbo Modula-2 Reloaded).
 
 First, there is a disassembly of the Z80 code. The original bytecode (MCode) interpreter of Turbo Modula-2 for CP/M was of course entirely written in Z80 code for speed. A number of procedures in the system library and in the parser of the compiler are also written in Z80 code (again for speed reasons), but apart from these, most of the rest of Turbo Modula-2 System was written in Modula-2, including the "kernel" (which is responsible for the initialization of the system, and the exception propagation system activated when an exception occurs).
 
