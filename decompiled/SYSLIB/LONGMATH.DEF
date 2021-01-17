@@ -1,0 +1,15 @@
+DEFINITION MODULE LongMath;
+
+ PROCEDURE Sqrt     (x: LONGREAL): LONGREAL;
+ PROCEDURE Exp      (x: LONGREAL): LONGREAL;
+ PROCEDURE Ln       (x: LONGREAL): LONGREAL;
+ PROCEDURE Sin      (x: LONGREAL): LONGREAL;
+ PROCEDURE Cos      (x: LONGREAL): LONGREAL;
+ PROCEDURE Arctan   (x: LONGREAL): LONGREAL;
+ PROCEDURE Entier   (x: LONGREAL): LONGINT;
+
+EXCEPTION ArgumentError;
+ (* Is raised if an argument is outside its legal range *)
+
+END LongMath.
+
