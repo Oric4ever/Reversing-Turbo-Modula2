@@ -1,0 +1,21 @@
+DEFINITION MODULE KERNEL;
+FROM SYSTEM IMPORT ADDRESS;
+(* trying to produce a byte-to-byte equivalent of original KERNEL *)
+
+PROCEDURE WriteChar(c: CHAR);
+PROCEDURE WriteString(str: ARRAY OF CHAR);
+PROCEDURE WriteLn;
+PROCEDURE WriteInt(i: CARDINAL; width: CARDINAL; signed: BOOLEAN);
+PROCEDURE WriteMod38(code: CARDINAL);
+PROCEDURE WriteModuleName(modbase: ADDRESS);
+
+(*
+PROCEDURE GetDependency(n: CARDINAL): ADDRESS;
+PROCEDURE DebugProc;
+PROCEDURE proc11;
+PROCEDURE proc12;
+PROCEDURE Proc;
+PROCEDURE ErrorProc;
+PROCEDURE Copyright;
+*)
+END KERNEL.
