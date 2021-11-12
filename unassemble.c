@@ -19,6 +19,81 @@ char *module_name(int num) {
     else return depend_names[num];
 }
 
+char *proc_name(char *module_name, int procnum) {
+  if (strncmp(module_name,"TEXTS", 8) == 0 && procnum <= 27) {
+    char *names[] = { "TEXTS",
+       "ReadChar", "ReadString", "ReadInt", "ReadCard", "ReadLong", "ReadReal", "ReadLn",
+      "WriteChar","WriteString","WriteInt","WriteCard","WriteLong","WriteReal","WriteLn",
+      "ReadLine", "ReadAgain", "Done", "EOLN", "EOT", "Col", "SetCol", "TextFile",
+      "OpenText", "CreateText", "CloseText", "ConnectDriver", "Init"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"INOUT", 8) == 0 && procnum <= 17) {
+    char *names[] = { "INOUT",
+      "OpenInput","OpenOutput","CloseInput","CloseOutput",
+       "Read",           "ReadString", "ReadInt", "ReadCard",
+      "Write","WriteLn","WriteString","WriteInt","WriteCard",
+      "WriteHex","WriteOct","ReadRead","WriteReal"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"FILES", 8) == 0 && procnum <= 21) {
+    char *names[] = { "FILES",
+      "Open","Create","Close","Delete","Rename","GetName","FileSize","EOF",
+       "ReadByte", "ReadWord", "ReadRec", "ReadBytes",
+      "WriteByte","WriteWord","WriteRec","WriteBytes",
+      "Flush","NextPos","SetPos","NoTrailer","ResetSys"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"TERMINAL", 8) == 0 && procnum <= 16) {
+    char *names[] = { "TERMINAL",
+      "ReadChar","BusyRead","ReadAgain","ReadLine","WriteChar","WriteLn","WriteString",
+      "ClearScreen","GotoXY","ClearToEOL","InsertLine","DeleteLine","Highlight","Normal",
+      "InitScreen","ExitScreen"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"COMLINE", 8) == 0 && procnum <= 3) {
+    char *names[] = { "COMLINE",
+      "RedirectInput","RedirectOutput","PromptFor"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"MATHLIB", 8) == 0 && procnum <= 9) {
+    char *names[] = { "MATHLIB",
+      "Sqrt","Exp","Ln","Sin","Cos","ArcTan","Entier","Randomize","Random"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"STRINGS", 8) == 0 && procnum <= 7) {
+    char *names[] = { "STRINGS",
+      "Length","Pos","Insert","Delete","Append","Copy","CAPS"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"CONVERT", 8) == 0 && procnum <= 8) {
+    char *names[] = { "CONVERT",
+      "StrToInt","StrToCard","StrToLong","StrToReal",
+      "IntToStr","CardToStr","LongToStr","RealToStr"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"DOUBLES", 8) == 0 && procnum <= 4) {
+    char *names[] = { "DOUBLES",
+      "ReadDouble","WriteDouble","StrToDouble","DoubleToStr"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"PROCESSE", 8) == 0 && procnum <= 5) {
+    char *names[] = { "PROCESSES",
+      "StartProcess","SEND","WAIT","Awaited","Init"
+    };
+    return names[procnum];
+  } else if (strncmp(module_name,"LOADER", 8) == 0 && procnum <= 1) {
+    char *names[] = { "LOADER",
+      "Call"
+    };
+    return names[procnum];
+  } else {
+    static char name[8];
+    sprintf(name,"proc%d",procnum);
+    return name;
+  }
+}
+
 void decode38(int addr)
 {
     int num = wmem(addr);
@@ -32,8 +107,7 @@ void decode38(int addr)
 void call_rel(int IP)
 {
     int disp = mem[IP++];
-    printf("call_rel %04x\n", IP+disp);
-    printf("%04x \"", IP);
+    printf(".. load immediate string \"");
     for (int i=0; i<disp; i++) {
         if (mem[IP+i]<' ') printf("\\x%02x",mem[IP+i]);
         else printf("%c",mem[IP+i]);
@@ -59,9 +133,9 @@ int longreal_opcode(int IP)
     return IP;
 }
 
-void extended_opcode(int opcode)
+int extended_opcode(int IP)
 {
-    switch (opcode) {
+    switch (mem[IP++]) {
         case 0: printf("drop"); break; // DROP
         case 1: printf("save_int_and_clear"); break; // PUSH_INT_FLAG and DISABLE INT
         case 2: printf("restore_int"); break; // POP_INT_FLAG
@@ -81,12 +155,21 @@ void extended_opcode(int opcode)
         case 16: printf("INP"); break; // INP
         case 17: printf("OUT"); break; // OUT
         case 18: printf("reserve_string"); break; // RESERVE STRING
+// new opcodes
+        case 20: printf("assert (line %d)",wmem(IP)); IP+=2; break; // ASSERT
+        case 21: printf("addc"); break;
+        case 22: printf("subc"); break;
+        case 23: printf("mulc"); break;
+        case 24: printf("divc"); break;
+        case 25: printf("load carry"); break;
+        case 26: printf("clc"); break;
     }
+    return IP;
 }
 
 int opcode_size[256] = {
     1,1,2,1, 1,1,1,1, 2,2,2,3, 2,1,1,1,
-    1,2,2,1, 1,1,1,1, 2,2,2,3, 2,1,1,1,
+    1,2,3,1, 1,1,1,1, 2,2,2,3, 2,1,1,1,
     1,1,1,1, 1,1,1,1, 1,1,1,1, 2,2,2,3,
     1,1,1,1, 1,1,1,1, 1,1,1,1, 2,2,2,3,
     2,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,
@@ -106,13 +189,16 @@ int opcode_size[256] = {
 
 void unassemble(int IP, int toIP)
 {
+    int i;
     while (IP < toIP) {
-        printf("%04x %02x ",IP, mem[IP]);
-        for (int i=1; i<opcode_size[mem[IP]]; i++)
-            printf("%02x ",mem[IP+i]);
-        printf("\t ");
-        fflush(stdout);
-        switch (mem[IP++]) {
+        int opcode = mem[IP];
+        printf("%04x  ",IP);
+        for (i=0; i<opcode_size[opcode]; i++) printf("%02x ",mem[IP+i]);
+        if (opcode != 0x8c)
+            for (; i<3; i++) printf("   ");
+        printf(" ");
+        IP++;
+        switch (opcode) {
 		case 0x00: printf("Error16"); break; // Error 16
 		case 0x01: printf("Raise"); break; // RAISE
 		case 0x02: printf("load proc_addr proc%d",mem[IP++]); break; // LOAD_PROC_ADDR n
@@ -130,8 +216,8 @@ void unassemble(int IP, int toIP)
 		case 0x0E: printf("load indexed word"); break; // LXW             Load Indexed Word
 		case 0x0F: printf("load indexed dword"); break; // LXD             Load Indexed Double word
 
-		case 0x10: printf("load (ix)"); break; // LOAD (IX)
-		case 0x11: printf("load ((ix)...) %d",mem[IP++]); break; // LOAD ((((IX)))) n times
+		case 0x10: printf("load outer frame"); break; // LOAD (IX)
+		case 0x11: printf("load outer frame %d",mem[IP++]); break; // LOAD ((((IX)))) n times
 		case 0x12: IP=longreal_opcode(IP); break; // LONGREAL_OPCODE op n
 		case 0x13: printf("store param1"); break; // SET_PARAM1 (IX+6)
 		case 0x14: printf("store param2"); break; // SET_PARAM2 (IX+8)
@@ -181,7 +267,7 @@ void unassemble(int IP, int toIP)
 		case 0x3E: printf("store stack word %d",mem[IP++]); break; // SSW n       Store Stack Word n
 		case 0x3F: printf("store %.8s.word%d",module_name(mem[IP]),mem[IP+1]); IP+=2; break; // SEW n m        Store External Word
 
-		case 0x40: extended_opcode(mem[IP++]); break; // EXT1_OPCODE op
+		case 0x40: IP = extended_opcode(IP); break; // EXT1_OPCODE op
 		case 0x41: printf("load stack dword0"); break; // LSD0        Load Stack Double Word #0
 		case 0x42: printf("load global word2"); break; // LGW2        Load Global Word #2
 		case 0x43: printf("load global word3"); break; // LGW3        Load Global Word #3
@@ -265,7 +351,7 @@ void unassemble(int IP, int toIP)
 		case 0x8B: printf("leave6"); break; // LEAVE6
 		case 0x8C: call_rel(IP); IP += mem[IP]+1; break; // CALL_REL +n
 		case 0x8D: printf("load immediate %d",mem[IP++]); break; // LIB n           Load Immediate Byte 
-		case 0x8E: printf("load immediate %d",wmem(IP)); IP+=2; break; // LIW n n         Load Immediate Word
+		case 0x8E: printf("load immediate %d",(int16_t)wmem(IP)); IP+=2; break; // LIW n n         Load Immediate Word
 		case 0x8F: printf("load immediate dword %d",dmem(IP)); IP+=4; break; // LID nnmm        Load Immediate Double Word
 
 		case 0x90: printf("load immediate 0"); break; // LI0             Load Immediate 0
@@ -384,9 +470,9 @@ void unassemble(int IP, int toIP)
 		case 0xEC: printf("nested_call proc%d",mem[IP++]); break; // NESTED_PROC_CALL n
 		case 0xED: printf("call proc%d",mem[IP++]); break; // PROC_CALL n
 		case 0xEE: printf("call_with_frame proc%d",mem[IP++]); break; // PROC_CALL_WITH_FRAME n
-		case 0xEF: printf("call %.8s.proc%d",module_name(mem[IP]),mem[IP+1]); IP+=2; break; // EXTERN_PROC_CALL m n
+		case 0xEF: printf("call %.8s.%s",module_name(mem[IP]),proc_name(module_name(mem[IP]),mem[IP+1])); IP+=2; break; // EXTERN_PROC_CALL m n
 
-		case 0xF0: printf("call %.8s.proc%d",module_name(mem[IP]/16),mem[IP]%16); IP++; break; // EXTERN_PROC_CALL mn  (m module number (high nibble))
+		case 0xF0: printf("call %.8s.%s",module_name(mem[IP]/16),proc_name(module_name(mem[IP]/16),mem[IP]%16)); IP++; break; // EXTERN_PROC_CALL mn  (m module number (high nibble))
 		case 0xF1: printf("call proc1"); break; // PROC_CALL1
 		case 0xF2: printf("call proc2"); break; // PROC_CALL2
 		case 0xF3: printf("call proc3"); break; // PROC_CALL3
@@ -428,11 +514,10 @@ void module(int base, int dependencies)
         printf("\tdepends on %.8s \n",module_name(num));
     printf("\n");
 
-    uint16_t min=0xFFFF, max;
+    uint16_t min=0xFFFF, max = proc_table_addr(base);
     for(int procnum=0; proc_table[-procnum]<0; procnum++) {
         uint16_t proc_addr = proc_table_addr(base)-2*procnum+1 
                            + proc_table[-procnum];
-        max = proc_table_addr(base)-2*procnum;
         if (mem[proc_addr-1] >= 0x80)
             printf("%.8s.proc%d: %04x\n",name,procnum, proc_addr);
         else {
@@ -440,7 +525,7 @@ void module(int base, int dependencies)
             decode38(proc_addr-6);
             decode38(proc_addr-4);
             printf(": %04x\n", proc_addr);
-//        }
+        }
         if (proc_addr < min) min = proc_addr;
     }
     printf("\n\n");
